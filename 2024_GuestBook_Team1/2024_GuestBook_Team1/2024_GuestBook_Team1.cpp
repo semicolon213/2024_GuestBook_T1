@@ -1,15 +1,30 @@
 ﻿// 2024_GuestBook_Team1.cpp : 애플리케이션에 대한 진입점을 정의합니다.
 //
 
+/**
+@author 김형균
+@date 2024.08.01
+    기본 그리기 코드 추가
+    그린 내용 유지 코드 추가
+@todo 그린 내용 replay 구현
+**/
+
 #include "framework.h"
 #include "2024_GuestBook_Team1.h"
 
+#include "GB_Function.h"
+
 #define MAX_LOADSTRING 100
+
+///extern 변수
+extern LINFO drawLInfo;
+
 
 // 전역 변수:
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
+
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -121,8 +136,17 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //  WM_DESTROY  - 종료 메시지를 게시하고 반환합니다.
 //
 //
+
+/// @brief WndProc 전역변수 선언
+bool LBState = false;
+int px, py;
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    HDC hdc;
+    hdc = GetDC(hWnd);
+    int x, y;
+
     switch (message)
     {
     case WM_COMMAND:
@@ -142,11 +166,67 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
         break;
+
+    case WM_LBUTTONDOWN :
+        LBState = true;
+        px = LOWORD(lParam);
+        py = HIWORD(lParam);
+
+        record(lParam, (DWORD)GetTickCount64(), message);
+
+        break;
+
+    case WM_MOUSEMOVE :
+        if (!LBState)
+            break;
+        x = LOWORD(lParam);
+        y = HIWORD(lParam);
+        MoveToEx(hdc, px, py, NULL);
+        LineTo(hdc, x, y);
+
+        px = x;
+        py = y;
+
+        record(lParam, (DWORD)GetTickCount64(), message);
+
+        break;
+
+    case WM_LBUTTONUP :
+        LBState = false;
+        record(lParam, (DWORD)GetTickCount64(), message);
+
     case WM_PAINT:
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
+
+            bool LBState = false;
+            int x, y;
+            for (const auto& record : drawLInfo.pInfo)
+            {
+                x = LOWORD(record.lParam);
+                y = HIWORD(record.lParam);
+
+                switch (record.state)
+                {
+                case WM_LBUTTONDOWN :
+                    LBState = true;
+                    MoveToEx(hdc, x, y, NULL);
+                    LineTo(hdc, x, y);
+                    break;
+
+                case WM_MOUSEMOVE :
+                    LineTo(hdc, x, y);
+                    break;
+                case WM_LBUTTONUP :
+                    LBState = false;
+                    break;
+                default :
+                    break;
+                }
+            }
+
             EndPaint(hWnd, &ps);
         }
         break;
@@ -156,6 +236,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
+
+    ReleaseDC(hWnd, hdc);
     return 0;
 }
 
@@ -175,6 +257,7 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             return (INT_PTR)TRUE;
         }
         break;
+
     }
     return (INT_PTR)FALSE;
 }

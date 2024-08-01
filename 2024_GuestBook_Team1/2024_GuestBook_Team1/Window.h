@@ -14,7 +14,10 @@ private :
 	static INT_PTR CALLBACK About(HWND, UINT, WPARAM, LPARAM);
 
 public :
-	Window() = default;
+	Window() = default;					
 	~Window() = default;
+
+	Window(const Window&) = delete;
+	Window& operator=(const Window&) = delete;
 };
 
