@@ -16,9 +16,9 @@
 ## 프로젝트 소개
 
 ## 기술 스택
-VC++
-Win32 API
-Window application
+VC++<br>
+Win32 API<br>
+Window application<br>
 
 ## 구현기능
 <br>
