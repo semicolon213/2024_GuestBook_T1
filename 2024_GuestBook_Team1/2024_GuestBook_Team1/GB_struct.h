@@ -1,8 +1,7 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 
-#include <vector>
-#include <Windows.h>
+#include "GB_Header.h"
 
 
 typedef struct pointInfo 

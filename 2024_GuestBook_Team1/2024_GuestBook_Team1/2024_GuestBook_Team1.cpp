@@ -8,7 +8,6 @@
 
 #include "2024_GuestBook_Team1.h"
 
-#include "GB_Function.h"
 #include "Window.h"
 
 #define MAX_LOADSTRING 100

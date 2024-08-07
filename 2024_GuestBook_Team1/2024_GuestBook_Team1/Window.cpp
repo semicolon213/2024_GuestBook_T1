@@ -130,6 +130,11 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_LBUTTONUP:
         LBState = false;
         record(lParam, (DWORD)GetTickCount64(), message);
+        break;
+
+    case WM_RBUTTONUP :
+
+        break;
 
     case WM_PAINT:
     {

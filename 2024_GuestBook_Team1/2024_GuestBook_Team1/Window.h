@@ -1,10 +1,7 @@
 #pragma once
 
-#include <memory>
-#include <mutex>
+#include "GB_Header.h"
 
-#include "framework.h"
-#include "GB_Function.h"
 #include "Resource.h"
 
 #define MAX_LOADSTRING 100
