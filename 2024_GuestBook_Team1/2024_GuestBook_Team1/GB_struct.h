@@ -1,8 +1,8 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 
-#include "GB_Header.h"
-
+#include <Windows.h>
+#include <vector>
 
 typedef struct pointInfo 
 {
@@ -18,8 +18,8 @@ typedef struct pointInfo
 typedef struct lineInfo
 {
 	std::vector<PINFO> pInfo;
-	int x;
-	int y;
-	int width;
-	int hieght;
+	//int x;
+	//int y;
+	//int width;
+	//int hieght;
 }LINFO;

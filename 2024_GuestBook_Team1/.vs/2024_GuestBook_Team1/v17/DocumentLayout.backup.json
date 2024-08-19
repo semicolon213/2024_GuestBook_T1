@@ -1,0 +1,194 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\GB_Header.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|solutionrelative:2024_GuestBook_Team1\\GB_Header.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\Window.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|solutionrelative:2024_GuestBook_Team1\\Window.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\2024_GuestBook_Team1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|solutionrelative:2024_GuestBook_Team1\\2024_GuestBook_Team1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\GB_struct.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|solutionrelative:2024_GuestBook_Team1\\GB_struct.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\GB_Function.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|solutionrelative:2024_GuestBook_Team1\\GB_Function.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\Window.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|solutionrelative:2024_GuestBook_Team1\\Window.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\ColorPalette.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|solutionrelative:2024_GuestBook_Team1\\ColorPalette.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\GB_Function.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|solutionrelative:2024_GuestBook_Team1\\GB_Function.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\ColorPalette.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|solutionrelative:2024_GuestBook_Team1\\ColorPalette.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\2024_GuestBook_Team1.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|solutionrelative:2024_GuestBook_Team1\\2024_GuestBook_Team1.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ColorPalette.h",
+              "DocumentMoniker": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\ColorPalette.h",
+              "RelativeDocumentMoniker": "2024_GuestBook_Team1\\ColorPalette.h",
+              "ToolTip": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\ColorPalette.h",
+              "RelativeToolTip": "2024_GuestBook_Team1\\ColorPalette.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-08-14T08:44:30.98Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "GB_Function.cpp",
+              "DocumentMoniker": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\GB_Function.cpp",
+              "RelativeDocumentMoniker": "2024_GuestBook_Team1\\GB_Function.cpp",
+              "ToolTip": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\GB_Function.cpp",
+              "RelativeToolTip": "2024_GuestBook_Team1\\GB_Function.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-08-08T03:25:18.627Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "2024_GuestBook_Team1.cpp",
+              "DocumentMoniker": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\2024_GuestBook_Team1.cpp",
+              "RelativeDocumentMoniker": "2024_GuestBook_Team1\\2024_GuestBook_Team1.cpp",
+              "ToolTip": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\2024_GuestBook_Team1.cpp",
+              "RelativeToolTip": "2024_GuestBook_Team1\\2024_GuestBook_Team1.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-08-07T08:00:07.186Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Window.cpp",
+              "DocumentMoniker": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\Window.cpp",
+              "RelativeDocumentMoniker": "2024_GuestBook_Team1\\Window.cpp",
+              "ToolTip": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\Window.cpp",
+              "RelativeToolTip": "2024_GuestBook_Team1\\Window.cpp",
+              "ViewState": "AgIAAHgAAAAAAAAAAAAAAMEAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-08-07T08:00:17.706Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Window.h",
+              "DocumentMoniker": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\Window.h",
+              "RelativeDocumentMoniker": "2024_GuestBook_Team1\\Window.h",
+              "ToolTip": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\Window.h",
+              "RelativeToolTip": "2024_GuestBook_Team1\\Window.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-08-13T10:33:53.174Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ColorPalette.cpp",
+              "DocumentMoniker": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\ColorPalette.cpp",
+              "RelativeDocumentMoniker": "2024_GuestBook_Team1\\ColorPalette.cpp",
+              "ToolTip": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\ColorPalette.cpp",
+              "RelativeToolTip": "2024_GuestBook_Team1\\ColorPalette.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-08-14T08:44:41.482Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GB_Function.h",
+              "DocumentMoniker": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\GB_Function.h",
+              "RelativeDocumentMoniker": "2024_GuestBook_Team1\\GB_Function.h",
+              "ToolTip": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\GB_Function.h",
+              "RelativeToolTip": "2024_GuestBook_Team1\\GB_Function.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-08-08T03:22:53.762Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "GB_struct.h",
+              "DocumentMoniker": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\GB_struct.h",
+              "RelativeDocumentMoniker": "2024_GuestBook_Team1\\GB_struct.h",
+              "ToolTip": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\GB_struct.h",
+              "RelativeToolTip": "2024_GuestBook_Team1\\GB_struct.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-08-13T09:33:29.42Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GB_Header.h",
+              "DocumentMoniker": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\GB_Header.h",
+              "RelativeDocumentMoniker": "2024_GuestBook_Team1\\GB_Header.h",
+              "ToolTip": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\GB_Header.h",
+              "RelativeToolTip": "2024_GuestBook_Team1\\GB_Header.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-08-17T11:37:06.996Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "2024_GuestBook_Team1.h",
+              "DocumentMoniker": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\2024_GuestBook_Team1.h",
+              "RelativeDocumentMoniker": "2024_GuestBook_Team1\\2024_GuestBook_Team1.h",
+              "ToolTip": "C:\\Users\\khk21\\Desktop\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\2024_GuestBook_Team1.h",
+              "RelativeToolTip": "2024_GuestBook_Team1\\2024_GuestBook_Team1.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-08-17T11:36:29.715Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

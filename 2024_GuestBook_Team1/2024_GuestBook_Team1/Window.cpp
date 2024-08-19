@@ -3,7 +3,6 @@
 // 멤버 변수 초기화
 unique_ptr<Window> Window::sinTonIns = nullptr;
 once_flag Window::flag;
-
 //  함수: MyRegisterClass()
 //
 //  용도: 창 클래스를 등록합니다.
@@ -38,6 +37,8 @@ ATOM Window::MyRegisterClass(HINSTANCE hInstance)
 //        이 함수를 통해 인스턴스 핸들을 전역 변수에 저장하고
 //        주 프로그램 창을 만든 다음 표시합니다.
 //
+
+
 BOOL Window::InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
     hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
@@ -73,18 +74,18 @@ LRESULT Window::StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 //
 //
 
-/// @brief WndProc 전역변수 선언
-bool LBState = false;
-int px, py;
+
 
 LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    HDC hdc;
-    hdc = GetDC(hWnd);
-    int x, y;
-
+    
     switch (message)
     {
+    case WM_CREATE :
+
+        function = make_unique<GB_Function>();
+
+        break;
     case WM_COMMAND:
     {
         int wmId = LOWORD(wParam);
@@ -104,35 +105,19 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     break;
 
     case WM_LBUTTONDOWN:
-        LBState = true;
-        px = LOWORD(lParam);
-        py = HIWORD(lParam);
-
-        record(lParam, (DWORD)GetTickCount64(), message);
-
+        function->mouseUD(lParam, (DWORD)GetTickCount64(), message, 10, RGB(255, 0, 0));
         break;
 
     case WM_MOUSEMOVE:
-        if (!LBState)
-            break;
-        x = LOWORD(lParam);
-        y = HIWORD(lParam);
-        MoveToEx(hdc, px, py, NULL);
-        LineTo(hdc, x, y);
-
-        px = x;
-        py = y;
-
-        record(lParam, (DWORD)GetTickCount64(), message);
-
+        function->draw(hWnd, lParam, (DWORD)GetTickCount64(), message, 10, RGB(255, 0, 0));
         break;
 
     case WM_LBUTTONUP:
-        LBState = false;
-        record(lParam, (DWORD)GetTickCount64(), message);
+        function->mouseUD(lParam, (DWORD)GetTickCount64(), message, 10, RGB(255, 0, 0));
+
         break;
 
-    case WM_RBUTTONUP :
+    case WM_RBUTTONDOWN :
 
         break;
 
@@ -144,7 +129,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         bool LBState = false;
         int x, y;
-        for (const auto& record : drawLInfo.pInfo)
+        for (const auto& record : function->drawLInfo.pInfo)
         {
             x = LOWORD(record.lParam);
             y = HIWORD(record.lParam);
@@ -178,7 +163,6 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
 
-    ReleaseDC(hWnd, hdc);
     return 0;
 }
 

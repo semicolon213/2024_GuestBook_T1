@@ -36,7 +36,7 @@
     <ClInclude Include="GB_Function.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GB_Header.h">
+    <ClInclude Include="ColorPalette.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -48,6 +48,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GB_Function.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorPalette.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

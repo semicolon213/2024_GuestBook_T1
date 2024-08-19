@@ -1,3 +1,3 @@
 ﻿#pragma once
 
-#include "GB_Header.h"
+#include <Windows.h>

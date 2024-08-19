@@ -7,6 +7,7 @@
 **/
 
 #include "2024_GuestBook_Team1.h"
+#include "Resource.h"
 
 #include "Window.h"
 
@@ -21,6 +22,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: 여기에 코드를 입력합니다.
+
 
     // 전역 문자열을 초기화합니다.
     LoadStringW(hInstance, IDS_APP_TITLE, Window::GetInstance()->szTitle, MAX_LOADSTRING);

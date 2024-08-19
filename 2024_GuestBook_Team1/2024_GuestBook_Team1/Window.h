@@ -1,14 +1,15 @@
 #pragma once
 
-#include "GB_Header.h"
+#include <Windows.h>
+#include <mutex>
+#include <memory>
 
 #include "Resource.h"
+#include "GB_Function.h"
 
 #define MAX_LOADSTRING 100
 
 using namespace std;
-
-extern LINFO drawLInfo;
 
 class Window
 {
@@ -24,6 +25,9 @@ private :
 	static unique_ptr<Window> sinTonIns;
 	static once_flag flag;
 
+	unique_ptr<GB_Function> function;
+
+
 public :
 	Window() = default;
 	~Window() = default;
@@ -38,6 +42,7 @@ public :
 	BOOL InitInstance(HINSTANCE, int);
 
 	static Window* GetInstance();
+
 
 
 };
