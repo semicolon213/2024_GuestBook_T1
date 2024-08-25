@@ -1,3 +1,8 @@
+/**
+@file RegisterList.h
+@brief 방문자 명단 전광판 클래스 멤버 정의 파일
+*/
+
 #pragma once
 #include <Windows.h>
 

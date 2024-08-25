@@ -26,14 +26,22 @@ private:
 	CLSID clsid;
 	HRESULT hr;
 
-	VARIANT a;			///여러 타입을 가지고 있는 열거체 변수
+	DISPID dispID;
 
 	IDispatch* appInst = NULL;
 	IDispatch* pWorkBooks = NULL;
+	IDispatch* pExcel = NULL;
+	IDispatch* pSheets = NULL;
+	IDispatch* pSheet = NULL;
+	IDispatch* pCells = NULL;
+	IDispatch* pRange = NULL;
 
-	DISPID dispID;
 	const OLECHAR* szVisible = L"Visible";
 	const OLECHAR* szWorkbooks = L"WorkBooks";
-
+	const OLECHAR* szOpen = L"Open";
+	const OLECHAR* szSheets = L"Sheets";
+	const OLECHAR* szItem = L"Item";
+	const OLECHAR* szCells = L"Cells";
+	const OLECHAR* szSave = L"SAVE";
 };
 
