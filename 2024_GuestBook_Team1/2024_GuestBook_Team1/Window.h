@@ -16,6 +16,9 @@ class Window
 private :
 	HINSTANCE hInst;
 	HWND hWnd;
+
+	RECT client_area_;//
+	RECT window_area_;//
 	
 	static LRESULT CALLBACK StaticWndProc(HWND, UINT, WPARAM, LPARAM);
 	LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -26,6 +29,10 @@ private :
 	static once_flag flag;
 
 	unique_ptr<GB_Function> function;
+
+	RECT GetWindowArea(); //
+	Control* GetControl();//
+
 
 
 public :

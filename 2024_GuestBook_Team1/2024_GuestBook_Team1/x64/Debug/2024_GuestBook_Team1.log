@@ -1,2 +1,655 @@
-﻿  GB_Function.cpp
-  2024_GuestBook_Team1.vcxproj -> D:\Yuhan_Uni\Reference\2024_GuestBook_Team1\x64\Debug\2024_GuestBook_Team1.exe
+﻿  2024_GuestBook_Team1.cpp
+C:\Users\tnrlf\2024_GuestBook_T1\2024_GuestBook_Team1\2024_GuestBook_Team1\Window.h(34,9): error C2143: 구문 오류: ';'이(가) '*' 앞에 없습니다.
+  (소스 파일 '2024_GuestBook_Team1.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\tnrlf\2024_GuestBook_T1\2024_GuestBook_Team1\2024_GuestBook_Team1\Window.h(34,9): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+  (소스 파일 '2024_GuestBook_Team1.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\tnrlf\2024_GuestBook_T1\2024_GuestBook_Team1\2024_GuestBook_Team1\Window.h(34,23): error C2238: ';' 앞에 예기치 않은 토큰이 있습니다.
+  (소스 파일 '2024_GuestBook_Team1.cpp'을(를) 컴파일하는 중)
+  
+  ColorPalette.cpp
+  FileManager.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(33,31): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(33,18): error C2146: 구문 오류: ';'이(가) 'GraphicsState' 식별자 앞에 없습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(534,18): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(534,1): error C2146: 구문 오류: ';'이(가) 'ObjectTypeIsValid' 식별자 앞에 없습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(537,1): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(560,44): error C2065: 'META_SETBKCOLOR': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(560,87): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(561,44): error C2065: 'META_SETBKMODE': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(561,86): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(562,44): error C2065: 'META_SETMAPMODE': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(562,87): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(563,44): error C2065: 'META_SETROP2': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(563,84): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(564,44): error C2065: 'META_SETRELABS': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(564,86): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(565,44): error C2065: 'META_SETPOLYFILLMODE': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(565,92): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(566,44): error C2065: 'META_SETSTRETCHBLTMODE': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(566,94): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(567,44): error C2065: 'META_SETTEXTCHAREXTRA': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(567,93): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(568,44): error C2065: 'META_SETTEXTCOLOR': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(568,89): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(569,44): error C2065: 'META_SETTEXTJUSTIFICATION': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(569,97): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(570,44): error C2065: 'META_SETWINDOWORG': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(570,89): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(571,44): error C2065: 'META_SETWINDOWEXT': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(571,89): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(572,44): error C2065: 'META_SETVIEWPORTORG': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(572,91): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(573,44): error C2065: 'META_SETVIEWPORTEXT': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(573,91): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(574,44): error C2065: 'META_OFFSETWINDOWORG': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(574,92): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(575,44): error C2065: 'META_SCALEWINDOWEXT': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(575,91): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(576,44): error C2065: 'META_OFFSETVIEWPORTORG': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(576,94): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(577,44): error C2065: 'META_SCALEVIEWPORTEXT': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(577,93): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(578,44): error C2065: 'META_LINETO': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(578,83): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(579,44): error C2065: 'META_MOVETO': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(579,83): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(580,44): error C2065: 'META_EXCLUDECLIPRECT': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(580,92): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(581,44): error C2065: 'META_INTERSECTCLIPRECT': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(581,94): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(582,44): error C2065: 'META_ARC': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(582,80): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(583,44): error C2065: 'META_ELLIPSE': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(583,84): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(584,44): error C2065: 'META_FLOODFILL': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(584,86): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(585,44): error C2065: 'META_PIE': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(585,80): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(586,44): error C2065: 'META_RECTANGLE': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(586,86): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(587,44): error C2065: 'META_ROUNDRECT': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(587,86): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(588,44): error C2065: 'META_PATBLT': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(588,83): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(589,44): error C2065: 'META_SAVEDC': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(589,83): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(590,44): error C2065: 'META_SETPIXEL': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(590,85): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(591,44): error C2065: 'META_OFFSETCLIPRGN': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(591,90): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(592,44): error C2065: 'META_TEXTOUT': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(592,84): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(593,44): error C2065: 'META_BITBLT': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(593,83): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(594,44): error C2065: 'META_STRETCHBLT': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(594,87): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(595,44): error C2065: 'META_POLYGON': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(595,84): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(596,44): error C2065: 'META_POLYLINE': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(596,85): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(597,44): error C2065: 'META_ESCAPE': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(597,83): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(598,44): error C2065: 'META_RESTOREDC': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(598,86): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(599,44): error C2065: 'META_FILLREGION': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(599,87): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(600,44): error C2065: 'META_FRAMEREGION': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(600,88): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(601,44): error C2065: 'META_INVERTREGION': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(601,89): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(602,44): error C2065: 'META_PAINTREGION': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(602,88): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(603,44): error C2065: 'META_SELECTCLIPREGION': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(603,93): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(604,44): error C2065: 'META_SELECTOBJECT': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(604,89): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(605,44): error C2065: 'META_SETTEXTALIGN': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(605,89): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(607,44): error C2065: 'META_CHORD': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(607,82): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(608,44): error C2065: 'META_SETMAPPERFLAGS': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(608,91): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(609,44): error C2065: 'META_EXTTEXTOUT': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(609,87): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(610,44): error C2065: 'META_SETDIBTODEV': 선언되지 않은 식별자입니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(610,44): error C1003: 오류 수가 100개를 초과했습니다. 컴파일을 중지합니다.
+  (소스 파일 'FileManager.cpp'을(를) 컴파일하는 중)
+  
+  GB_Function.cpp
+  pch.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(33,31): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(33,18): error C2146: 구문 오류: ';'이(가) 'GraphicsState' 식별자 앞에 없습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(534,18): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(534,1): error C2146: 구문 오류: ';'이(가) 'ObjectTypeIsValid' 식별자 앞에 없습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(537,1): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(560,44): error C2065: 'META_SETBKCOLOR': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(560,87): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(561,44): error C2065: 'META_SETBKMODE': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(561,86): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(562,44): error C2065: 'META_SETMAPMODE': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(562,87): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(563,44): error C2065: 'META_SETROP2': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(563,84): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(564,44): error C2065: 'META_SETRELABS': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(564,86): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(565,44): error C2065: 'META_SETPOLYFILLMODE': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(565,92): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(566,44): error C2065: 'META_SETSTRETCHBLTMODE': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(566,94): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(567,44): error C2065: 'META_SETTEXTCHAREXTRA': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(567,93): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(568,44): error C2065: 'META_SETTEXTCOLOR': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(568,89): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(569,44): error C2065: 'META_SETTEXTJUSTIFICATION': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(569,97): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(570,44): error C2065: 'META_SETWINDOWORG': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(570,89): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(571,44): error C2065: 'META_SETWINDOWEXT': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(571,89): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(572,44): error C2065: 'META_SETVIEWPORTORG': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(572,91): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(573,44): error C2065: 'META_SETVIEWPORTEXT': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(573,91): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(574,44): error C2065: 'META_OFFSETWINDOWORG': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(574,92): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(575,44): error C2065: 'META_SCALEWINDOWEXT': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(575,91): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(576,44): error C2065: 'META_OFFSETVIEWPORTORG': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(576,94): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(577,44): error C2065: 'META_SCALEVIEWPORTEXT': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(577,93): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(578,44): error C2065: 'META_LINETO': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(578,83): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(579,44): error C2065: 'META_MOVETO': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(579,83): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(580,44): error C2065: 'META_EXCLUDECLIPRECT': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(580,92): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(581,44): error C2065: 'META_INTERSECTCLIPRECT': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(581,94): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(582,44): error C2065: 'META_ARC': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(582,80): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(583,44): error C2065: 'META_ELLIPSE': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(583,84): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(584,44): error C2065: 'META_FLOODFILL': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(584,86): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(585,44): error C2065: 'META_PIE': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(585,80): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(586,44): error C2065: 'META_RECTANGLE': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(586,86): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(587,44): error C2065: 'META_ROUNDRECT': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(587,86): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(588,44): error C2065: 'META_PATBLT': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(588,83): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(589,44): error C2065: 'META_SAVEDC': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(589,83): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(590,44): error C2065: 'META_SETPIXEL': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(590,85): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(591,44): error C2065: 'META_OFFSETCLIPRGN': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(591,90): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(592,44): error C2065: 'META_TEXTOUT': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(592,84): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(593,44): error C2065: 'META_BITBLT': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(593,83): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(594,44): error C2065: 'META_STRETCHBLT': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(594,87): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(595,44): error C2065: 'META_POLYGON': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(595,84): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(596,44): error C2065: 'META_POLYLINE': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(596,85): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(597,44): error C2065: 'META_ESCAPE': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(597,83): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(598,44): error C2065: 'META_RESTOREDC': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(598,86): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(599,44): error C2065: 'META_FILLREGION': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(599,87): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(600,44): error C2065: 'META_FRAMEREGION': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(600,88): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(601,44): error C2065: 'META_INVERTREGION': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(601,89): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(602,44): error C2065: 'META_PAINTREGION': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(602,88): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(603,44): error C2065: 'META_SELECTCLIPREGION': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(603,93): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(604,44): error C2065: 'META_SELECTOBJECT': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(604,89): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(605,44): error C2065: 'META_SETTEXTALIGN': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(605,89): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(607,44): error C2065: 'META_CHORD': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(607,82): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(608,44): error C2065: 'META_SETMAPPERFLAGS': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(608,91): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(609,44): error C2065: 'META_EXTTEXTOUT': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(609,87): error C2056: 식이 잘못되었습니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(610,44): error C2065: 'META_SETDIBTODEV': 선언되지 않은 식별자입니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\GdiplusEnums.h(610,44): error C1003: 오류 수가 100개를 초과했습니다. 컴파일을 중지합니다.
+  (소스 파일 'pch.cpp'을(를) 컴파일하는 중)
+  
+  Window.cpp
+C:\Users\tnrlf\2024_GuestBook_T1\2024_GuestBook_Team1\2024_GuestBook_Team1\Window.h(34,9): error C2143: 구문 오류: ';'이(가) '*' 앞에 없습니다.
+  (소스 파일 'Window.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\tnrlf\2024_GuestBook_T1\2024_GuestBook_Team1\2024_GuestBook_Team1\Window.h(34,9): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+  (소스 파일 'Window.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\tnrlf\2024_GuestBook_T1\2024_GuestBook_Team1\2024_GuestBook_Team1\Window.h(34,23): error C2238: ';' 앞에 예기치 않은 토큰이 있습니다.
+  (소스 파일 'Window.cpp'을(를) 컴파일하는 중)
+  
+  코드를 생성하고 있습니다...

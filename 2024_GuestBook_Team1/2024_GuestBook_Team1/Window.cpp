@@ -195,3 +195,8 @@ Window* Window::GetInstance()
         });
     return sinTonIns.get();
 }
+
+RECT Window::GetWindowArea() //
+{
+    return window_area_;
+}
