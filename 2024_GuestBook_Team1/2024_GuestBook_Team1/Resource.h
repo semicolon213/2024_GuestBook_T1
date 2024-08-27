@@ -12,6 +12,8 @@
 #define IDI_MY2024GUESTBOOKTEAM1			107
 #define IDI_SMALL				108
 #define IDC_MY2024GUESTBOOKTEAM1			109
+#define IDI_YUHAN256			256
+#define IDI_YUHAN				7065
 #define IDC_MYICON				2
 #ifndef IDC_STATIC
 #define IDC_STATIC				-1
