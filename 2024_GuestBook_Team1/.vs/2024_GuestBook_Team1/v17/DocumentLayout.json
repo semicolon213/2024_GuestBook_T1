@@ -1,53 +1,12 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\ycs22\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\2024_GuestBook_T1\\2024_GuestBook_Team1\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|C:\\Users\\ycs22\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\2024_GuestBook_T1\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\Window.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|solutionrelative:2024_GuestBook_Team1\\Window.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|C:\\Users\\ycs22\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\2024_GuestBook_T1\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\GB_Function.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{BF0598AD-A6CA-4C60-BC41-04873AA68EFF}|2024_GuestBook_Team1\\2024_GuestBook_Team1.vcxproj|solutionrelative:2024_GuestBook_Team1\\GB_Function.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    }
-  ],
+  "WorkspaceRootPath": "C:\\Users\\USER\\Desktop\\\uACFC\uC81C\\2024_GuestBook_T1\\2024_GuestBook_Team1\\",
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": [
-        {
-          "DockedWidth": 201,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Window.cpp",
-              "DocumentMoniker": "C:\\Users\\ycs22\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\2024_GuestBook_T1\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\Window.cpp",
-              "RelativeDocumentMoniker": "2024_GuestBook_Team1\\Window.cpp",
-              "ToolTip": "C:\\Users\\ycs22\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\2024_GuestBook_T1\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\Window.cpp",
-              "RelativeToolTip": "2024_GuestBook_Team1\\Window.cpp",
-              "ViewState": "AQIAAGAAAAAAAAAAAAAAAHcAAAB7AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-08-22T04:59:15.267Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "GB_Function.h",
-              "DocumentMoniker": "C:\\Users\\ycs22\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\2024_GuestBook_T1\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\GB_Function.h",
-              "RelativeDocumentMoniker": "2024_GuestBook_Team1\\GB_Function.h",
-              "ToolTip": "C:\\Users\\ycs22\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\2024_GuestBook_T1\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\GB_Function.h",
-              "RelativeToolTip": "2024_GuestBook_Team1\\GB_Function.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAcwBMAAAAZAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-08-08T03:22:53.762Z"
-            }
-          ]
-        }
-      ]
+      "DocumentGroups": []
     }
   ]
 }
