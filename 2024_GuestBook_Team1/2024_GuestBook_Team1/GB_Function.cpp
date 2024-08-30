@@ -57,6 +57,7 @@ void GB_Function::mouseUD(LPARAM lParam, ULONGLONG pTime, UINT state, int size, 
 	record(lParam, pTime, state, size, col);
 }
 
+
 void GB_Function::replay(HWND hWnd)
 {
     HDC hdc;
@@ -67,6 +68,7 @@ void GB_Function::replay(HWND hWnd)
     {
         //화면 초기화
         InvalidateRect(hWnd, NULL, TRUE);
+        //윈도우 갱신
         UpdateWindow(hWnd);
 
         hdc = GetDC(hWnd);
@@ -115,9 +117,4 @@ void GB_Function::replay(HWND hWnd)
         //반복 간격 조절
         Sleep(500);
     }
-}
-
-void GB_Function::terminate()
-{
-    isTerminate = true;
 }
