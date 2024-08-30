@@ -57,7 +57,67 @@ void GB_Function::mouseUD(LPARAM lParam, ULONGLONG pTime, UINT state, int size, 
 	record(lParam, pTime, state, size, col);
 }
 
-//DWORD GB_Function::replay(LPVOID points)
-//{
-//	
-//}
+void GB_Function::replay(HWND hWnd)
+{
+    HDC hdc;
+    HPEN nPen;
+    int x, y;
+
+    while (!isTerminate)
+    {
+        //화면 초기화
+        InvalidateRect(hWnd, NULL, TRUE);
+        UpdateWindow(hWnd);
+
+        hdc = GetDC(hWnd);
+
+        for (size_t i = 0; i < drawLInfo.pInfo.size(); i++)
+        {
+            if (isTerminate)
+                break;
+
+            nPen = CreatePen(PS_SOLID, drawLInfo.pInfo[i].pWidth, drawLInfo.pInfo[i].pColor);
+            SelectObject(hdc, nPen);
+
+            x = LOWORD(drawLInfo.pInfo[i].lParam);
+            y = HIWORD(drawLInfo.pInfo[i].lParam);
+
+            switch (drawLInfo.pInfo[i].state)
+            {
+            case WM_LBUTTONDOWN:
+                MoveToEx(hdc, x, y, NULL);
+                LineTo(hdc, x, y + 1);
+                break;
+
+            case WM_MOUSEMOVE:
+                LineTo(hdc, x, y);
+                break;
+
+            case WM_LBUTTONUP:
+                LineTo(hdc, x, y);
+                break;
+
+            default:
+                break;
+            }
+
+            //재생 속도 조절
+            if (i < drawLInfo.pInfo.size() - 1)
+            {
+                Sleep(drawLInfo.pInfo[i + 1].pTime - drawLInfo.pInfo[i].pTime);
+            }
+
+            DeleteObject(nPen);
+        }
+
+        ReleaseDC(hWnd, hdc);
+
+        //반복 간격 조절
+        Sleep(500);
+    }
+}
+
+void GB_Function::terminate()
+{
+    isTerminate = true;
+}

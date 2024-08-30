@@ -2,7 +2,6 @@
 
 #include "GB_struct.h"
 
-
 static int px, py;
 class GB_Function
 {
@@ -15,6 +14,7 @@ private :
 	int x, y;
 
 	bool isLeftClick = false;
+	bool isTerminate = false;
 
 public :
 	GB_Function() = default;
@@ -27,6 +27,9 @@ public :
 	void mouseUD(LPARAM, ULONGLONG, UINT, int, COLORREF);
 
 	LINFO drawLInfo;
-	//DWORD WINAPI replay(LPVOID points);
+	
+	void replay(HWND hWnd);
+
+	void terminate();
 
 };
