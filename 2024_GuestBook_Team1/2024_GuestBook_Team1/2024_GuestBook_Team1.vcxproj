@@ -147,7 +147,6 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="GB_Function.h" />
     <ClInclude Include="GB_struct.h" />
-    <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Window.h" />
@@ -157,7 +156,6 @@
     <ClCompile Include="ColorPalette.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="GB_Function.cpp" />
-    <ClCompile Include="pch.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>

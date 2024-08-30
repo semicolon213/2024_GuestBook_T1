@@ -13,13 +13,13 @@ using namespace std;
 
 class Window
 {
-private :
+private:
 	HINSTANCE hInst;
 	HWND hWnd;
 
 	RECT client_area_;//
 	RECT window_area_;//
-	
+
 	static LRESULT CALLBACK StaticWndProc(HWND, UINT, WPARAM, LPARAM);
 	LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 	static INT_PTR CALLBACK About(HWND, UINT, WPARAM, LPARAM);
@@ -30,12 +30,11 @@ private :
 
 	unique_ptr<GB_Function> function;
 
-	RECT GetWindowArea(); //
-	Control* GetControl();//
 
 
 
-public :
+
+public:
 	Window() = default;
 	~Window() = default;
 

@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "FileManager.h"
 
 // 멤버 변수 초기화
 unique_ptr<Window> Window::sinTonIns = nullptr;
@@ -59,6 +60,7 @@ BOOL Window::InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 LRESULT Window::StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+
     return sinTonIns->WndProc(hWnd, message, wParam, lParam);
 }
 
@@ -78,14 +80,19 @@ LRESULT Window::StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 
 LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    
+
     switch (message)
     {
-    case WM_CREATE :
-
+    case WM_CREATE:
+        InitializePanels(hWnd);  // 패널 초기화 함수 호출
         function = make_unique<GB_Function>();
 
         break;
+
+    case WM_SIZE:
+        ResizePanels(hWnd, lParam);  // 패널 크기 조정 함수 호출
+        break;
+
     case WM_COMMAND:
     {
         int wmId = LOWORD(wParam);
@@ -117,7 +124,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         break;
 
-    case WM_RBUTTONDOWN :
+    case WM_RBUTTONDOWN:
 
         break;
 
@@ -194,9 +201,4 @@ Window* Window::GetInstance()
             sinTonIns.reset(new Window);
         });
     return sinTonIns.get();
-}
-
-RECT Window::GetWindowArea() //
-{
-    return window_area_;
 }
