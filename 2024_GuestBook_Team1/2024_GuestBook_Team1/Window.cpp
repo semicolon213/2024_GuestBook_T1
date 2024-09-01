@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "FileManager.h"
 
 // 멤버 변수 초기화
 unique_ptr<Window> Window::sinTonIns = nullptr;
@@ -101,7 +102,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_CREATE :
-
+        InitializePanels(hWnd);  /*패널 초기화 */
         function = make_unique<GB_Function>();
 
         GetClientRect(hWnd, &MainRT);
@@ -122,6 +123,8 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         CreateWindowW(L"BUTTON", L"STOP", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 630, 55, 60, 30, hWnd, (HMENU)"STOP", hInst, nullptr);
 
         break;
+
+
     case WM_COMMAND:
     {
         int wmId = LOWORD(wParam);
@@ -133,6 +136,9 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
         case IDM_EXIT:
             DestroyWindow(hWnd);
+            break;
+        case ID_FILE_LIST:
+            /* 파일 리스트 박스에서 선택된 파일을 처리하는 코드를 넣어야함*/
             break;
         default:
             return DefWindowProc(hWnd, message, wParam, lParam);
@@ -157,6 +163,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         break;
     case WM_SIZE:
+        ResizePanels(hWnd, lParam);  /*패널 크기 조정 함수 호출*/
         MoveWindow(SideMenu, MainRT.right - 49, 10, 30, 30, TRUE);          //...다음에 구현
         break;
     case WM_PAINT:

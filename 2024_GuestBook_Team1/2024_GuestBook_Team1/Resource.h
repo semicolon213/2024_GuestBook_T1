@@ -3,7 +3,7 @@
 // 다음에서 사용 2024_GuestBook_Team1.rc
 
 #define IDS_APP_TITLE			103
-
+#define ID_FILE_LIST			101
 #define IDR_MAINFRAME			128
 #define IDD_MY2024GUESTBOOKTEAM1_DIALOG	102
 #define IDD_ABOUTBOX			103
