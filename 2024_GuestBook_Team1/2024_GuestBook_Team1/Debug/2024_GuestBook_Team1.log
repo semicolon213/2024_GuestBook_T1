@@ -1,7 +1,0 @@
-﻿  2024_GuestBook_Team1.cpp
-  GB_Function.cpp
-  Window.cpp
-  코드를 생성하고 있습니다...
-Window.obj : error LNK2001: 확인할 수 없는 외부 기호 "private: static class std::unique_ptr<class Window,struct std::default_delete<class Window> > Window::sinTonIns" (?sinTonIns@Window@@0V?$unique_ptr@VWindow@@U?$default_delete@VWindow@@@std@@@std@@A)
-Window.obj : error LNK2001: 확인할 수 없는 외부 기호 "private: static struct std::once_flag Window::flag" (?flag@Window@@0Uonce_flag@std@@A)
-D:\학교자료\동아리\2024 방명록\2024_GuestBook_T1\2024_GuestBook_Team1\Debug\2024_GuestBook_Team1.exe : fatal error LNK1120: 2개의 확인할 수 없는 외부 참조입니다.
