@@ -16,6 +16,8 @@ class Window
 private :
 	HINSTANCE hInst;
 	HWND hWnd;
+
+	bool replay = false;
 	
 	static LRESULT CALLBACK StaticWndProc(HWND, UINT, WPARAM, LPARAM);
 	LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

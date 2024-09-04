@@ -138,9 +138,11 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             DestroyWindow(hWnd);
             break;
         case PLAY:
+            replay = true;
             function->replayThread(hWnd);
             break;
         case STOP:
+            replay = false;
             function->isTerminate = true;
             break;
         default:
@@ -173,7 +175,6 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
         HBRUSH hbr = (HBRUSH)SelectObject(hdc,CreateSolidBrush(RGB(249,249,249)));
-        HPEN hPen = (HPEN)SelectObject(hdc, CreatePen(PS_SOLID, 1, RGB(234, 234, 234)));
         // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
         GetClientRect(hWnd, &MainRT);
         
@@ -185,27 +186,32 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         bool LBState = false;
         int x, y;
-        for (const auto& record : function->drawLInfo.pInfo)
+
+        if (replay = false) 
         {
-            x = LOWORD(record.lParam);
-            y = HIWORD(record.lParam);
-
-            switch (record.state)
+            for (const auto& record : function->drawLInfo.pInfo)
             {
-            case WM_LBUTTONDOWN:
-                LBState = true;
-                MoveToEx(hdc, x, y, NULL);
-                LineTo(hdc, x, y);
-                break;
+                HPEN hPen = (HPEN)SelectObject(hdc, CreatePen(PS_SOLID, 10, RGB(255, 0, 0)));
+                x = LOWORD(record.lParam);
+                y = HIWORD(record.lParam);
 
-            case WM_MOUSEMOVE:
-                LineTo(hdc, x, y);
-                break;
-            case WM_LBUTTONUP:
-                LBState = false;
-                break;
-            default:
-                break;
+                switch (record.state)
+                {
+                case WM_LBUTTONDOWN:
+                    LBState = true;
+                    MoveToEx(hdc, x, y, NULL);
+                    LineTo(hdc, x, y);
+                    break;
+
+                case WM_MOUSEMOVE:
+                    LineTo(hdc, x, y);
+                    break;
+                case WM_LBUTTONUP:
+                    LBState = false;
+                    break;
+                default:
+                    break;
+                }
             }
         }
 
