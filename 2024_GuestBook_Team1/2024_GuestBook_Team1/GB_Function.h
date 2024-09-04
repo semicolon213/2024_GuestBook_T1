@@ -1,6 +1,9 @@
 #pragma once
 
+#include <thread>
 #include "GB_struct.h"
+
+using namespace std;
 
 static int px, py;
 class GB_Function
@@ -14,8 +17,8 @@ private :
 	int x, y;
 
 	bool isLeftClick = false;
-	bool isTerminate = false;
 
+	
 public :
 	GB_Function() = default;
 	~GB_Function() = default;
@@ -28,6 +31,11 @@ public :
 
 	LINFO drawLInfo;
 	
-	void replay(HWND hWnd);
+	void replay(HWND);
 
+	void replayThread(HWND);
+
+	bool isTerminate = false;
+
+	thread replayThreadHandle;
 };

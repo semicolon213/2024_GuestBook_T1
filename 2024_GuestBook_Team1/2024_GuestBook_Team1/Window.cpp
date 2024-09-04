@@ -1,4 +1,6 @@
 #include "Window.h"
+#include "GB_Function.h"
+#include <thread>
 
 // 멤버 변수 초기화
 unique_ptr<Window> Window::sinTonIns = nullptr;
@@ -91,7 +93,8 @@ LRESULT Window::StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 //
 //
 
-
+#define PLAY 1
+#define STOP 2
 
 LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -118,8 +121,8 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         CreateWindowW(L"BUTTON", L"LOAD", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 350, 55, 60, 30, hWnd, (HMENU)"LOAD", hInst, nullptr);
         CreateWindowW(L"BUTTON", L"MANAGER", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 420, 55, 60, 30, hWnd, (HMENU)"FILE_MANAER", hInst, nullptr);
         CreateWindowW(L"BUTTON", L"CREDIT", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 490, 55, 60, 30, hWnd, (HMENU)"CREDIT", hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"PLAY", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 560, 55, 60, 30, hWnd, (HMENU)"PLAY", hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"STOP", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 630, 55, 60, 30, hWnd, (HMENU)"STOP", hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"PLAY", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 560, 55, 60, 30, hWnd, (HMENU)PLAY, hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"STOP", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 630, 55, 60, 30, hWnd, (HMENU)STOP, hInst, nullptr);
 
         break;
     case WM_COMMAND:
@@ -133,6 +136,12 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
         case IDM_EXIT:
             DestroyWindow(hWnd);
+            break;
+        case PLAY:
+            function->replayThread(hWnd);
+            break;
+        case STOP:
+            function->isTerminate = true;
             break;
         default:
             return DefWindowProc(hWnd, message, wParam, lParam);
@@ -154,7 +163,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_RBUTTONDOWN :
-
+        
         break;
     case WM_SIZE:
         MoveWindow(SideMenu, MainRT.right - 49, 10, 30, 30, TRUE);          //...다음에 구현
