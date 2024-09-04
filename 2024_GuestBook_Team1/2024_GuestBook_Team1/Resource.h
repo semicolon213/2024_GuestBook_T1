@@ -3,7 +3,7 @@
 // 다음에서 사용 2024_GuestBook_Team1.rc
 
 #define IDS_APP_TITLE			103
-
+#define ID_FILE_LIST			101
 #define IDR_MAINFRAME			128
 #define IDD_MY2024GUESTBOOKTEAM1_DIALOG	102
 #define IDD_ABOUTBOX			103
@@ -17,6 +17,18 @@
 #define IDC_MYICON				2
 #ifndef IDC_STATIC
 #define IDC_STATIC				-1
+
+
+#define DEF_ID 65000
+#define BUTTON_ID (DEF_ID + 1)
+
+
+
+//DrowWindow
+#define DW_DEF					(DEF_ID + 100)
+ 
+
+
 #endif
 // 다음은 새 개체에 사용할 기본값입니다.
 //

@@ -30,6 +30,4 @@ public :
 	
 	void replay(HWND hWnd);
 
-	void terminate();
-
 };
