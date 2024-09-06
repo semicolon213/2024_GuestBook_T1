@@ -102,7 +102,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_CREATE :
-        InitializePanels(hWnd);  /*패널 초기화 */
+        FileManager::InitializePanels(hWnd);  /*패널 초기화 */
         function = make_unique<GB_Function>();
 
         GetClientRect(hWnd, &MainRT);
@@ -163,7 +163,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         break;
     case WM_SIZE:
-        ResizePanels(hWnd, lParam);  /*패널 크기 조정 함수 호출*/
+        FileManager::ResizePanels(hWnd, lParam);  /*패널 크기 조정 함수 호출*/
         MoveWindow(SideMenu, MainRT.right - 49, 10, 30, 30, TRUE);          //...다음에 구현
         break;
     case WM_PAINT:
