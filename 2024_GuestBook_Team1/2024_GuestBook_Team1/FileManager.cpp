@@ -1,9 +1,10 @@
 /**
 @author 김수길
-@date 2024.09.01
-    파일매니저 기능 구현을 위한 임시 저장버튼 생성 
+@date 2024.09.08
     파일리스트 구현 (좌표값 배치 및 ui는 기능 구현 완료 후 수정작업 예정)
-@todo 저장버튼 누르면 파일리스트에 들어가기
+    저장버튼 누르면 파일리스트에 생성
+    실제 경로에 저장
+@todo 불러오기 만들기
       좌표 재배치 및 UI 업데이트 
       다이얼로그에 저장하기 불러오기 구현 
 **/
@@ -15,7 +16,14 @@
 
 std::vector<std::wstring> fileList;
 
+FileManager::FileManager() : hRightPanel(nullptr), hFileListBox(nullptr), hInst(nullptr), hWnd(nullptr) {
+    
+}
 
+// HWND를 받는 생성자 정의
+FileManager::FileManager(HWND hWnd) : hRightPanel(nullptr), hFileListBox(nullptr), hInst(nullptr), hWnd(hWnd) {
+    
+}
 
 
 /*패널을 초기화*/ 
@@ -61,22 +69,42 @@ void FileManager::UpdateFileListUI()
         SendMessage(getInstance().hFileListBox, LB_ADDSTRING, 0, (LPARAM)file.c_str());
     }
 }
-void FileManager::Button(HWND hWnd) /*파일매니저 저장기능을 위한 임시 버튼 */
-{
-    getInstance().File_Manager_Button = CreateWindowW(L"Button", L"저장", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 150,150,150,150, hWnd, (HMENU)ID_BUTTON_SAVE, GetModuleHandle(NULL), NULL);
 
-    if (!getInstance().File_Manager_Button) /*버튼 생성에 자꾸 오류가 떠서 확인용.*/
-    {
-        MessageBox(hWnd, L"버튼 생성 실패", L"오류", MB_OK | MB_ICONERROR);
+
+
+
+
+void FileManager::SaveFile() {
+    WCHAR file_name[256] = L"";
+    OPENFILENAME OFN;
+    memset(&OFN, 0, sizeof(OPENFILENAME));
+    OFN.lStructSize = sizeof(OPENFILENAME);
+    OFN.hwndOwner = hWnd; 
+    OFN.lpstrFilter = L"Guest Book(*.gb)\0*.gb";
+    OFN.lpstrDefExt = L"gb";
+    OFN.lpstrFile = file_name;
+    OFN.nMaxFile = 256;
+    OFN.lpstrInitialDir = L"C:\\Users\\Public\\Documents";
+    OFN.Flags = OFN_NOCHANGEDIR | OFN_OVERWRITEPROMPT;
+
+    if (GetSaveFileName(&OFN)) {
+        
+        std::wofstream outFile(file_name);  /// 파일생성
+
+        if (outFile.is_open()) {
+            
+            
+            outFile.close();  // 파일 닫기
+
+            AddFileToList(file_name);  /// 선택한 파일명을 리스트에 추가
+        }
+        else {
+           
+            MessageBox(hWnd, L"파일 저장에 실패!", L"오류", MB_OK | MB_ICONERROR);
+        }
     }
+    
 }
 
-/*void SaveFile(const std::wstring& fileName) 
-{
-    // 파일 저장 로직 넣기
-    
-
-    AddFileToList(fileName); 
-} 아직 기능 구현 중 */
 
 

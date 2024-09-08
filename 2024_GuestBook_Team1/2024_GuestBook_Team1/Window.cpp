@@ -102,8 +102,9 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_CREATE :
-        FileManager::InitializePanels(hWnd);  /*패널 초기화 */
+        FileManager::getInstance().InitializePanels(hWnd);  /*패널 초기화 */
         function = make_unique<GB_Function>();
+        FileManager_ = make_unique<FileManager>(hWnd);
 
         GetClientRect(hWnd, &MainRT);
 
@@ -115,7 +116,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         CreateWindowW(L"BUTTON", L"굵기", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 110, 55, 30, 30, hWnd, (HMENU)"P_WIDTH", hInst, nullptr);
         CreateWindowW(L"BUTTON", L"CLEAR", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 145, 55, 60, 30, hWnd, (HMENU)"CLEAR", hInst, nullptr);
         CreateWindowW(L"BUTTON", L"NEW", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 210, 55, 55, 30, hWnd, (HMENU)"NEW_FILE", hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"SAVE", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 280, 55, 60, 30, hWnd, (HMENU)"SAVE", hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"SAVE", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 280, 55, 60, 30, hWnd, (HMENU)ID_SAVE_BUTTON, hInst, nullptr);
         CreateWindowW(L"BUTTON", L"LOAD", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 350, 55, 60, 30, hWnd, (HMENU)"LOAD", hInst, nullptr);
         CreateWindowW(L"BUTTON", L"MANAGER", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 420, 55, 60, 30, hWnd, (HMENU)"FILE_MANAER", hInst, nullptr);
         CreateWindowW(L"BUTTON", L"CREDIT", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 490, 55, 60, 30, hWnd, (HMENU)"CREDIT", hInst, nullptr);
@@ -136,6 +137,9 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
         case IDM_EXIT:
             DestroyWindow(hWnd);
+            break;
+        case ID_SAVE_BUTTON:
+            FileManager_->SaveFile();
             break;
         case ID_FILE_LIST:
             /* 파일 리스트 박스에서 선택된 파일을 처리하는 코드를 넣어야함*/
@@ -163,7 +167,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         break;
     case WM_SIZE:
-        FileManager::ResizePanels(hWnd, lParam);  /*패널 크기 조정 함수 호출*/
+        FileManager::getInstance().ResizePanels(hWnd, lParam);  /*패널 크기 조정 함수 호출*/
         MoveWindow(SideMenu, MainRT.right - 49, 10, 30, 30, TRUE);          //...다음에 구현
         break;
     case WM_PAINT:
