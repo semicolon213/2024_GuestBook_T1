@@ -11,6 +11,8 @@
 
 using namespace std;
 
+enum DrawType { BASIC, BRUSH, PENCIL, SPRAY, MARKER, RECTANGLE, TEST };  //브러쉬 종류
+
 class Window
 {
 private :
