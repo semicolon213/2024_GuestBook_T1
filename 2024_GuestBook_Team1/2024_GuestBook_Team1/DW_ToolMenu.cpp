@@ -3,11 +3,13 @@ DW_ToolMenu::DW_ToolMenu(HINSTANCE hInstance)
 	:ChildWindow(cInst, RGB(249, 249, 249))
 {
 	tInst = hInstance;
+    ToolRT = { 0 };
+    tWnd = nullptr;
 }
 
 void DW_ToolMenu::Create(HWND hParentWnd, int x, int y, int width, int height)
 {
-	ChildWindow::Create(hParentWnd, L"BlueWindowClass", L"Blue Child Window", x, y, width, height);
+	ChildWindow::Create(hParentWnd, L"DW_ToolMenuClass", L"Tool Child Window", x, y, width, height);
 	tWnd = cWnd;
 }
 

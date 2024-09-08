@@ -11,6 +11,7 @@ public:
     RECT GetRT();
     void Show(bool show);
     HWND GetHWND() const;
+    RECT GetChildPos(HWND hWndParent, HWND hWndChild);
 
 protected:
     virtual LRESULT HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM lParam);

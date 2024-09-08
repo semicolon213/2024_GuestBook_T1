@@ -1,7 +1,10 @@
 #include "ChildWindow.h"
 
 ChildWindow::ChildWindow(HINSTANCE hInstance, COLORREF bgColor)
-    : cInst(hInstance), bgColor(bgColor), cWnd(NULL), hBrush(CreateSolidBrush(bgColor)) {}
+    : cInst(hInstance), bgColor(bgColor), cWnd(NULL), hBrush(CreateSolidBrush(bgColor))
+{
+    ChildRT = { 0 };
+}
 
 void ChildWindow::Create(HWND hParentWnd, LPCWSTR className, LPCWSTR windowName, int x, int y, int width, int height) 
 {
@@ -34,14 +37,23 @@ HWND ChildWindow::GetHWND() const
     return cWnd;
 }
 
+RECT ChildWindow::GetChildPos(HWND hWndParent, HWND hWndChild)
+{
+    RECT rect;
+    GetClientRect(hWndChild, &rect);
+    MapWindowPoints(hWndChild, hWndParent, (POINT*)&rect, 2);
+    
+    return rect;
+}
+
 LRESULT CALLBACK ChildWindow::ChildWndProc(HWND cWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 {
-    ChildWindow* pThis = reinterpret_cast<ChildWindow*>(GetWindowLongPtr(cWnd, GWLP_USERDATA));
+    ChildWindow* pThis = (ChildWindow*)GetWindowLongPtr(cWnd, GWLP_USERDATA);
 
     if (message == WM_CREATE) 
     {
-        LPCREATESTRUCT pCreateStruct = reinterpret_cast<LPCREATESTRUCT>(lParam);
-        pThis = reinterpret_cast<ChildWindow*>(pCreateStruct->lpCreateParams);
+        LPCREATESTRUCT pCreateStruct = (LPCREATESTRUCT)lParam;
+        pThis = (ChildWindow*)pCreateStruct->lpCreateParams;
         SetWindowLongPtr(cWnd, GWLP_USERDATA, (LONG_PTR)pThis);
     }
 
@@ -61,9 +73,9 @@ LRESULT ChildWindow::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARA
     {
     case WM_CREATE:
         break;
-    case WM_KILLFOCUS:
-        SetForegroundWindow(cWnd); // 포커스를 잃으면 다시 자식 창으로 포커스 설정
-        break;
+    //case WM_KILLFOCUS:
+    //    SetForegroundWindow(cWnd); // 포커스를 잃으면 다시 자식 창으로 포커스 설정
+    //    break;
     case WM_PAINT: {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(cWnd, &ps);

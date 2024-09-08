@@ -1,6 +1,7 @@
 #pragma once
 #include "ChildWindow.h"
 #include "DW_ToolMenu.h"
+#include "Resource.h"
 
 class DrowWindow : public ChildWindow 
 {
