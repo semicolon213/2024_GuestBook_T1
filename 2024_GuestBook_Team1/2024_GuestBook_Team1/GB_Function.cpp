@@ -38,7 +38,14 @@ void GB_Function::draw(HWND hWnd, LPARAM lParam, ULONGLONG pTime, UINT state, in
 
 void GB_Function::mouseUD(LPARAM lParam, ULONGLONG pTime, UINT state, int size, COLORREF col)
 {
-	isLeftClick = !isLeftClick;
+    if (state == WM_LBUTTONDOWN) 
+    {
+        isLeftClick = true;
+    }
+    else 
+    {
+        isLeftClick = false;
+    }
 	
 	x = LOWORD(lParam);
 	y = HIWORD(lParam);
