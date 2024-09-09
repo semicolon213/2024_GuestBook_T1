@@ -3,18 +3,22 @@
 #include <Windows.h>
 #include <mutex>
 #include <memory>
-#include "FileManager.h"
-#include "Resource.h"
-#include "GB_Function.h"
+#include <thread>
+
+#include "framework.h"
+
 #include "BlueWindow.h"
 #include "DrowWindow.h"
+#include "FileManager.h"
+#include "Function.h"
+#include "ColorPalette.h"
 
 #define MAX_LOADSTRING 100
 
+#define PLAY 1
+#define STOP 2
 
 using namespace std;
-
-enum DrawType { BASIC, BRUSH, PENCIL, SPRAY, MARKER, RECTANGLE, TEST };  //브러쉬 종류
 
 class Window
 {
@@ -32,8 +36,11 @@ private :
 	static unique_ptr<Window> sinTonIns;
 	static once_flag flag;
 
-	unique_ptr<GB_Function> function;
-	std::unique_ptr<FileManager> fileManager;
+	unique_ptr<Function> function;
+	unique_ptr<FileManager> fileManager;
+	unique_ptr<ColorPalette> colorPalette;
+
+	int penNum = 0;
 
 
 public :
@@ -50,8 +57,6 @@ public :
 	BOOL InitInstance(HINSTANCE, int);
 
 	static Window* GetInstance();
-
-
 
 };
 

@@ -12,7 +12,6 @@
 
 
 #include "FileManager.h"
-#include "window.h"
 
 std::vector<std::wstring> fileList;
 

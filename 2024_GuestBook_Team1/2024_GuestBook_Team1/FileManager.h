@@ -4,9 +4,8 @@
 #include <vector>
 #include <string>
 #include <fstream>
+
 #include "Resource.h"
-
-
 
 #define ID_FILE_LIST 101
 
@@ -19,11 +18,6 @@ private:
 	 HWND hFileListBox;
 	 HINSTANCE hInst;
 	 HWND hWnd;
-	 
-
-
-	 
-	 
 
 public:
 	static FileManager& getInstance() {
@@ -42,7 +36,6 @@ public:
 	void AddFileToList(const std::wstring& fileName);
 	void UpdateFileListUI();
 	void SaveFile();
-
 
 };
 

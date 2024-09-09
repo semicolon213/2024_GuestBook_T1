@@ -9,7 +9,6 @@
 #include "2024_GuestBook_Team1.h"
 #include "Resource.h"
 
-#include "Window.h"
 
 #define MAX_LOADSTRING 100
 
