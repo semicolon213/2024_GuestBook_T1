@@ -23,10 +23,12 @@
 #define BUTTON_ID (DEF_ID + 1)
 
 
+#define PLAY_BUTTON (BUTTON_ID + 1)
+#define CLEAR_BUTTON (BUTTON_ID + 2)
+
 
 //DrowWindow
 #define DW_DEF					(DEF_ID + 100)
- 
 
 
 #endif
