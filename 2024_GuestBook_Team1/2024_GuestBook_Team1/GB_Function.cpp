@@ -57,6 +57,22 @@ void GB_Function::mouseUD(LPARAM lParam, ULONGLONG pTime, UINT state, int size, 
 	record(lParam, pTime, state, size, col);
 }
 
+void GB_Function::replayThread(HWND hWnd)
+{
+    isTerminate = false;
+    bool status = false;
+
+    if (replayThreadHandle.joinable())
+        return;
+        
+    else
+
+    //std::thread를 사용하여 스레드를 시작
+    replayThreadHandle = thread(&GB_Function::replay, this, hWnd);
+
+    //스레드가 종료될 때 자동으로 자원이 반환되도록 함
+    replayThreadHandle.detach();
+}
 
 void GB_Function::replay(HWND hWnd)
 {
@@ -68,7 +84,6 @@ void GB_Function::replay(HWND hWnd)
     {
         //화면 초기화
         InvalidateRect(hWnd, NULL, TRUE);
-        //윈도우 갱신
         UpdateWindow(hWnd);
 
         hdc = GetDC(hWnd);
@@ -118,3 +133,4 @@ void GB_Function::replay(HWND hWnd)
         Sleep(500);
     }
 }
+

@@ -1,5 +1,7 @@
 #include "Window.h"
 #include "FileManager.h"
+#include "GB_Function.h"
+#include <thread>
 
 // 멤버 변수 초기화
 unique_ptr<Window> Window::sinTonIns = nullptr;
@@ -93,7 +95,8 @@ LRESULT Window::StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 //
 //
 
-
+#define PLAY 1
+#define STOP 2
 
 LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -127,6 +130,8 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         CreateWindowW(L"BUTTON", L"CREDIT", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 490, 55, 60, 30, hWnd, (HMENU)"CREDIT", hInst, nullptr);
         CreateWindowW(L"BUTTON", L"PLAY", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 560, 55, 60, 30, hWnd, (HMENU)"PLAY", hInst, nullptr);
         CreateWindowW(L"BUTTON", L"STOP", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 630, 55, 60, 30, hWnd, (HMENU)BUTTON_ID, hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"PLAY", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 560, 55, 60, 30, hWnd, (HMENU)PLAY, hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"STOP", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 630, 55, 60, 30, hWnd, (HMENU)STOP, hInst, nullptr);
 
         dWindow = new DrowWindow(hInst);
         dWindow->Create(hWnd, 0, 0, MainRT.right, MainRT.bottom);
@@ -162,6 +167,13 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
         case ID_FILE_LIST:
             /* 파일 리스트 박스에서 선택된 파일을 처리하는 코드를 넣어야함*/
+        case PLAY:
+            replay = true;
+            function->replayThread(hWnd);
+            break;
+        case STOP:
+            replay = false;
+            function->isTerminate = true;
             break;
         default:
             return DefWindowProc(hWnd, message, wParam, lParam);
@@ -182,7 +194,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_RBUTTONDOWN :
-
+        
         break;
     case WM_SIZE:
         ResizePanels(hWnd, lParam);  /*패널 크기 조정 함수 호출*/
@@ -194,7 +206,6 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
         HBRUSH hbr = (HBRUSH)SelectObject(hdc,CreateSolidBrush(RGB(249,249,249)));
-        HPEN hPen = (HPEN)SelectObject(hdc, CreatePen(PS_SOLID, 1, RGB(234, 234, 234)));
         // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
         GetClientRect(hWnd, &MainRT);
         
@@ -206,27 +217,32 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         bool LBState = false;
         int x, y;
-        for (const auto& record : function->drawLInfo.pInfo)
+
+        if (replay = false) 
         {
-            x = LOWORD(record.lParam);
-            y = HIWORD(record.lParam);
-
-            switch (record.state)
+            for (const auto& record : function->drawLInfo.pInfo)
             {
-            case WM_LBUTTONDOWN:
-                LBState = true;
-                MoveToEx(hdc, x, y, NULL);
-                LineTo(hdc, x, y);
-                break;
+                HPEN hPen = (HPEN)SelectObject(hdc, CreatePen(PS_SOLID, 10, RGB(255, 0, 0)));
+                x = LOWORD(record.lParam);
+                y = HIWORD(record.lParam);
 
-            case WM_MOUSEMOVE:
-                LineTo(hdc, x, y);
-                break;
-            case WM_LBUTTONUP:
-                LBState = false;
-                break;
-            default:
-                break;
+                switch (record.state)
+                {
+                case WM_LBUTTONDOWN:
+                    LBState = true;
+                    MoveToEx(hdc, x, y, NULL);
+                    LineTo(hdc, x, y);
+                    break;
+
+                case WM_MOUSEMOVE:
+                    LineTo(hdc, x, y);
+                    break;
+                case WM_LBUTTONUP:
+                    LBState = false;
+                    break;
+                default:
+                    break;
+                }
             }
         }
 
