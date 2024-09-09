@@ -4,10 +4,14 @@
 // 멤버 변수 초기화
 unique_ptr<Window> Window::sinTonIns = nullptr;
 once_flag Window::flag;
+
+
+DrawType currentDraw = DrawType::BASIC;  // 현재 사용 중인 브러쉬
+
 //  함수: MyRegisterClass()
 //
 //  용도: 창 클래스를 등록합니다.
-//
+//  
 ATOM Window::MyRegisterClass(HINSTANCE hInstance)
 {
     WNDCLASSEXW wcex;
@@ -133,6 +137,15 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         CreateWindowW(L"BUTTON", L"STOP", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 630, 55, 60, 30, hWnd, (HMENU)BUTTON_ID, hInst, nullptr);
         CreateWindowW(L"BUTTON", L"PLAY", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 560, 55, 60, 30, hWnd, (HMENU)PLAY, hInst, nullptr);
         CreateWindowW(L"BUTTON", L"STOP", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 630, 55, 60, 30, hWnd, (HMENU)STOP, hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"STOP", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 630, 55, 60, 30, hWnd, (HMENU)"STOP", hInst, nullptr);
+        // 테스트 중인 코드 삭제 해도 됨.
+        CreateWindowW(L"BUTTON", L"연필", WS_CHILD | WS_VISIBLE, 700, 55, 40, 30, hWnd, (HMENU)"DRAW_PENCIL", hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"붓", WS_CHILD | WS_VISIBLE, 750, 55, 30, 30, hWnd, (HMENU)"DRAW_BRUSH", hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"스프레이", WS_CHILD | WS_VISIBLE, 780, 55, 60, 30, hWnd, (HMENU)"DRAW_SPRAY", hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"마커", WS_CHILD | WS_VISIBLE, 850, 55, 40, 30, hWnd, (HMENU)"DRAW_MARKER", hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"사인펜", WS_CHILD | WS_VISIBLE, 900, 55, 50, 30, hWnd, (HMENU)"DRAW_PEN", hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"깃펜", WS_CHILD | WS_VISIBLE, 950, 55, 40, 30, hWnd, (HMENU)"DRAW_FEATHER", hInst, nullptr);
+
 
         dWindow = new DrowWindow(hInst);
         dWindow->Create(hWnd, 0, 0, MainRT.right, MainRT.bottom);
@@ -151,6 +164,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_COMMAND:
     {
+
         int wmId = LOWORD(wParam);
         // 메뉴 선택을 구문 분석합니다:
         switch (wmId)
@@ -179,19 +193,34 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             replay = false;
             function->isTerminate = true;
             break;
+        // 버튼 기능 이해못해서 적용 안되는중
+        case DRAW_PENCIL:
+            currentDraw = PENCIL;
+            break;
+        case DRAW_BRUSH:
+            currentDraw = BRUSH;
+            break;
+        case DRAW_SPRAY:
+            currentDraw = SPRAY;
+            break;
+        case DRAW_PEN:
+            currentDraw = RECTANGLE;
+            break;
+        
+        /*case ID_FILE_LIST:
+             파일 리스트 박스에서 선택된 파일을 처리하는 코드를 넣어야함
+            break; */
         default:
-            return DefWindowProc(hWnd, message, wParam, lParam);
+            return DefWindowProc(hWnd, message, wParam, lParam);            
         }
     }
-    break;
-
+    break;    
     case WM_LBUTTONDOWN:
         break;
 
-    case WM_MOUSEMOVE:
-        function->draw(hWnd, lParam, (DWORD)GetTickCount64(), message, 10, RGB(255, 0, 0));
+    case WM_MOUSEMOVE:      
+        function->draw(hWnd, lParam, (DWORD)GetTickCount64(), message, 10, RGB(255, 0, 0), RECTANGLE); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
         break;
-
     case WM_LBUTTONUP:
         function->mouseUD(lParam, (DWORD)GetTickCount64(), message, 10, RGB(255, 0, 0));
 

@@ -1,5 +1,14 @@
+/**
+@author 조재현
+@date 2024.09.09
+    브러쉬 종류 기능 추가 (버튼 못 만들어서 코드에서 직접 수정해야 기능 사용 가능)
+    버튼 추가 (버튼 만 만들고 기능 구현x)
+@todo 버튼 기능 구현
+      더 다양한 브러쉬 기능 추가 생각
+      색깔,리플레이,브러쉬 크기,저장 등 다른 기능들이랑 연결점 고려하기.
+**/
 #include "GB_Function.h"
-
+#include "Window.h"
 using namespace std;
 
 
@@ -13,25 +22,67 @@ void GB_Function::record(LPARAM lParam, ULONGLONG pTime, UINT state, int size, C
 	drawLInfo.pInfo.push_back(drawPInfo);
 }
 
-void GB_Function::draw(HWND hWnd, LPARAM lParam, ULONGLONG pTime, UINT state, int size, COLORREF col)
+// 기본 그리기 기능에 브러쉬 기능 코드 추가함.
+void GB_Function::draw(HWND hWnd, LPARAM lParam, ULONGLONG pTime, UINT state, int size, COLORREF col, int b_type)
 {
+    HBRUSH hpen;
+    HPEN npen,open;
+    
 	hdc = GetDC(hWnd);
 	if (isLeftClick)
 	{
 		x = LOWORD(lParam);
 		y = HIWORD(lParam);
-	
-		nPen = CreatePen(PS_SOLID, size, col);
-		oPen = (HPEN)SelectObject(hdc, nPen);
-	
-		MoveToEx(hdc, x, y, NULL);
-		LineTo(hdc, px, py);
+        // 브러쉬 선택하면 거기에 맞는 펜 제공
+        switch (b_type) {
+        case BASIC: // 기본 그리기
+            nPen = CreatePen(PS_SOLID, size, col);
+            oPen = (HPEN)SelectObject(hdc, nPen);
+            break;
+        case PENCIL: // 연필 (색깔만 회색으로)
+            nPen = CreatePen(PS_SOLID, size, RGB(150, 150, 150));
+            oPen = (HPEN)SelectObject(hdc, nPen);
+            break;
+        case SPRAY: // 스프레이 (점을 흩뿌림)
+            for (int i = 0; i < 100; ++i) {
+                int offsetX = (rand() % (size * 8)) - (size * 4);
+                int offsetY = (rand() % (size * 8)) - (size * 4);
+                if (sqrt(offsetX * offsetX + offsetY * offsetY) <= size * 4) {
+                    SetPixel(hdc, x + offsetX, y + offsetY, col);
+                }
+            }
+            ReleaseDC(hWnd, hdc);
+            break;
+        case MARKER: 
+            for (int i = 0; i < 100; ++i) {
+                int offsetX = (rand() % (size * 2)) - size;
+                int offsetY = (rand() % (size * 2)) - size;
+                SetPixel(hdc, x + offsetX, y + offsetY, col);                                  
+            }
+            ReleaseDC(hWnd, hdc);
+            break;
+        case RECTANGLE:
+        {
+            HBRUSH hpen = CreateSolidBrush(RGB(GetRValue(col), GetGValue(col), GetBValue(col)));
+            SelectObject(hdc, hpen);
+            Rectangle(hdc, x - size, y - size, x + size, y + size);
+            ReleaseDC(hWnd, hdc);
+            return;
+        }
+        case TEST: break;
+        default: break;
+        }        
+                
+            MoveToEx(hdc, x, y, NULL);
+            LineTo(hdc, px, py);            
+            DeleteObject(nPen);
+        
 
 		px = x;
 		py = y;
 
 		record(lParam, pTime, state, size, col);
-	
+	    
 	}
 
 }
