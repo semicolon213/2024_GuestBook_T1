@@ -1,6 +1,4 @@
 #include "Window.h"
-#include "FileManager.h"
-#include "GB_Function.h"
 #include <thread>
 
 // 멤버 변수 초기화
@@ -111,8 +109,10 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_CREATE :
-        InitializePanels(hWnd);  /*패널 초기화 */
         function = make_unique<GB_Function>();
+        fileManager = make_unique<FileManager>(hWnd);
+
+        fileManager->getInstance().InitializePanels(hWnd);  /*패널 초기화 */
 
         GetClientRect(hWnd, &MainRT);
 
@@ -124,10 +124,11 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         CreateWindowW(L"BUTTON", L"굵기", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 110, 55, 30, 30, hWnd, (HMENU)"P_WIDTH", hInst, nullptr);
         CreateWindowW(L"BUTTON", L"CLEAR", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 145, 55, 60, 30, hWnd, (HMENU)"CLEAR", hInst, nullptr);
         CreateWindowW(L"BUTTON", L"NEW", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 210, 55, 55, 30, hWnd, (HMENU)"NEW_FILE", hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"SAVE", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 280, 55, 60, 30, hWnd, (HMENU)"SAVE", hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"SAVE", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 280, 55, 60, 30, hWnd, (HMENU)ID_SAVE_BUTTON, hInst, nullptr);
         CreateWindowW(L"BUTTON", L"LOAD", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 350, 55, 60, 30, hWnd, (HMENU)"LOAD", hInst, nullptr);
         CreateWindowW(L"BUTTON", L"MANAGER", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 420, 55, 60, 30, hWnd, (HMENU)"FILE_MANAER", hInst, nullptr);
         CreateWindowW(L"BUTTON", L"CREDIT", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 490, 55, 60, 30, hWnd, (HMENU)"CREDIT", hInst, nullptr);
+        ///윤찬솔 최가은 합의 하셈 밑에 코드
         CreateWindowW(L"BUTTON", L"PLAY", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 560, 55, 60, 30, hWnd, (HMENU)"PLAY", hInst, nullptr);
         CreateWindowW(L"BUTTON", L"STOP", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 630, 55, 60, 30, hWnd, (HMENU)BUTTON_ID, hInst, nullptr);
         CreateWindowW(L"BUTTON", L"PLAY", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 560, 55, 60, 30, hWnd, (HMENU)PLAY, hInst, nullptr);
@@ -165,6 +166,9 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         case IDM_EXIT:
             DestroyWindow(hWnd);
             break;
+        case ID_SAVE_BUTTON:
+            fileManager->SaveFile();
+            break;
         case ID_FILE_LIST:
             /* 파일 리스트 박스에서 선택된 파일을 처리하는 코드를 넣어야함*/
         case PLAY:
@@ -197,7 +201,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         
         break;
     case WM_SIZE:
-        ResizePanels(hWnd, lParam);  /*패널 크기 조정 함수 호출*/
+        fileManager->getInstance().ResizePanels(hWnd, lParam);  /*패널 크기 조정 함수 호출*/
         GetClientRect(hWnd, &MainRT);
         MoveWindow(d_hWnd, 0, 0, MainRT.right, MainRT.bottom, TRUE);          //...다음에 구현
         break;

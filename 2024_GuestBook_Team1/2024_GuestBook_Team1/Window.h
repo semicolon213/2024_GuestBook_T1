@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <mutex>
 #include <memory>
-
+#include "FileManager.h"
 #include "Resource.h"
 #include "GB_Function.h"
 #include "BlueWindow.h"
@@ -31,6 +31,7 @@ private :
 	static once_flag flag;
 
 	unique_ptr<GB_Function> function;
+	std::unique_ptr<FileManager> fileManager;
 
 
 public :

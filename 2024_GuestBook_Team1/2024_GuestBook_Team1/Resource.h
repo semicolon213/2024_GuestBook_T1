@@ -2,6 +2,7 @@
 // Microsoft Visual C++에서 생성한 포함 파일입니다.
 // 다음에서 사용 2024_GuestBook_Team1.rc
 
+#define ID_RIGHT_PANEL			1002
 #define IDS_APP_TITLE			103
 #define ID_FILE_LIST			101
 #define IDR_MAINFRAME			128
@@ -9,6 +10,7 @@
 #define IDD_ABOUTBOX			103
 #define IDM_ABOUT				104
 #define IDM_EXIT				105
+#define ID_SAVE_BUTTON			1001
 #define IDI_MY2024GUESTBOOKTEAM1			107
 #define IDI_SMALL				108
 #define IDC_MY2024GUESTBOOKTEAM1			109
