@@ -33,6 +33,7 @@ ATOM Window::MyRegisterClass(HINSTANCE hInstance)
 }
 
 
+
 static RECT DesktopRT;      //사용자 화면 크기 받기용
 static RECT MainRT;         //메인 윈도우 크기 받기용
 
@@ -97,7 +98,12 @@ LRESULT Window::StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     string FileName = "제목 없음";
-    HWND SideMenu = NULL;
+    static HWND SideMenu = NULL;
+    static DrowWindow* dWindow = nullptr;
+    static BlueWindow* pBW = nullptr;
+    static HWND d_hWnd = nullptr;
+    static HWND b_hWnd = nullptr;
+
 
     switch (message)
     {
@@ -120,8 +126,20 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         CreateWindowW(L"BUTTON", L"MANAGER", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 420, 55, 60, 30, hWnd, (HMENU)"FILE_MANAER", hInst, nullptr);
         CreateWindowW(L"BUTTON", L"CREDIT", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 490, 55, 60, 30, hWnd, (HMENU)"CREDIT", hInst, nullptr);
         CreateWindowW(L"BUTTON", L"PLAY", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 560, 55, 60, 30, hWnd, (HMENU)"PLAY", hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"STOP", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 630, 55, 60, 30, hWnd, (HMENU)"STOP", hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"STOP", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 630, 55, 60, 30, hWnd, (HMENU)BUTTON_ID, hInst, nullptr);
 
+        dWindow = new DrowWindow(hInst);
+        dWindow->Create(hWnd, 0, 0, MainRT.right, MainRT.bottom);
+        dWindow->Show(FALSE);
+        d_hWnd = dWindow->GetHWND();
+
+        pBW = new BlueWindow(hInst);
+
+        pBW->Create(hWnd, 0, 0, MainRT.right, MainRT.bottom);
+
+        pBW->Show(FALSE);
+
+        b_hWnd = pBW->GetHWND();
         break;
 
 
@@ -131,6 +149,11 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         // 메뉴 선택을 구문 분석합니다:
         switch (wmId)
         {
+        case BUTTON_ID:
+            dWindow->Show(true);
+            EnableWindow(GetDlgItem(hWnd, BUTTON_ID), FALSE);
+            break;
+
         case IDM_ABOUT:
             DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
             break;
@@ -147,7 +170,6 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     break;
 
     case WM_LBUTTONDOWN:
-        function->mouseUD(lParam, (DWORD)GetTickCount64(), message, 10, RGB(255, 0, 0));
         break;
 
     case WM_MOUSEMOVE:
@@ -164,7 +186,8 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     case WM_SIZE:
         ResizePanels(hWnd, lParam);  /*패널 크기 조정 함수 호출*/
-        MoveWindow(SideMenu, MainRT.right - 49, 10, 30, 30, TRUE);          //...다음에 구현
+        GetClientRect(hWnd, &MainRT);
+        MoveWindow(d_hWnd, 0, 0, MainRT.right, MainRT.bottom, TRUE);          //...다음에 구현
         break;
     case WM_PAINT:
     {
@@ -177,8 +200,8 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         
         Rectangle(hdc, -1, 52, MainRT.right + 1, 99);       //메뉴바 만들기               크흑 맘에 안들지만 일단 생성;;
         hbr = (HBRUSH)SelectObject(hdc, CreateSolidBrush(RGB(255, 255, 255)));
-        //서명란 만들기 (크기 1200X700)
-        Rectangle(hdc, (MainRT.right - 1200) / 2, (MainRT.bottom - 700) / 2 + 100, (MainRT.right + 1200) / 2, (MainRT.bottom + 700) / 2);
+        //서명란 만들기 (크기 1300X750)
+        Rectangle(hdc, (MainRT.right - 1300) / 2, (MainRT.bottom - 750) / 2 + 100, (MainRT.right + 1300) / 2, (MainRT.bottom + 750) / 2);
 
 
         bool LBState = false;

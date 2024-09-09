@@ -6,8 +6,11 @@
 
 #include "Resource.h"
 #include "GB_Function.h"
+#include "BlueWindow.h"
+#include "DrowWindow.h"
 
 #define MAX_LOADSTRING 100
+
 
 using namespace std;
 
