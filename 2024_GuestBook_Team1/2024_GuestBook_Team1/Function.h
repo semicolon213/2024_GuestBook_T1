@@ -27,6 +27,7 @@ private:
 
 	bool isLeftClick = false;
 	bool isTerminate = false;
+	bool isReplay = false;
 
 	LINFO drawLInfo;
 
@@ -37,11 +38,16 @@ public:
 
 	void draw(HWND, LPARAM, ULONGLONG, UINT, int , COLORREF); //뒤에 브러쉬 추가
 	void mouseUD(LPARAM, ULONGLONG, UINT, int, COLORREF);
-	void setIsTerminate(bool);
 	void replayThread(HWND);
+
+	void setIsReplay(bool);
+	bool getIsReplay();
+
 	void setBShape(int);
+
 	void setPenStyle(int, LPARAM, COLORREF);
 
+	void setIsTerminate(bool);
 	LINFO getDrawLInfo();
 	thread replayThreadHandle;
 

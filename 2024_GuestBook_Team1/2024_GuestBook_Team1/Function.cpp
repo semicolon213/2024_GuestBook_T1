@@ -43,6 +43,8 @@ void Function::draw(HWND hWnd, LPARAM lParam, ULONGLONG pTime, UINT state, int s
 		px = x;
 		py = y;
 
+		if (isReplay) return;
+
 		record(lParam, pTime, state, size, col);
 
 	}
@@ -53,6 +55,12 @@ void Function::mouseUD(LPARAM lParam, ULONGLONG pTime, UINT state, int size, COL
 {
 	if (state == WM_LBUTTONDOWN)
 	{
+		x = LOWORD(lParam);
+		y = HIWORD(lParam);
+
+		px = x;
+		py = y;
+
 		isLeftClick = true;
 	}
 	else
@@ -60,20 +68,7 @@ void Function::mouseUD(LPARAM lParam, ULONGLONG pTime, UINT state, int size, COL
 		isLeftClick = false;
 	}
 
-	x = LOWORD(lParam);
-	y = HIWORD(lParam);
-
-	if (isLeftClick)
-	{
-		setPenStyle(size, lParam, col);
-
-		MoveToEx(hdc, x, y, NULL);
-		LineTo(hdc, x, y);
-
-		px = x;
-		py = y;
-
-	}
+	if (isReplay) return;
 
 	record(lParam, pTime, state, size, col);
 }
@@ -81,7 +76,7 @@ void Function::mouseUD(LPARAM lParam, ULONGLONG pTime, UINT state, int size, COL
 void Function::replayThread(HWND hWnd)
 {
 	isTerminate = false;
-	bool status = false;
+	setIsReplay(true);
 
 	if (replayThreadHandle.joinable())
 		return;
@@ -111,26 +106,27 @@ void Function::replay(HWND hWnd)
 		{
 			if (isTerminate)
 				break;
-			setBShape(drawLInfo.pInfo[i].bShape);
 
-			setPenStyle(drawLInfo.pInfo[i].pWidth, drawLInfo.pInfo[i].lParam, drawLInfo.pInfo[i].pColor);
+			PINFO replayInfo = drawLInfo.pInfo[i];
+			x = LOWORD(replayInfo.lParam);
+			y = HIWORD(replayInfo.lParam);
 
-			x = LOWORD(drawLInfo.pInfo[i].lParam);
-			y = HIWORD(drawLInfo.pInfo[i].lParam);
-
-			switch (drawLInfo.pInfo[i].state)
+			switch (replayInfo.state)
 			{
 			case WM_LBUTTONDOWN:
-				MoveToEx(hdc, x, y, NULL);
-				LineTo(hdc, x, y + 1);
+				setBShape(replayInfo.bShape);
+				mouseUD(replayInfo.lParam, replayInfo.pTime, replayInfo.state, replayInfo.pWidth, replayInfo.pColor);
 				break;
 
 			case WM_MOUSEMOVE:
-				LineTo(hdc, x, y);
+				setBShape(replayInfo.bShape);
+				draw(hWnd, replayInfo.lParam, replayInfo.pTime, replayInfo.state, replayInfo.pWidth, replayInfo.pColor);
 				break;
 
 			case WM_LBUTTONUP:
-				LineTo(hdc, x, y);
+				setBShape(replayInfo.bShape);
+				mouseUD(replayInfo.lParam, replayInfo.pTime, replayInfo.state, replayInfo.pWidth, replayInfo.pColor);
+
 				break;
 
 			default:
@@ -218,4 +214,14 @@ void Function::setIsTerminate(bool isTerminate)
 LINFO Function::getDrawLInfo()
 {
 	return drawLInfo;
+}
+
+void Function::setIsReplay(bool isReplay)
+{
+	this->isReplay = isReplay;
+}
+
+bool Function::getIsReplay() 
+{
+	return isReplay;
 }

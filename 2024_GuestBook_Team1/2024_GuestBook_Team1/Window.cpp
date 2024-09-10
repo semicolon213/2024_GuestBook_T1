@@ -196,11 +196,10 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         case ID_FILE_LIST:
             /* 파일 리스트 박스에서 선택된 파일을 처리하는 코드를 넣어야함*/
         case PLAY:
-            replay = true;
             function->replayThread(hWnd);
             break;
         case STOP:
-            replay = false;
+            function->setIsReplay(false);
             function->setIsTerminate(true);
             break;
         // 버튼 기능 이해못해서 적용 안되는중
@@ -235,16 +234,16 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     break;    
     case WM_LBUTTONDOWN:
-        if (replay) break;
+        if (function->getIsReplay()) break;
         function->mouseUD(lParam, (DWORD)GetTickCount64(), message, 10, colorPalette->getColor(penNum));
         break;
 
     case WM_MOUSEMOVE:
-        if (replay) break;
+        if (function->getIsReplay()) break;
         function->draw(hWnd, lParam, (DWORD)GetTickCount64(), message, 10, colorPalette->getColor(penNum)); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
         break;
     case WM_LBUTTONUP:
-        if (replay) break;
+        if (function->getIsReplay()) break;
         function->mouseUD(lParam, (DWORD)GetTickCount64(), message, 10, colorPalette->getColor(penNum));
 
         break;
@@ -274,7 +273,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         bool LBState = false;
         int x, y;
 
-        if (replay = false) 
+        if (!function->getIsReplay())
         {
             for (const auto& record : function->getDrawLInfo().pInfo)
             {
