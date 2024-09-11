@@ -8,18 +8,20 @@
 
 using namespace std;
 
-static int px, py;
+
 
 class Function
 {
 
 private:
 
+
 	HWND hWnd;
-	PINFO drawPInfo;
 	HDC hdc;
 	HPEN nPen, oPen;
 	HBRUSH hPen;
+
+	int px, py;
 
 	int x, y;
 
@@ -31,13 +33,15 @@ private:
 
 	LINFO drawLInfo;
 
+	thread replayThreadHandle;
+
 	void replay(HWND);
-	void record(LPARAM, ULONGLONG, UINT, int, COLORREF);
+	void record(PINFO);
 
 public:
 
-	void draw(HWND, LPARAM, ULONGLONG, UINT, int , COLORREF); //뒤에 브러쉬 추가
-	void mouseUD(LPARAM, ULONGLONG, UINT, int, COLORREF);
+	void draw(HWND, PINFO, bool);		//뒤에 브러쉬 추가
+	void mouseUD(PINFO, bool);
 	void replayThread(HWND);
 
 	void setIsReplay(bool);
@@ -49,6 +53,5 @@ public:
 
 	void setIsTerminate(bool);
 	LINFO getDrawLInfo();
-	thread replayThreadHandle;
 
 };

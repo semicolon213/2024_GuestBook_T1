@@ -3,6 +3,7 @@
 
 #include <Windows.h>
 #include <vector>
+#include "Resource.h"
 
 typedef struct pointInfo
 {

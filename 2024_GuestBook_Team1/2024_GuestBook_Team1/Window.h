@@ -12,6 +12,7 @@
 #include "FileManager.h"
 #include "Function.h"
 #include "ColorPalette.h"
+#include "Struct.h"
 
 #define MAX_LOADSTRING 100
 
@@ -38,8 +39,13 @@ private :
 	unique_ptr<FileManager> fileManager;
 	unique_ptr<ColorPalette> colorPalette;
 
+	PINFO drawPInfo;
+
 	int penNum = 0;
 
+	int px, py;
+
+	bool LBState = false;
 
 public :
 	Window() = default;

@@ -154,8 +154,8 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         pBW->Show(FALSE);
 
         b_hWnd = pBW->GetHWND();
-        break;
 
+        break;
 
     case WM_COMMAND:
     {
@@ -169,16 +169,19 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 colorPalette->colorSelect(hWnd, penNum);
             else penNum = 0;
             break;
+
         case COLOR2:
             if (penNum == 1)
                 colorPalette->colorSelect(hWnd, penNum);
             else penNum = 1;
             break;
+
         case COLOR3:
             if (penNum == 2)
                 colorPalette->colorSelect(hWnd, penNum);
             else penNum = 2;
             break;
+
         case BUTTON_ID:
             dWindow->Show(true);
             EnableWindow(GetDlgItem(hWnd, BUTTON_ID), FALSE);
@@ -187,75 +190,96 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         case IDM_ABOUT:
             DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
             break;
+
         case IDM_EXIT:
             DestroyWindow(hWnd);
             break;
+
         case ID_SAVE_BUTTON:
             fileManager->SaveFile();
             break;
+
         case ID_FILE_LIST:
             /* 파일 리스트 박스에서 선택된 파일을 처리하는 코드를 넣어야함*/
+
         case PLAY:
             function->replayThread(hWnd);
             break;
+
         case STOP:
             function->setIsReplay(false);
             function->setIsTerminate(true);
             break;
+
         // 버튼 기능 이해못해서 적용 안되는중
         case BASIC:
             function->setBShape(BASIC);
             break;
+
         case BRUSH:
             function->setBShape(BRUSH);
             break;
+
         case PENCIL:
             function->setBShape(PENCIL);
             break;
+
         case SPRAY:
             function->setBShape(SPRAY);
             break;
+
         case MARKER:
             function->setBShape(MARKER);
             break;
+
         case PEN:
             function->setBShape(PEN);
             break;
+
         case RECTANGLE:
             function->setBShape(RECTANGLE);
             break;
-        
-        /*case ID_FILE_LIST:
-             파일 리스트 박스에서 선택된 파일을 처리하는 코드를 넣어야함
-            break; */
+
         default:
             return DefWindowProc(hWnd, message, wParam, lParam);            
         }
-    }
-    break;    
-    case WM_LBUTTONDOWN:
-        if (function->getIsReplay()) break;
-        function->mouseUD(lParam, (DWORD)GetTickCount64(), message, 10, colorPalette->getColor(penNum));
         break;
+    }
 
+
+    
     case WM_MOUSEMOVE:
         if (function->getIsReplay()) break;
-        function->draw(hWnd, lParam, (DWORD)GetTickCount64(), message, 10, colorPalette->getColor(penNum)); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
+        drawPInfo.lParam = lParam;
+        drawPInfo.pColor = colorPalette->getColor(penNum);
+        drawPInfo.pTime = (DWORD)GetTickCount64();
+        drawPInfo.pWidth = 10;
+        drawPInfo.state = message;
+        function->draw(hWnd, drawPInfo, true); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
         break;
+
+    case WM_LBUTTONDOWN:
     case WM_LBUTTONUP:
         if (function->getIsReplay()) break;
-        function->mouseUD(lParam, (DWORD)GetTickCount64(), message, 10, colorPalette->getColor(penNum));
+        drawPInfo.lParam = lParam;
+        drawPInfo.pColor = colorPalette->getColor(penNum);
+        drawPInfo.pTime = (DWORD)GetTickCount64();
+        drawPInfo.pWidth = 10;
+        drawPInfo.state = message;
+        function->mouseUD(drawPInfo,true);
 
         break;
 
     case WM_RBUTTONDOWN :
         
         break;
+
     case WM_SIZE:
         fileManager->getInstance().ResizePanels(hWnd, lParam);  /*패널 크기 조정 함수 호출*/
         GetClientRect(hWnd, &MainRT);
         MoveWindow(d_hWnd, 0, 0, MainRT.right, MainRT.bottom, TRUE);          //...다음에 구현
         break;
+
     case WM_PAINT:
     {
         PAINTSTRUCT ps;
@@ -269,32 +293,23 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         //서명란 만들기 (크기 1300X750)
         Rectangle(hdc, (MainRT.right - 1300) / 2, (MainRT.bottom - 750) / 2 + 100, (MainRT.right + 1300) / 2, (MainRT.bottom + 750) / 2);
 
-
-        bool LBState = false;
-        int x, y;
-
         if (!function->getIsReplay())
         {
             for (const auto& record : function->getDrawLInfo().pInfo)
             {
-                HPEN hPen = (HPEN)SelectObject(hdc, CreatePen(PS_SOLID, 10, RGB(255, 0, 0)));
-                x = LOWORD(record.lParam);
-                y = HIWORD(record.lParam);
+                function->setBShape(record.bShape);
 
                 switch (record.state)
                 {
                 case WM_LBUTTONDOWN:
-                    LBState = true;
-                    MoveToEx(hdc, x, y, NULL);
-                    LineTo(hdc, x, y);
+                case WM_LBUTTONUP:
+                    function->mouseUD(record, false);
                     break;
 
                 case WM_MOUSEMOVE:
-                    LineTo(hdc, x, y);
+                    function->draw(hWnd, record, false);
                     break;
-                case WM_LBUTTONUP:
-                    LBState = false;
-                    break;
+
                 default:
                     break;
                 }

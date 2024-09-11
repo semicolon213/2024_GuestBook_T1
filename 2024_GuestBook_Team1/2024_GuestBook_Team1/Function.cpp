@@ -11,66 +11,58 @@
 
 using namespace std;
 
-
-void Function::record(LPARAM lParam, ULONGLONG pTime, UINT state, int size, COLORREF col)
+void Function::record(PINFO inputPI)
 {
-	drawPInfo.lParam = lParam;
-	drawPInfo.pTime = pTime;
-	drawPInfo.state = state;
-	drawPInfo.pWidth = size;
-	drawPInfo.pColor = col;
-	drawPInfo.bShape = bShape;
-	drawLInfo.pInfo.push_back(drawPInfo);
+	inputPI.bShape = bShape;
+	drawLInfo.pInfo.push_back(inputPI);
 }
 
 // 기본 그리기 기능에 브러쉬 기능 코드 추가함.
-void Function::draw(HWND hWnd, LPARAM lParam, ULONGLONG pTime, UINT state, int size, COLORREF col)// 뒤에 브러쉬 추가
+void Function::draw(HWND hWnd, PINFO dInfo, bool isRecord)// 뒤에 브러쉬 추가
 {
 
 	hdc = GetDC(hWnd);
 	if (isLeftClick)
 	{
-		x = LOWORD(lParam);
-		y = HIWORD(lParam);
+		x = LOWORD(dInfo.lParam);
+		y = HIWORD(dInfo.lParam);
 
-		setPenStyle(size, lParam, col);
+		setPenStyle(dInfo.pWidth, dInfo.lParam, dInfo.pColor);
 
 		MoveToEx(hdc, x, y, NULL);
 		LineTo(hdc, px, py);
 		DeleteObject(nPen);
 
-
 		px = x;
 		py = y;
 
-		if (isReplay) return;
-
-		record(lParam, pTime, state, size, col);
+		
+		if (isRecord)
+			record(dInfo);
 
 	}
 
 }
 
-void Function::mouseUD(LPARAM lParam, ULONGLONG pTime, UINT state, int size, COLORREF col)
+void Function::mouseUD(PINFO dInfo, bool isRecord)
 {
-	if (state == WM_LBUTTONDOWN)
+	if (dInfo.state == WM_LBUTTONDOWN)
 	{
-		x = LOWORD(lParam);
-		y = HIWORD(lParam);
+		x = LOWORD(dInfo.lParam);
+		y = HIWORD(dInfo.lParam);
 
 		px = x;
 		py = y;
 
 		isLeftClick = true;
-	}
-	else
+	} else
 	{
 		isLeftClick = false;
 	}
 
-	if (isReplay) return;
-
-	record(lParam, pTime, state, size, col);
+	
+	if (isRecord)
+		record(dInfo);
 }
 
 void Function::replayThread(HWND hWnd)
@@ -82,7 +74,6 @@ void Function::replayThread(HWND hWnd)
 		return;
 
 	else
-
 		//std::thread를 사용하여 스레드를 시작
 		replayThreadHandle = thread(&Function::replay, this, hWnd);
 
@@ -111,26 +102,25 @@ void Function::replay(HWND hWnd)
 			x = LOWORD(replayInfo.lParam);
 			y = HIWORD(replayInfo.lParam);
 
+			setBShape(replayInfo.bShape);
+
 			switch (replayInfo.state)
 			{
 			case WM_LBUTTONDOWN:
-				setBShape(replayInfo.bShape);
-				mouseUD(replayInfo.lParam, replayInfo.pTime, replayInfo.state, replayInfo.pWidth, replayInfo.pColor);
+				mouseUD(replayInfo, false);
 				break;
 
 			case WM_MOUSEMOVE:
-				setBShape(replayInfo.bShape);
-				draw(hWnd, replayInfo.lParam, replayInfo.pTime, replayInfo.state, replayInfo.pWidth, replayInfo.pColor);
+				draw(hWnd, replayInfo, false);
 				break;
 
 			case WM_LBUTTONUP:
-				setBShape(replayInfo.bShape);
-				mouseUD(replayInfo.lParam, replayInfo.pTime, replayInfo.state, replayInfo.pWidth, replayInfo.pColor);
-
+				mouseUD(replayInfo, false);
 				break;
 
 			default:
 				break;
+
 			}
 
 			//재생 속도 조절
@@ -162,10 +152,12 @@ void Function::setPenStyle(int size, LPARAM lParam, COLORREF col)
 		nPen = CreatePen(PS_SOLID, size, col);
 		oPen = (HPEN)SelectObject(hdc, nPen);
 		break;
+
 	case PENCIL: // 연필 (색깔만 회색으로)
 		nPen = CreatePen(PS_SOLID, size, col);
 		oPen = (HPEN)SelectObject(hdc, nPen);
 		break;
+
 	case SPRAY: // 스프레이 (점을 흩뿌림)
 		for (int i = 0; i < 100; ++i)
 		{
@@ -178,6 +170,7 @@ void Function::setPenStyle(int size, LPARAM lParam, COLORREF col)
 		}
 		ReleaseDC(hWnd, hdc);
 		break;
+
 	case MARKER:
 		for (int i = 0; i < 100; ++i)
 		{
@@ -187,8 +180,8 @@ void Function::setPenStyle(int size, LPARAM lParam, COLORREF col)
 		}
 		ReleaseDC(hWnd, hdc);
 		break;
-	case RECTANGLE:
 
+	case RECTANGLE:
 		hPen = CreateSolidBrush(RGB(GetRValue(col), GetGValue(col), GetBValue(col)));
 		SelectObject(hdc, hPen);
 		Rectangle(hdc, x - size, y - size, x + size, y + size);
