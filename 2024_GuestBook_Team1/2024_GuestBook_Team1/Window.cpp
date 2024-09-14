@@ -2,6 +2,7 @@
 
 using namespace std;
 
+
 // 멤버 변수 초기화
 unique_ptr<Window> Window::sinTonIns = nullptr;
 once_flag Window::flag;
@@ -111,8 +112,10 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         function = make_unique<Function>();
         fileManager = make_unique<FileManager>(hWnd);
         colorPalette = make_unique<ColorPalette>();
-
+        
+        
         fileManager->getInstance().InitializePanels(hWnd);  /*패널 초기화 */
+        function->GDIPlusStart();
 
         GetClientRect(hWnd, &MainRT);
 
@@ -134,12 +137,11 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         CreateWindowW(L"BUTTON", L"STOP", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 630, 55, 60, 30, hWnd, (HMENU)STOP, hInst, nullptr);
         
         CreateWindowW(L"BUTTON", L"기본", WS_CHILD | WS_VISIBLE, 700, 55, 40, 30, hWnd, (HMENU)BASIC, hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"붓", WS_CHILD | WS_VISIBLE, 750, 55, 30, 30, hWnd, (HMENU)BRUSH, hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"연필", WS_CHILD | WS_VISIBLE, 700, 55, 40, 30, hWnd, (HMENU)PENCIL, hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"스프레이", WS_CHILD | WS_VISIBLE, 780, 55, 60, 30, hWnd, (HMENU)SPRAY, hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"마커", WS_CHILD | WS_VISIBLE, 850, 55, 40, 30, hWnd, (HMENU)MARKER, hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"사인펜", WS_CHILD | WS_VISIBLE, 900, 55, 50, 30, hWnd, (HMENU)PEN, hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"사각형", WS_CHILD | WS_VISIBLE, 950, 55, 40, 30, hWnd, (HMENU)RECTANGLE, hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"연필", WS_CHILD | WS_VISIBLE, 750, 55, 40, 30, hWnd, (HMENU)PENCIL, hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"붓", WS_CHILD | WS_VISIBLE, 800, 55, 30, 30, hWnd, (HMENU)BRUSH, hInst, nullptr);               
+        CreateWindowW(L"BUTTON", L"마커", WS_CHILD | WS_VISIBLE, 840, 55, 40, 30, hWnd, (HMENU)MARKER, hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"스프레이", WS_CHILD | WS_VISIBLE, 890, 55, 65, 30, hWnd, (HMENU)SPRAY, hInst, nullptr);
+        CreateWindowW(L"BUTTON", L"수채화", WS_CHILD | WS_VISIBLE, 960, 55, 50, 30, hWnd, (HMENU)WATERCOLOR, hInst, nullptr);       
 
 
         dWindow = new DrowWindow(hInst);
@@ -201,8 +203,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         case STOP:
             function->setIsReplay(false);
             function->setIsTerminate(true);
-            break;
-        // 버튼 기능 이해못해서 적용 안되는중
+            break;        
         case BASIC:
             function->setBShape(BASIC);
             break;
@@ -218,12 +219,9 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         case MARKER:
             function->setBShape(MARKER);
             break;
-        case PEN:
-            function->setBShape(PEN);
-            break;
-        case RECTANGLE:
-            function->setBShape(RECTANGLE);
-            break;
+        case WATERCOLOR:
+            function->setBShape(WATERCOLOR);
+            break;        
         
         /*case ID_FILE_LIST:
              파일 리스트 박스에서 선택된 파일을 처리하는 코드를 넣어야함
@@ -240,7 +238,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_MOUSEMOVE:
         if (function->getIsReplay()) break;
-        function->draw(hWnd, lParam, (DWORD)GetTickCount64(), message, 10, colorPalette->getColor(penNum)); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
+        function->draw(hWnd, lParam, (DWORD)GetTickCount64(), message, 10, colorPalette->getColor(penNum)); 
         break;
     case WM_LBUTTONUP:
         if (function->getIsReplay()) break;
@@ -306,6 +304,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     break;
     case WM_DESTROY:
         PostQuitMessage(0);
+        function->GDIPlusEnd();
         break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
