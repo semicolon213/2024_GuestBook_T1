@@ -1,13 +1,15 @@
 #include "Window.h"
-#include "FileManager.h"
+
+using namespace std;
 
 // 멤버 변수 초기화
 unique_ptr<Window> Window::sinTonIns = nullptr;
 once_flag Window::flag;
+
 //  함수: MyRegisterClass()
 //
 //  용도: 창 클래스를 등록합니다.
-//
+//  
 ATOM Window::MyRegisterClass(HINSTANCE hInstance)
 {
     WNDCLASSEXW wcex;
@@ -94,7 +96,6 @@ LRESULT Window::StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 //
 
 
-
 LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     string FileName = "제목 없음";
@@ -104,29 +105,49 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     static HWND d_hWnd = nullptr;
     static HWND b_hWnd = nullptr;
 
-
     switch (message)
     {
     case WM_CREATE :
-        InitializePanels(hWnd);  /*패널 초기화 */
-        function = make_unique<GB_Function>();
+        function = make_unique<Function>();
+        //fileManager = make_unique<FileManager>(hWnd);
+        colorPalette = make_unique<ColorPalette>();
+
+        //fileManager->getInstance().InitializePanels(hWnd);  /*패널 초기화 */
 
         GetClientRect(hWnd, &MainRT);
-
-        CreateWindowW(L"STATIC", L"이름 없음", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 10, 10, 100, 30, hWnd, (HMENU)"FILE_NAME", hInst, nullptr);
-        SideMenu = CreateWindowW(L"BUTTON", L":", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, MainRT.right - 49, 10, 30, 30, hWnd, (HMENU)"SIDE_MENU", hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"색1", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 5, 55, 30, 30, hWnd, (HMENU)"COLOR1", hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"색2", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 40, 55, 30, 30, hWnd, (HMENU)"COLOR2", hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"색3", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 75, 55, 30, 30, hWnd, (HMENU)"COLOR3", hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"굵기", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 110, 55, 30, 30, hWnd, (HMENU)"P_WIDTH", hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"CREDIT", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 145, 55, 60, 30, hWnd, (HMENU)"CREDIT", hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"NEW", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 210, 55, 55, 30, hWnd, (HMENU)"NEW_FILE", hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"SAVE", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 280, 55, 60, 30, hWnd, (HMENU)"SAVE", hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"LOAD", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 350, 55, 60, 30, hWnd, (HMENU)"LOAD", hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"MANAGER", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 420, 55, 60, 30, hWnd, (HMENU)"FILE_MANAER", hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"CLEAR", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 490, 55, 60, 30, hWnd, (HMENU)CLEAR_BUTTON, hInst, nullptr);
-        CreateWindowW(L"BUTTON", L"PLAY", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 560, 55, 60, 30, hWnd, (HMENU)PLAY_BUTTON, hInst, nullptr);
+        //주석 풀고싶으면 컨트롤+k+u 누르세용
+        //CreateWindowW(L"STATIC", L"이름 없음", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 10, 10, 100, 30, hWnd, (HMENU)"FILE_NAME", hInst, nullptr);
+        ////SideMenu = CreateWindowW(L"BUTTON", L":", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, MainRT.right - 49, 10, 30, 30, hWnd, (HMENU)"SIDE_MENU", hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"색1", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 5, 55, 30, 30, hWnd, (HMENU)COLOR1, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"색2", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 40, 55, 30, 30, hWnd, (HMENU)COLOR2, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"색3", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 75, 55, 30, 30, hWnd, (HMENU)COLOR3, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"굵기", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 110, 55, 30, 30, hWnd, (HMENU)P_WIDTH, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"CLEAR", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 145, 55, 60, 30, hWnd, (HMENU)CLEAR, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"NEW", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 210, 55, 55, 30, hWnd, (HMENU)NEW_FILE, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"SAVE", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 280, 55, 60, 30, hWnd, (HMENU)ID_SAVE_BUTTON, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"LOAD", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 350, 55, 60, 30, hWnd, (HMENU)LOAD, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"MANAGER", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 420, 55, 60, 30, hWnd, (HMENU)FILE_MANAER, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"CREDIT", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 490, 55, 60, 30, hWnd, (HMENU)CREDIT, hInst, nullptr);
+        /////윤찬솔 최가은 합의 하셈 밑에 코드
         //CreateWindowW(L"BUTTON", L"STOP", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 630, 55, 60, 30, hWnd, (HMENU)BUTTON_ID, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"PLAY", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 560, 55, 60, 30, hWnd, (HMENU)PLAY, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"STOP", WS_CHILD | WS_VISIBLE /*| BS_OWNERDRAW*/, 630, 55, 60, 30, hWnd, (HMENU)STOP, hInst, nullptr);
+        //
+        //CreateWindowW(L"BUTTON", L"기본", WS_CHILD | WS_VISIBLE, 700, 55, 40, 30, hWnd, (HMENU)BASIC, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"붓", WS_CHILD | WS_VISIBLE, 750, 55, 30, 30, hWnd, (HMENU)BRUSH, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"연필", WS_CHILD | WS_VISIBLE, 700, 55, 40, 30, hWnd, (HMENU)PENCIL, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"스프레이", WS_CHILD | WS_VISIBLE, 780, 55, 60, 30, hWnd, (HMENU)SPRAY, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"마커", WS_CHILD | WS_VISIBLE, 850, 55, 40, 30, hWnd, (HMENU)MARKER, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"사인펜", WS_CHILD | WS_VISIBLE, 900, 55, 50, 30, hWnd, (HMENU)PEN, hInst, nullptr);
+        //CreateWindowW(L"BUTTON", L"사각형", WS_CHILD | WS_VISIBLE, 950, 55, 40, 30, hWnd, (HMENU)RECTANGLE, hInst, nullptr);
+
+
+        DrowBT = CreateWindowW(L"BUTTON", L"서명하기", WS_CHILD | WS_VISIBLE,
+            (MainRT.right / 2) - 120, (MainRT.bottom / 2) - 170, 240, 100, hWnd, (HMENU)DEF_DROW_BT, hInst, nullptr);
+        LoadBT = CreateWindowW(L"BUTTON", L"불러오기", WS_CHILD | WS_VISIBLE,
+            (MainRT.right / 2) - 120, (MainRT.bottom / 2) - 50, 240, 100, hWnd, (HMENU)DEF_LOAD_BT, hInst, nullptr);
+        CreditBT = CreateWindowW(L"BUTTON", L"CREDIT", WS_CHILD | WS_VISIBLE,
+            (MainRT.right / 2) - 120, (MainRT.bottom / 2) + 70, 240, 100, hWnd, (HMENU)DEF_CREDIT_BT, hInst, nullptr);
 
         dWindow = new DrowWindow(hInst);
         dWindow->Create(hWnd, 0, 0, MainRT.right, MainRT.bottom);
@@ -140,95 +161,191 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         pBW->Show(FALSE);
 
         b_hWnd = pBW->GetHWND();
-        break;
 
+        break;
 
     case WM_COMMAND:
     {
+
         int wmId = LOWORD(wParam);
         // 메뉴 선택을 구문 분석합니다:
         switch (wmId)
         {
-        case BUTTON_ID:
+        case DEF_DROW_BT:
+            EnableWindow(d_hWnd, true);
+            dWindow->ToolCnt = true;
             dWindow->Show(true);
-            EnableWindow(GetDlgItem(hWnd, BUTTON_ID), FALSE);
+            EnableWindow(DrowBT, FALSE);
+            EnableWindow(LoadBT, FALSE);
+            EnableWindow(CreditBT, FALSE);
+
             break;
+
+        case DEF_LOAD_BT:
+            EnableWindow(d_hWnd, true);
+            dWindow->ToolCnt = FALSE;
+            dWindow->Show(true);
+            EnableWindow(DrowBT, FALSE);
+            EnableWindow(LoadBT, FALSE);
+            EnableWindow(CreditBT, FALSE);
+
+            /*
+            
+            여기에다 파일 불러오는기능 추가해주세용
+            
+            */
+
+            break;
+
+        case COLOR1:
+            if (penNum == 0)
+                colorPalette->colorSelect(hWnd, penNum);
+            else penNum = 0;
+            break;
+
+        case COLOR2:
+            if (penNum == 1)
+                colorPalette->colorSelect(hWnd, penNum);
+            else penNum = 1;
+            break;
+
+        case COLOR3:
+            if (penNum == 2)
+                colorPalette->colorSelect(hWnd, penNum);
+            else penNum = 2;
+            break;
+
 
         case IDM_ABOUT:
             DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
             break;
+
         case IDM_EXIT:
             DestroyWindow(hWnd);
             break;
+
+        case ID_SAVE_BUTTON:
+            fileManager->SaveFile();
+            break;
+
         case ID_FILE_LIST:
             /* 파일 리스트 박스에서 선택된 파일을 처리하는 코드를 넣어야함*/
+
+        case PLAY:
+            function->replayThread(hWnd);
             break;
+
+        case STOP:
+            function->setIsReplay(false);
+            function->setIsTerminate(true);
+            break;
+
+        // 버튼 기능 이해못해서 적용 안되는중
+        case BASIC:
+            function->setBShape(BASIC);
+            break;
+
+        case BRUSH:
+            function->setBShape(BRUSH);
+            break;
+
+        case PENCIL:
+            function->setBShape(PENCIL);
+            break;
+
+        case SPRAY:
+            function->setBShape(SPRAY);
+            break;
+
+        case MARKER:
+            function->setBShape(MARKER);
+            break;
+
+        case PEN:
+            function->setBShape(PEN);
+            break;
+
+        case RECTANGLE:
+            function->setBShape(RECTANGLE);
+            break;
+
         default:
-            return DefWindowProc(hWnd, message, wParam, lParam);
+            return DefWindowProc(hWnd, message, wParam, lParam);            
         }
+        break;
     }
-    break;
+
+
+    
+    case WM_MOUSEMOVE:
+        if (function->getIsReplay()) break;
+        drawPInfo.lParam = lParam;
+        drawPInfo.pColor = colorPalette->getColor(penNum);
+        drawPInfo.pTime = (DWORD)GetTickCount64();
+        drawPInfo.pWidth = 10;
+        drawPInfo.state = message;
+        function->draw(hWnd, drawPInfo, true); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
+        break;
 
     case WM_LBUTTONDOWN:
-        break;
-
-    case WM_MOUSEMOVE:
-        function->draw(hWnd, lParam, (DWORD)GetTickCount64(), message, 10, RGB(255, 0, 0));
-        break;
-
     case WM_LBUTTONUP:
-        function->mouseUD(lParam, (DWORD)GetTickCount64(), message, 10, RGB(255, 0, 0));
+        if (function->getIsReplay()) break;
+        drawPInfo.lParam = lParam;
+        drawPInfo.pColor = colorPalette->getColor(penNum);
+        drawPInfo.pTime = (DWORD)GetTickCount64();
+        drawPInfo.pWidth = 10;
+        drawPInfo.state = message;
+        function->mouseUD(drawPInfo,true);
 
         break;
 
     case WM_RBUTTONDOWN :
+        
+        break;
 
-        break;
     case WM_SIZE:
-        ResizePanels(hWnd, lParam);  /*패널 크기 조정 함수 호출*/
+        //fileManager->getInstance().ResizePanels(hWnd, lParam);  /*패널 크기 조정 함수 호출*/
         GetClientRect(hWnd, &MainRT);
-        MoveWindow(d_hWnd, 0, 0, MainRT.right, MainRT.bottom, TRUE);          //...다음에 구현
+        MoveWindow(d_hWnd, 0, 0, MainRT.right, MainRT.bottom, TRUE);
         break;
+
     case WM_PAINT:
     {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
         HBRUSH hbr = (HBRUSH)SelectObject(hdc,CreateSolidBrush(RGB(249,249,249)));
-        HPEN hPen = (HPEN)SelectObject(hdc, CreatePen(PS_SOLID, 1, RGB(234, 234, 234)));
         // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
         GetClientRect(hWnd, &MainRT);
+
         
-        Rectangle(hdc, -1, 52, MainRT.right + 1, 99);       //메뉴바 만들기               크흑 맘에 안들지만 일단 생성;;
-        hbr = (HBRUSH)SelectObject(hdc, CreateSolidBrush(RGB(255, 255, 255)));
-        //서명란 만들기 (크기 1300X750)
-        Rectangle(hdc, (MainRT.right - 1300) / 2, (MainRT.bottom - 750) / 2 + 100, (MainRT.right + 1300) / 2, (MainRT.bottom + 750) / 2);
+        
+        //Rectangle(hdc, -1, 52, MainRT.right + 1, 99);       //메뉴바 만들기               크흑 맘에 안들지만 일단 생성;;
+        //hbr = (HBRUSH)SelectObject(hdc, CreateSolidBrush(RGB(255, 255, 255)));
+        ////서명란 만들기 (크기 1300X750)
+        //Rectangle(hdc, (MainRT.right - 1300) / 2, (MainRT.bottom - 750) / 2 + 100, (MainRT.right + 1300) / 2, (MainRT.bottom + 750) / 2);
 
+        //if (!function->getIsReplay())
+        //{
+        //    for (const auto& record : function->getDrawLInfo().pInfo)
+        //    {
+        //        function->setBShape(record.bShape);
 
-        bool LBState = false;
-        int x, y;
-        for (const auto& record : function->drawLInfo.pInfo)
-        {
-            x = LOWORD(record.lParam);
-            y = HIWORD(record.lParam);
+        //        switch (record.state)
+        //        {
+        //        case WM_LBUTTONDOWN:
+        //        case WM_LBUTTONUP:
+        //            function->mouseUD(record, false);
+        //            break;
 
-            switch (record.state)
-            {
-            case WM_LBUTTONDOWN:
-                LBState = true;
-                MoveToEx(hdc, x, y, NULL);
-                LineTo(hdc, x, y);
-                break;
+        //        case WM_MOUSEMOVE:
+        //            function->draw(hWnd, record, false);
+        //            break;
 
-            case WM_MOUSEMOVE:
-                LineTo(hdc, x, y);
-                break;
-            case WM_LBUTTONUP:
-                LBState = false;
-                break;
-            default:
-                break;
-            }
-        }
+        //        default:
+        //            break;
+        //        }
+        //    }
+        //}
 
         EndPaint(hWnd, &ps);
     }

@@ -30,12 +30,6 @@
     <ClInclude Include="Window.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GB_struct.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GB_Function.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="ColorPalette.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -60,15 +54,30 @@
     <ClInclude Include="DW_ToolMenu.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Function.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DW_SideMenu.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DW_Canvas.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DW_NameBar.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="2024_GuestBook_Team1.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Window.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GB_Function.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ColorPalette.cpp">
@@ -95,6 +104,18 @@
     <ClCompile Include="DW_ToolMenu.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Function.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DW_SideMenu.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DW_Canvas.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DW_NameBar.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2024_GuestBook_Team1.rc">
@@ -106,6 +127,12 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="2024_GuestBook_Team1.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="yuhan.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="yuhan256.ico">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #include "BlueWindow.h"
 
 BlueWindow::BlueWindow(HINSTANCE hInstance)
-    : ChildWindow(cInst, RGB(000, 000, 255)) 
+    : ChildWindow(RGB(000, 000, 255)) 
 {
     bInst = hInstance;
 }

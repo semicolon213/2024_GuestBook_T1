@@ -5,9 +5,10 @@
 class ChildWindow 
 {
 public:
-    ChildWindow(HINSTANCE hInstance, COLORREF bgColor);
+    ChildWindow(COLORREF bgColor);
     virtual ~ChildWindow() = default;
     virtual void Create(HWND hParentWnd, LPCWSTR className, LPCWSTR windowName, int x, int y, int width, int height);
+    virtual void CreatePop(HWND hParentWnd, LPCWSTR className, LPCWSTR windowName, int x, int y, int width, int height);
     RECT GetRT();
     void Show(bool show);
     HWND GetHWND() const;

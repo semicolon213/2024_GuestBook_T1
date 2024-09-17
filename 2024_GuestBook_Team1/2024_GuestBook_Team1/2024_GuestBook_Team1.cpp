@@ -9,7 +9,6 @@
 #include "2024_GuestBook_Team1.h"
 #include "Resource.h"
 
-#include "Window.h"
 
 #define MAX_LOADSTRING 100
 
@@ -38,6 +37,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MY2024GUESTBOOKTEAM1));
 
     MSG msg;
+
+
 
     // 기본 메시지 루프입니다:
     while (GetMessage(&msg, nullptr, 0, 0))

@@ -3,14 +3,22 @@
 #include <Windows.h>
 #include <mutex>
 #include <memory>
+#include <thread>
 
+#include "framework.h"
 #include "Resource.h"
-#include "GB_Function.h"
+
 #include "BlueWindow.h"
 #include "DrowWindow.h"
+#include "FileManager.h"
+#include "Function.h"
+#include "ColorPalette.h"
+#include "Struct.h"
 
 #define MAX_LOADSTRING 100
 
+#define PLAY 1
+#define STOP 2
 
 using namespace std;
 
@@ -28,8 +36,21 @@ private :
 	static unique_ptr<Window> sinTonIns;
 	static once_flag flag;
 
-	unique_ptr<GB_Function> function;
+	unique_ptr<Function> function;
+	unique_ptr<FileManager> fileManager;
+	unique_ptr<ColorPalette> colorPalette;
 
+	PINFO drawPInfo;
+
+	int penNum = 0;
+
+	int px, py;
+
+	bool LBState = false;
+
+	HWND DrowBT = nullptr;
+	HWND LoadBT = nullptr;
+	HWND CreditBT = nullptr;
 
 public :
 	Window() = default;
@@ -45,8 +66,6 @@ public :
 	BOOL InitInstance(HINSTANCE, int);
 
 	static Window* GetInstance();
-
-
 
 };
 
