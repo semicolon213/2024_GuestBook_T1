@@ -203,12 +203,12 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             /* 파일 리스트 박스에서 선택된 파일을 처리하는 코드를 넣어야함*/
 
         case PLAY:
-            function->replayThread(hWnd);
+            if (!function->getIsReplay())
+                function->replayThread(hWnd);
             break;
 
         case STOP:
             function->setIsReplay(false);
-            function->setIsTerminate(true);
             break;
 
         // 버튼 기능 이해못해서 적용 안되는중

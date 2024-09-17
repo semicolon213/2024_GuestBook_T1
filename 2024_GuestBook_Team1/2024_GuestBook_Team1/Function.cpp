@@ -67,12 +67,10 @@ void Function::mouseUD(PINFO dInfo, bool isRecord)
 
 void Function::replayThread(HWND hWnd)
 {
-	isTerminate = false;
 	setIsReplay(true);
 
 	if (replayThreadHandle.joinable())
 		return;
-
 	else
 		//std::thread를 사용하여 스레드를 시작
 		replayThreadHandle = thread(&Function::replay, this, hWnd);
@@ -85,7 +83,7 @@ void Function::replay(HWND hWnd)
 {
 	HDC hdc;
 
-	while (!isTerminate)
+	while (isReplay)
 	{
 		//화면 초기화
 		InvalidateRect(hWnd, NULL, TRUE);
@@ -95,7 +93,7 @@ void Function::replay(HWND hWnd)
 
 		for (size_t i = 0; i < drawLInfo.pInfo.size(); i++)
 		{
-			if (isTerminate)
+			if (!isReplay)
 				break;
 
 			PINFO replayInfo = drawLInfo.pInfo[i];
@@ -197,12 +195,6 @@ void Function::setBShape(int bShape)
 {
 	this->bShape = bShape;
 }
-
-void Function::setIsTerminate(bool isTerminate)
-{
-	this->isTerminate = isTerminate;
-}
-
 
 LINFO Function::getDrawLInfo()
 {

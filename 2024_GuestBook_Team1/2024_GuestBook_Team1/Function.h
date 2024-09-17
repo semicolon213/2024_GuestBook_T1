@@ -28,7 +28,6 @@ private:
 	int bShape = BASIC;
 
 	bool isLeftClick = false;
-	bool isTerminate = false;
 	bool isReplay = false;
 
 	LINFO drawLInfo;
@@ -51,7 +50,6 @@ public:
 
 	void setPenStyle(int, LPARAM, COLORREF);
 
-	void setIsTerminate(bool);
 	LINFO getDrawLInfo();
 
 };
