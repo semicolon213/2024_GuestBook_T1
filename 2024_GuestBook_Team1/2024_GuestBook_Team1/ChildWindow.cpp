@@ -1,10 +1,23 @@
+
+/**
+ * @file ChildWindow.cpp
+ * @brief ChildWindow 클래스 메서드를 구현. 
+ * @details 창 생성 및 메시지 처리를 포함.
+ * @author 윤찬솔
+ * @date 2024.09.19
+ */
+
 #include "ChildWindow.h"
+
+
 
 ChildWindow::ChildWindow(COLORREF bgColor)
     : cInst(nullptr), bgColor(bgColor), cWnd(NULL), hBrush(CreateSolidBrush(bgColor))
 {
     ChildRT = { 0 };
 }
+
+
 
 void ChildWindow::CreatePop(HWND hParentWnd, LPCWSTR className, LPCWSTR windowName, int x, int y, int width, int height) 
 {

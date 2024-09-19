@@ -19,15 +19,15 @@ void DW_SideMenu::Create(HWND hParentWnd, int x, int y, int width, int height)
     sWnd = cWnd;
 
     NewFile = CreateWindow(L"BUTTON", L"NewFile", WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, 
-        10, 20, 280, 80, sWnd, (HMENU)SD_NEWFILE_BT, sInst, nullptr);
+        10, 20, 330, 80, sWnd, (HMENU)SD_NEWFILE_BT, sInst, nullptr);
     SaveFile = CreateWindow(L"BUTTON", L"SaveFile", WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, 
-        10, 120, 280, 80, sWnd, (HMENU)SD_SAVEFILE_BT, sInst, nullptr);
+        10, 120, 330, 80, sWnd, (HMENU)SD_SAVEFILE_BT, sInst, nullptr);
     LoadFile = CreateWindow(L"BUTTON", L"LoadFile", WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, 
-        10, 220, 280, 80, sWnd, (HMENU)SD_LOADFILE_BT, sInst, nullptr);
+        10, 220, 330, 80, sWnd, (HMENU)SD_LOADFILE_BT, sInst, nullptr);
     FileManager = CreateWindow(L"BUTTON", L"FileManager", WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, 
-        10, 320, 280, 80, sWnd, (HMENU)SD_FILEMANAGER_BT, sInst, nullptr);
+        10, 320, 330, 80, sWnd, (HMENU)SD_FILEMANAGER_BT, sInst, nullptr);
     Credit = CreateWindow(L"BUTTON", L"Credit", WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, 
-        10, 420, 280, 80, sWnd, (HMENU)SD_CREDIT_BT, sInst, nullptr);
+        10, 420, 330, 80, sWnd, (HMENU)SD_CREDIT_BT, sInst, nullptr);
 }
 
 PAINTSTRUCT s_ps = { 0 };
@@ -38,12 +38,6 @@ HDC sHdc = nullptr;
 LRESULT DW_SideMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message)
     {
-        SideRT = ChildWindow::GetRT();
-    case WM_CREATE:
-
-
-        break;
-
     case WM_COMMAND:
         switch (wParam)
         {
@@ -74,7 +68,6 @@ LRESULT DW_SideMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
     case WM_KILLFOCUS:
 
         Show(FALSE);
-        //EnableWindow(GetDlgItem(n_hWnd, 2), true);
         InvalidateRect(GetParent(sWnd), nullptr, true);
         break;
 

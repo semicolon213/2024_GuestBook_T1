@@ -51,7 +51,7 @@
 #define BUTTON_ID (DEF_ID + 1)
 #define DEF_DROW_BT					(DEF_ID + 1)
 #define DEF_LOAD_BT					(DEF_ID + 2)
-#define DEF_CREDIT_BT				(DEF_ID + 3)
+#define DEF_CREDIT_BT				(IDM_ABOUT)
 
 
 

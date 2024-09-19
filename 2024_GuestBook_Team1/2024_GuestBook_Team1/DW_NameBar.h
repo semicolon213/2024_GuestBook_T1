@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DW_NAMEBAR_H
+#define DW_NAMEBAR_H
 #include "ChildWindow.h"
 
 
@@ -23,3 +24,4 @@ protected:
 
 };
 
+#endif

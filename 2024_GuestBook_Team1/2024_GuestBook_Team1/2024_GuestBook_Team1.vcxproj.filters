@@ -45,9 +45,6 @@
     <ClInclude Include="ChildWindow.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="BlueWindow.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="DrowWindow.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -93,9 +90,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ChildWindow.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="BlueWindow.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="DrowWindow.cpp">

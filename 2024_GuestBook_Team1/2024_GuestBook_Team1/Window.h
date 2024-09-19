@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WINDOW_H
+#define WINDOW_H
 
 #include <Windows.h>
 #include <mutex>
@@ -8,7 +9,6 @@
 #include "framework.h"
 #include "Resource.h"
 
-#include "BlueWindow.h"
 #include "DrowWindow.h"
 #include "FileManager.h"
 #include "Function.h"
@@ -69,3 +69,4 @@ public :
 
 };
 
+#endif

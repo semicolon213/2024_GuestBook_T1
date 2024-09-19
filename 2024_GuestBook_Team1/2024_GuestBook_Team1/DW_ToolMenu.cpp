@@ -17,22 +17,22 @@ void DW_ToolMenu::Create(HWND hParentWnd, int x, int y, int width, int height)
     ToolRT = GetRT();
 
     Color1BT = CreateWindowW(L"BUTTON", L"색1", WS_CHILD | WS_VISIBLE,
-        (ToolRT.right / 2) - 80, 10, 30, 30, tWnd, (HMENU)TL_COLOR1_BT, tInst, nullptr);
+        (ToolRT.right / 2) - 100,8, 30, 30, tWnd, (HMENU)TL_COLOR1_BT, tInst, nullptr);
     Color2BT = CreateWindowW(L"BUTTON", L"색2", WS_CHILD | WS_VISIBLE,
-        (ToolRT.right / 2) - 40, 10, 30, 30, tWnd, (HMENU)TL_COLOR2_BT, tInst, nullptr);
+        (ToolRT.right / 2) - 50, 8, 30, 30, tWnd, (HMENU)TL_COLOR2_BT, tInst, nullptr);
     Color3BT = CreateWindowW(L"BUTTON", L"색3", WS_CHILD | WS_VISIBLE,
-        ToolRT.right / 2, 10, 30, 30, tWnd, (HMENU)TL_COLOR3_BT, tInst, nullptr);
+        ToolRT.right / 2, 8, 30, 30, tWnd, (HMENU)TL_COLOR3_BT, tInst, nullptr);
     PenWidthBT = CreateWindowW(L"BUTTON", L"굵기", WS_CHILD | WS_VISIBLE,
-        (ToolRT.right / 2) + 40, 10, 30, 30, tWnd, (HMENU)TL_PEN_WIDTH_BT, tInst, nullptr);
+        (ToolRT.right / 2) + 50, 8, 30, 30, tWnd, (HMENU)TL_PEN_WIDTH_BT, tInst, nullptr);
     ClearBT = CreateWindowW(L"BUTTON", L"X", WS_CHILD | WS_VISIBLE,
-        (ToolRT.right / 2) + 80, 10, 30, 30, tWnd, (HMENU)TL_CLEAR_BT, tInst, nullptr);
+        (ToolRT.right / 2) + 100, 8, 30, 30, tWnd, (HMENU)TL_CLEAR_BT, tInst, nullptr);
     SaveBT = CreateWindowW(L"BUTTON", L"저장", WS_CHILD | WS_VISIBLE,
-        ToolRT.right - 50, 10, 30, 30, tWnd, (HMENU)TL_SAVE_BT, tInst, nullptr);
+        ToolRT.right - 50, 8, 30, 30, tWnd, (HMENU)TL_SAVE_BT, tInst, nullptr);
 
     PlayBT = CreateWindowW(L"BUTTON", L"▶", WS_CHILD | WS_VISIBLE,
-        (ToolRT.right / 2) - 50, 10, 30, 30, tWnd, (HMENU)TL_PLAY_BT, tInst, nullptr);
+        (ToolRT.right / 2) - 50, 8, 30, 30, tWnd, (HMENU)TL_PLAY_BT, tInst, nullptr);
     ResetBT = CreateWindowW(L"BUTTON", L"■", WS_CHILD | WS_VISIBLE,
-        (ToolRT.right / 2) + 20, 10, 30, 30, tWnd, (HMENU)TL_RESET_BT, tInst, nullptr);
+        (ToolRT.right / 2) + 20, 8, 30, 30, tWnd, (HMENU)TL_RESET_BT, tInst, nullptr);
 
 
 }
@@ -53,17 +53,69 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
         {
         case TL_COLOR1_BT:
 
+            if (message == WM_LBUTTONDBLCLK)
+            {
+                /*
+                버튼을 더블클릭했을때
+                
+                여기다가 컬러팔레트 기능 넣어주세용
+                
+                */
+            }
+
+
+
+
             break;
 
         case TL_COLOR2_BT:
+
+            if (message == WM_LBUTTONDBLCLK)
+            {
+                /*
+                버튼을 더블클릭했을때
+
+                여기다가 컬러팔레트 기능 넣어주세용
+
+                */
+            }
+
+
+
 
             break;
 
         case TL_COLOR3_BT:
 
+            if (message == WM_LBUTTONDBLCLK)
+            {
+                /*
+                버튼을 더블클릭했을때
+
+                여기다가 컬러팔레트 기능 넣어주세용
+
+                */
+            }
+
+
+
+
             break;
 
         case TL_PEN_WIDTH_BT:
+
+            if (message == WM_LBUTTONDBLCLK)
+            {
+                /*
+                버튼을 더블클릭했을때
+
+                여기다가 굵기 선택 기능 넣어주세용
+
+                */
+            }
+
+
+
 
             break;
 
@@ -93,6 +145,7 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
             break;
 
         case TL_RESET_BT:
+
             SetWindowText(PlayBT, L"▶");
             pCnt = true;
 
@@ -104,7 +157,16 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
         }
 
         break;
+
     case WM_PAINT:
+
+
+        ToolRT = ChildWindow::GetRT();
+        tHdc = GetDC(tWnd);
+        tHdc = BeginPaint(tWnd, &t_ps);
+        ToolBrush = (HBRUSH)SelectObject(tHdc, GetStockObject(NULL_BRUSH));
+        ToolPen = (HPEN)SelectObject(tHdc, CreatePen(PS_SOLID, 1, RGB(234, 234, 234)));
+        Rectangle(tHdc, ToolRT.left - 1, ToolRT.top, ToolRT.right + 1, ToolRT.bottom);
 
         if (*tCnt)
         {
@@ -115,8 +177,18 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
             ShowWindow(ClearBT, SW_SHOW);
             ShowWindow(SaveBT, SW_SHOW);
 
-            ShowWindow(PlayBT, SW_HIDE);
-            ShowWindow(ResetBT, SW_HIDE);
+            MoveWindow(Color1BT, (ToolRT.right / 2) - 150, 8, 30, 30, true);
+            MoveWindow(Color2BT, (ToolRT.right / 2) - 100, 8, 30, 30, true);
+            MoveWindow(Color3BT, (ToolRT.right / 2) - 50, 8, 30, 30, true);
+            MoveWindow(PenWidthBT, ToolRT.right / 2, 8, 30, 30, true);
+            MoveWindow(ClearBT, (ToolRT.right / 2) + 50, 8, 30, 30, true);
+            MoveWindow(SaveBT, ToolRT.right - 50, 8, 30, 30, true);
+
+            MoveToEx(tHdc, (ToolRT.right / 2) + 98, 5, nullptr);
+            LineTo(tHdc, (ToolRT.right / 2) + 98, 40);
+
+            MoveWindow(PlayBT, (ToolRT.right / 2) + 115, 8, 30, 30, true);
+            MoveWindow(ResetBT, (ToolRT.right / 2) + 165, 8, 30, 30, true);
         }
         else
         {
@@ -127,18 +199,13 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
             ShowWindow(ClearBT, SW_HIDE);
             ShowWindow(SaveBT, SW_HIDE);
 
-            ShowWindow(PlayBT, SW_SHOW);
-            ShowWindow(ResetBT, SW_SHOW);
+            MoveWindow(PlayBT, (ToolRT.right / 2) - 50, 8, 30, 30, true);
+            MoveWindow(ResetBT, (ToolRT.right / 2) + 20, 8, 30, 30, true);
 
 
         }
 
-        ToolRT = ChildWindow::GetRT();
-        tHdc = GetDC(tWnd);
-        tHdc = BeginPaint(tWnd, &t_ps);
-        ToolBrush = (HBRUSH)SelectObject(tHdc, GetStockObject(NULL_BRUSH));
-        ToolPen = (HPEN)SelectObject(tHdc, CreatePen(PS_SOLID, 1, RGB(234, 234, 234)));
-        Rectangle(tHdc, ToolRT.left - 1, ToolRT.top, ToolRT.right + 1, ToolRT.bottom);
+        
         SelectObject(tHdc, ToolPen);
         SelectObject(tHdc, ToolBrush);
 

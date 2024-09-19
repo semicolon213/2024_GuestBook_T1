@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DW_SIDEMENU_H
+#define DW_SIDEMENU_H
 #include "ChildWindow.h"
 
 
@@ -22,3 +23,4 @@ protected:
     HWND Credit;
 };
 
+#endif

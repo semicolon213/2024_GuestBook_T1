@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DW_CANVAS_H
+#define DW_CANVAS_H
 #include "ChildWindow.h"
 
 
@@ -14,3 +15,4 @@ protected:
     RECT CanvasRT;
 };
 
+#endif

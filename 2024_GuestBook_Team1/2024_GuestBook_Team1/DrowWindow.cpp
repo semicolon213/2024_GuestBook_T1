@@ -1,3 +1,6 @@
+
+
+
 #include "DrowWindow.h"
 
 DrowWindow::DrowWindow(HINSTANCE hInstance)
@@ -48,7 +51,7 @@ void DrowWindow::Create(HWND hParentWnd, int x, int y, int width, int height)
 
 
     SideMenu = new DW_SideMenu(dInst);
-    SideMenu->Create(dWnd, DrowRT.right - 300, 0, 300, 600);
+    SideMenu->Create(dWnd, DrowRT.right - 350, 0, 350, 600);
     s_hWnd = SideMenu->GetHWND();
 
     SideMenu->Show(FALSE);

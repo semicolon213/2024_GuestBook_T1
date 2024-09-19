@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DW_TOOLMENU_H
+#define DW_TOOLMENU_H
 #include "ChildWindow.h"
 
 
@@ -26,3 +27,5 @@ protected:
     HWND PlayBT = nullptr;
     HWND ResetBT = nullptr;
 };
+
+#endif

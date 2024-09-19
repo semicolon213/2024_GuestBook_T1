@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DROWWINDOW_H
+#define DROWWINDOW_H
 #include "ChildWindow.h"
 #include "DW_ToolMenu.h"
 #include "DW_Canvas.h"
@@ -25,3 +26,5 @@ protected:
     DW_SideMenu* SideMenu;
     HWND s_hWnd;
 };
+
+#endif
