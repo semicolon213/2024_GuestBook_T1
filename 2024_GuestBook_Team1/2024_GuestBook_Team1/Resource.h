@@ -37,9 +37,9 @@
 #define P_WIDTH 1004
 #define CLEAR 1005
 #define NEW_FILE 1006
-#define ID_SAVE_BUTTON	 1007
+#define SAVE	 1007
 #define LOAD 1008
-#define FILE_MANAER 1009
+#define FILE_MANAGER 1009
 #define CREDIT 1010
 
 

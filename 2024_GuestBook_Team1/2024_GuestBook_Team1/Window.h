@@ -38,6 +38,7 @@ private :
 	unique_ptr<Function> function;
 	unique_ptr<FileManager> fileManager;
 	unique_ptr<ColorPalette> colorPalette;
+	vector<pointInfo> penMemory;
 
 	PINFO drawPInfo;
 
