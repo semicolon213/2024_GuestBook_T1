@@ -24,8 +24,8 @@ private:
 	 HINSTANCE hInst;
 	 HWND hWnd;
 	
-	 bool is_open_;
-	 std::fstream fs;
+	 bool is_open_ = false;
+	
 
 public:
 	static FileManager& getInstance() {
@@ -45,10 +45,9 @@ public:
 	void AddFileToList(const std::wstring& fileName);
 	void UpdateFileListUI();
 
-	/*파일 매니저 함수*/
-	void SaveFile(HWND hWnd, std::vector<pointInfo>* penMemory);
-	void LoadFile(HWND hWnd, std::vector<pointInfo>* penMemory);
-	void GetFiles(const std::wstring& directoryPath);
+
+	void SaveFile(HWND hWnd, std::vector<PINFO>* penMemory);
+	void LoadFile(HWND hWnd, std::vector<PINFO> *penMemory);
 	void FileManager_Open();
 	void SaveFileList();
 	void LoadFileList();
