@@ -43,8 +43,12 @@ public:
 	void mouseUD(PINFO, bool);
 	void replayThread(HWND);
 
+	void clearDrawing(HWND);
+
 	void setIsReplay(bool);
 	bool getIsReplay();
+
+	bool getDrawLInfoEmpty();
 
 	void setBShape(int);
 

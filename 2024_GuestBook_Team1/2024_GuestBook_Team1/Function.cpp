@@ -72,10 +72,10 @@ void Function::replayThread(HWND hWnd)
 	if (replayThreadHandle.joinable())
 		return;
 	else
-		//std::thread를 사용하여 스레드를 시작
+		// std::thread를 사용하여 스레드 시작
 		replayThreadHandle = thread(&Function::replay, this, hWnd);
 
-	//스레드가 종료될 때 자동으로 자원이 반환되도록 함
+	// 스레드가 종료될 때 자동으로 자원이 반환되도록 함
 	replayThreadHandle.detach();
 }
 
@@ -85,7 +85,7 @@ void Function::replay(HWND hWnd)
 
 	while (isReplay)
 	{
-		//화면 초기화
+		// 화면 초기화
 		InvalidateRect(hWnd, NULL, TRUE);
 		UpdateWindow(hWnd);
 
@@ -94,7 +94,10 @@ void Function::replay(HWND hWnd)
 		for (size_t i = 0; i < drawLInfo.pInfo.size(); i++)
 		{
 			if (!isReplay)
+			{
+				isLeftClick = false;
 				break;
+			}
 
 			PINFO replayInfo = drawLInfo.pInfo[i];
 			x = LOWORD(replayInfo.lParam);
@@ -121,7 +124,7 @@ void Function::replay(HWND hWnd)
 
 			}
 
-			//재생 속도 조절
+			// 재생 속도 조절
 			if (i < drawLInfo.pInfo.size() - 1)
 			{
 				Sleep(drawLInfo.pInfo[i + 1].pTime - drawLInfo.pInfo[i].pTime);
@@ -132,9 +135,18 @@ void Function::replay(HWND hWnd)
 
 		ReleaseDC(hWnd, hdc);
 
-		//반복 간격 조절
+		// 반복 간격 조절
 		Sleep(500);
 	}
+}
+
+void Function::clearDrawing(HWND hWnd) {
+	// 기록 삭제
+	drawLInfo.pInfo.clear();
+
+	// 화면 초기화
+	InvalidateRect(hWnd, NULL, TRUE);
+	UpdateWindow(hWnd);
 }
 
 void Function::setPenStyle(int size, LPARAM lParam, COLORREF col)
@@ -209,4 +221,9 @@ void Function::setIsReplay(bool isReplay)
 bool Function::getIsReplay() 
 {
 	return isReplay;
+}
+
+bool Function::getDrawLInfoEmpty()
+{
+	return drawLInfo.pInfo.empty();
 }

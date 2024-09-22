@@ -199,11 +199,18 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         case ID_FILE_LIST:
             /* 파일 리스트 박스에서 선택된 파일을 처리하는 코드를 넣어야함*/
+            break;
+
+        case CLEAR:
+            if (!function->getIsReplay())
+                function->clearDrawing(hWnd);
+            break;
 
         case PLAY:
+            if (function->getDrawLInfoEmpty())  break;
             if (!function->getIsReplay())
                 function->replayThread(hWnd);
-            break;
+            break; 
 
         case STOP:
             function->setIsReplay(false);
