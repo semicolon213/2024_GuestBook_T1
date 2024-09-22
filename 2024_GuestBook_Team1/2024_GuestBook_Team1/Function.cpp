@@ -162,9 +162,19 @@ void Function::setPenStyle(int size, LPARAM lParam, COLORREF col)
 		oPen = (HPEN)SelectObject(hdc, nPen);
 		break;
 	case PENCIL: // 연필 (색깔,크기 만 조정)		
-		nPen = CreatePen(PS_SOLID, 2, RGB(130,130,130));
-		oPen = (HPEN)SelectObject(hdc, nPen);
+	{
+		Graphics graphics(hdc);
+		int alpha = 15; // 기본 투명도 설정    		
+		PointF points[80]; // 도형 꼭짓점 갯수
+		for (int i = 0; i < 80; ++i) {
+			INT angle = rand() % 6 * 3.14159f * i / 80; // 꼭짓점 좌표 
+			points[i] = PointF(x + size * cos(angle) / 2, y + size * sin(angle) / 2); // 꼭짓점 설정
+		}
+		SolidBrush brush(Color(alpha, GetRValue(col), GetGValue(col), GetBValue(col)));	// 색상 설정
+		graphics.FillPolygon(&brush, points, 80); // 정형화 되지 않는 도형 그리기	
+		ReleaseDC(hWnd, hdc);
 		break;
+	}
 	case SPRAY: // 스프레이 (점을 흩뿌림)
 		for (int i = 0; i < 200; ++i)
 		{
@@ -187,19 +197,26 @@ void Function::setPenStyle(int size, LPARAM lParam, COLORREF col)
 	}
 	case WATERCOLOR:
 	{
-		Graphics graphics(hdc);		
-		int alpha = 10; // 기본 투명도 설정    		
-		PointF points[50]; // 도형 꼭짓점 갯수
-		for (int i = 0; i < 50; ++i) {			
-			float angle = 2 * 3.14159f * i / 50; // 꼭짓점 좌표 
+		Graphics graphics(hdc);
+		int alpha = 10; // 기본 투명도 설정
+		const int numPoints = 20; // 꼭짓점 갯수
+		PointF points[numPoints];
 
-			points[i] = PointF(x + size * cos(angle), y + size * sin(angle)); // 꼭짓점 설정
-		}		
-		SolidBrush brush(Color(alpha, GetRValue(col), GetGValue(col), GetBValue(col)));	// 색상 설정
-		graphics.FillPolygon(&brush, points, 50); // 정형화 되지 않는 도형 그리기	
+		// 무작위 각도를 사용하여 비정형적인 모양을 만들기
+		for (int i = 0; i < numPoints; ++i) {
+			float angle = 2 * 3.14159f * i / numPoints; // 원형 좌표
+			float radius = size + (rand() % 10); // 무작위 반경 변화
+			points[i] = PointF(x + radius * cos(angle), y + radius * sin(angle)); // 꼭짓점 설정
+		}
+
+		SolidBrush brush(Color(alpha, GetRValue(col), GetGValue(col), GetBValue(col))); // 색상 설정
+		graphics.SetSmoothingMode(SmoothingModeAntiAlias); // 부드럽게 그리기
+		graphics.FillPolygon(&brush, points, numPoints); // 비정형 도형 그리기
+
 		ReleaseDC(hWnd, hdc);
 		break;
-	}	
+	}
+
 	default:		
 		break;
 	}	

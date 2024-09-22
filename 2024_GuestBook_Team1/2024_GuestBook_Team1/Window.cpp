@@ -233,7 +233,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     break;    
     case WM_LBUTTONDOWN:
         if (function->getIsReplay()) break;
-        function->mouseUD(lParam, (DWORD)GetTickCount64(), message, 10, colorPalette->getColor(penNum));
+        function->mouseUD(lParam, (DWORD)GetTickCount64(), message, 10, colorPalette->getColor(0));
         break;
 
     case WM_MOUSEMOVE:
