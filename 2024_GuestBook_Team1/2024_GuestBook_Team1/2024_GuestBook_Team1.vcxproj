@@ -153,10 +153,7 @@
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Function.h" />
-<<<<<<< HEAD
-=======
     <ClInclude Include="pch.h" />
->>>>>>> feature/button
     <ClInclude Include="RegisterList.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Struct.h" />
