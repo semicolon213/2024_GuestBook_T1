@@ -28,7 +28,6 @@ private:
 	int bShape = BASIC;
 
 	bool isLeftClick = false;
-	bool isTerminate = false;
 	bool isReplay = false;
 
 	LINFO drawLInfo;
@@ -44,14 +43,17 @@ public:
 	void mouseUD(PINFO, bool);
 	void replayThread(HWND);
 
+	void clearDrawing(HWND);
+
 	void setIsReplay(bool);
 	bool getIsReplay();
+
+	bool getDrawLInfoEmpty();
 
 	void setBShape(int);
 
 	void setPenStyle(int, LPARAM, COLORREF);
 
-	void setIsTerminate(bool);
 	LINFO getDrawLInfo();
 
 };
