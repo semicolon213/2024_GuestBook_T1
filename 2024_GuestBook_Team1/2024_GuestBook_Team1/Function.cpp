@@ -1,17 +1,19 @@
 /**
 @author 조재현
-@date 2024.09.09
-	브러쉬 종류 기능 추가 (버튼 못 만들어서 코드에서 직접 수정해야 기능 사용 가능)
-	버튼 추가 (버튼 만 만들고 기능 구현x)
-@todo 버튼 기능 구현
-	  더 다양한 브러쉬 기능 추가 생각
-	  색깔,리플레이,브러쉬 크기,저장 등 다른 기능들이랑 연결점 고려하기.
+@date 2024.09.15
+	브러쉬 종류 기능 업뎃
+@todo 그림판 처럼 깔끔한 브러쉬 기능 연구중	  
+      ex) 선 빨리 그어도 깔끔하게 이어지게
 **/
 #include "Function.h"
 
 using namespace std;
+using namespace Gdiplus;
 
 void Function::record(PINFO inputPI)
+ULONG_PTR gdiplusToken;
+
+void Function::record(LPARAM lParam, ULONGLONG pTime, UINT state, int size, COLORREF col)
 {
 	inputPI.bShape = bShape;
 	drawLInfo.pInfo.push_back(inputPI);
@@ -19,6 +21,9 @@ void Function::record(PINFO inputPI)
 
 // 기본 그리기 기능에 브러쉬 기능 코드 추가함.
 void Function::draw(HWND hWnd, PINFO dInfo, bool isRecord)// 뒤에 브러쉬 추가
+
+void Function::draw(HWND hWnd, LPARAM lParam, ULONGLONG pTime, UINT state, int size, COLORREF col)// 뒤에 브러쉬 추가
+>>>>>>> origin/feature/brushShape
 {
 
 	hdc = GetDC(hWnd);
@@ -151,7 +156,6 @@ void Function::clearDrawing(HWND hWnd) {
 
 void Function::setPenStyle(int size, LPARAM lParam, COLORREF col)
 {
-
 	x = LOWORD(lParam);
 	y = HIWORD(lParam);
 
@@ -163,45 +167,50 @@ void Function::setPenStyle(int size, LPARAM lParam, COLORREF col)
 		oPen = (HPEN)SelectObject(hdc, nPen);
 		break;
 
-	case PENCIL: // 연필 (색깔만 회색으로)
-		nPen = CreatePen(PS_SOLID, size, col);
-		oPen = (HPEN)SelectObject(hdc, nPen);
-		break;
-
 	case SPRAY: // 스프레이 (점을 흩뿌림)
-		for (int i = 0; i < 100; ++i)
+		for (int i = 0; i < 200; ++i)
 		{
 			int offsetX = (rand() % (size * 8)) - (size * 4);
 			int offsetY = (rand() % (size * 8)) - (size * 4);
-			if (sqrt(offsetX * offsetX + offsetY * offsetY) <= size * 4)
+			if (sqrt(offsetX * offsetX + offsetY * offsetY) <= size * 2)
 			{
 				SetPixel(hdc, x + offsetX, y + offsetY, col);
 			}
 		}
 		ReleaseDC(hWnd, hdc);
 		break;
-
-	case MARKER:
-		for (int i = 0; i < 100; ++i)
-		{
-			int offsetX = (rand() % (size * 2)) - size;
-			int offsetY = (rand() % (size * 2)) - size;
-			SetPixel(hdc, x + offsetX, y + offsetY, col);
-		}
-		ReleaseDC(hWnd, hdc);
-		break;
-
-	case RECTANGLE:
-		hPen = CreateSolidBrush(RGB(GetRValue(col), GetGValue(col), GetBValue(col)));
-		SelectObject(hdc, hPen);
-		Rectangle(hdc, x - size, y - size, x + size, y + size);
-		ReleaseDC(hWnd, hdc);
-		break;
-
-	default:
+	case MARKER:		
+	{
+		Graphics graphics(hdc);
+		SolidBrush marker(Color(40, GetRValue(col), GetGValue(col), GetBValue(col)));
+		graphics.FillRectangle(&marker, x - size, y - size, size * 2, size * 2);
+		ReleaseDC(hWnd, hdc);		
 		break;
 	}
+	case WATERCOLOR:
+	{
+		Graphics graphics(hdc);		
+		int alpha = 10; // 기본 투명도 설정    		
+		PointF points[50]; // 도형 꼭짓점 갯수
+		for (int i = 0; i < 50; ++i) {			
+			float angle = 2 * 3.14159f * i / 50; // 꼭짓점 좌표 
+
+			points[i] = PointF(x + size * cos(angle), y + size * sin(angle)); // 꼭짓점 설정
+		}		
+		SolidBrush brush(Color(alpha, GetRValue(col), GetGValue(col), GetBValue(col)));	// 색상 설정
+		graphics.FillPolygon(&brush, points, 50); // 정형화 되지 않는 도형 그리기	
+		ReleaseDC(hWnd, hdc);
+		break;
+	}	
+	default:		
+		break;
+	}	
+	
 }
+
+
+
+
 
 void Function::setBShape(int bShape)
 {
@@ -226,4 +235,12 @@ bool Function::getIsReplay()
 bool Function::getDrawLInfoEmpty()
 {
 	return drawLInfo.pInfo.empty();
+}
+void Function::GDIPlusStart()
+{
+	GdiplusStartupInput gdiplusStartupInput;
+	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+}
+void Function::GDIPlusEnd() { //gdi 종료
+	GdiplusShutdown(gdiplusToken);
 }

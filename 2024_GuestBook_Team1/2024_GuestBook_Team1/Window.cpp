@@ -2,6 +2,7 @@
 
 using namespace std;
 
+
 // 멤버 변수 초기화
 unique_ptr<Window> Window::sinTonIns = nullptr;
 once_flag Window::flag;
@@ -199,6 +200,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     break;
     case WM_DESTROY:
         PostQuitMessage(0);
+        function->GDIPlusEnd();
         break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);

@@ -27,7 +27,7 @@
 #define PENCIL 302 
 #define SPRAY 303
 #define MARKER 304
-#define PEN 305
+#define WATERCOLOR 305
 #define RECTANGLE 306
 
 // 버튼 호출 상수

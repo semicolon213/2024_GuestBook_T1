@@ -5,6 +5,8 @@
 
 #include "Resource.h"
 
+#include <gdiplus.h> //gdi+ 기능을 사용하기 위한 헤더파일.
+#pragma comment (lib, "gdiplus.lib") // GDI+ 라이브러리 링크
 
 using namespace std;
 
@@ -53,6 +55,8 @@ public:
 	void setBShape(int);
 
 	void setPenStyle(int, LPARAM, COLORREF);
+	void GDIPlusStart(); // gdi+ 시작 함수 
+	void GDIPlusEnd(); // gdi+ 종료 함수
 
 	LINFO getDrawLInfo();
 
