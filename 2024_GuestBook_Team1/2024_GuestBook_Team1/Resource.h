@@ -47,14 +47,54 @@
 #define IDC_STATIC				-1
 
 
-#define DEF_ID 65000
+#define DEF_ID						65000
 #define BUTTON_ID (DEF_ID + 1)
+#define DEF_DROW_BT					(DEF_ID + 1)
+#define DEF_LOAD_BT					(DEF_ID + 2)
+#define DEF_CREDIT_BT				(IDM_ABOUT)
 
 
 
 //DrowWindow
-#define DW_DEF					(DEF_ID + 100)
- 
+#define DW_DEF						(DEF_ID + 100)
+
+
+
+
+#define CANVAS_DEF					(DEF_ID + 200)
+
+
+
+
+#define NAMEBAR_DEF					(DEF_ID + 300)
+
+#define NB_BACK_BT					(NAMEBAR_DEF + 1)
+#define NB_SIDE_BT					(NAMEBAR_DEF + 2)
+#define NB_FILE_NAME				(NAMEBAR_DEF + 3)
+
+
+#define SIDE_DEF					(DEF_ID + 400)
+
+#define SD_NEWFILE_BT				(SIDE_DEF + 1)
+#define SD_SAVEFILE_BT				(SIDE_DEF + 2)
+#define SD_LOADFILE_BT				(DEF_LOAD_BT)
+#define SD_FILEMANAGER_BT			(SIDE_DEF + 4)
+#define SD_CREDIT_BT				(DEF_CREDIT_BT)
+
+
+
+#define TOOL_DEF					(DEF_ID + 500)
+
+#define TL_COLOR1_BT				(TOOL_DEF + 1)
+#define TL_COLOR2_BT				(TOOL_DEF + 2)
+#define TL_COLOR3_BT				(TOOL_DEF + 3)
+#define TL_PEN_WIDTH_BT				(TOOL_DEF + 4)
+#define TL_CLEAR_BT					(TOOL_DEF + 5)
+#define TL_SAVE_BT					(SD_SAVEFILE_BT)
+#define TL_PLAY_BT					(TOOL_DEF + 7)
+#define TL_RESET_BT					(TOOL_DEF + 8)
+
+
 
 
 #endif

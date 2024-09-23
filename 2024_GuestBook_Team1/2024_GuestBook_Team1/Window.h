@@ -1,13 +1,21 @@
-#pragma once
+#ifndef WINDOW_H
+#define WINDOW_H
 
 #include <Windows.h>
 #include <mutex>
 #include <memory>
 #include <thread>
+<<<<<<< HEAD
 
 #include "framework.h"
 
 #include "BlueWindow.h"
+=======
+
+#include "framework.h"
+#include "Resource.h"
+
+>>>>>>> feature/button
 #include "DrowWindow.h"
 #include "FileManager.h"
 #include "Function.h"
@@ -46,6 +54,13 @@ private :
 	int px, py;
 
 	bool LBState = false;
+<<<<<<< HEAD
+=======
+
+	HWND DrowBT = nullptr;
+	HWND LoadBT = nullptr;
+	HWND CreditBT = nullptr;
+>>>>>>> feature/button
 
 public :
 	Window() = default;
@@ -64,3 +79,4 @@ public :
 
 };
 
+#endif

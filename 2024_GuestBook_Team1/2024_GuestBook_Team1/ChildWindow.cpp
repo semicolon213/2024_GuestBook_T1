@@ -1,12 +1,25 @@
+
+/**
+ * @file ChildWindow.cpp
+ * @brief ChildWindow 클래스 메서드를 구현. 
+ * @details 창 생성 및 메시지 처리를 포함.
+ * @author 윤찬솔
+ * @date 2024.09.19
+ */
+
 #include "ChildWindow.h"
 
-ChildWindow::ChildWindow(HINSTANCE hInstance, COLORREF bgColor)
-    : cInst(hInstance), bgColor(bgColor), cWnd(NULL), hBrush(CreateSolidBrush(bgColor))
+
+
+ChildWindow::ChildWindow(COLORREF bgColor)
+    : cInst(nullptr), bgColor(bgColor), cWnd(NULL), hBrush(CreateSolidBrush(bgColor))
 {
     ChildRT = { 0 };
 }
 
-void ChildWindow::Create(HWND hParentWnd, LPCWSTR className, LPCWSTR windowName, int x, int y, int width, int height) 
+
+
+void ChildWindow::CreatePop(HWND hParentWnd, LPCWSTR className, LPCWSTR windowName, int x, int y, int width, int height) 
 {
     WNDCLASS wc = { 0 };
     wc.lpfnWndProc = ChildWndProc;
@@ -17,8 +30,27 @@ void ChildWindow::Create(HWND hParentWnd, LPCWSTR className, LPCWSTR windowName,
     RegisterClass(&wc);
 
     cWnd = CreateWindowEx(
-        0, className, windowName, WS_CHILD | WS_VISIBLE,
+        0, className, windowName, WS_POPUP | WS_VISIBLE,
         x, y, width, height, hParentWnd, NULL, cInst, this);
+
+    cInst = (HINSTANCE)GetWindowLongPtr(cWnd, GWLP_HINSTANCE);
+}
+
+void ChildWindow::Create(HWND hParentWnd, LPCWSTR className, LPCWSTR windowName, int x, int y, int width, int height)
+{
+    WNDCLASS wc = { 0 };
+    wc.lpfnWndProc = ChildWndProc;
+    wc.hInstance = cInst;
+    wc.lpszClassName = className;
+    wc.hbrBackground = hBrush;
+    wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
+    RegisterClass(&wc);
+
+    cWnd = CreateWindowEx(
+        0, className, windowName, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN,
+        x, y, width, height, hParentWnd, NULL, cInst, this);
+
+    cInst = (HINSTANCE)GetWindowLongPtr(cWnd, GWLP_HINSTANCE);
 }
 
 void ChildWindow::Show(bool show) 
@@ -73,16 +105,6 @@ LRESULT ChildWindow::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARA
     {
     case WM_CREATE:
         break;
-    //case WM_KILLFOCUS:
-    //    SetForegroundWindow(cWnd); // 포커스를 잃으면 다시 자식 창으로 포커스 설정
-    //    break;
-    case WM_PAINT: {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(cWnd, &ps);
-        FillRect(hdc, &ps.rcPaint, hBrush); // 배경색으로 채우기
-        EndPaint(cWnd, &ps);
-        break;
-    }
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
