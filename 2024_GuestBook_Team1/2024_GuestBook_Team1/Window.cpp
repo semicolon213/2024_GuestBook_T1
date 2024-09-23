@@ -108,7 +108,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
     case WM_CREATE :
 
-        fileManager->getInstance().InitializePanels(hWnd);  /*패널 초기화 */
+        fileManager->getInstance().InitializePanels(hWnd);  
 
         GetClientRect(hWnd, &MainRT);
 
