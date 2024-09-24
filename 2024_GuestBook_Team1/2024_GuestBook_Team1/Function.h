@@ -36,6 +36,9 @@ private:
 
 	thread replayThreadHandle;
 
+
+	ULONG_PTR gdiplusToken;
+
 	void replay(HWND);
 	void record(PINFO);
 

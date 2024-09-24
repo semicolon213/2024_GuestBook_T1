@@ -11,9 +11,6 @@ using namespace std;
 using namespace Gdiplus;
 
 void Function::record(PINFO inputPI)
-ULONG_PTR gdiplusToken;
-
-void Function::record(LPARAM lParam, ULONGLONG pTime, UINT state, int size, COLORREF col)
 {
 	inputPI.bShape = bShape;
 	drawLInfo.pInfo.push_back(inputPI);
@@ -21,9 +18,6 @@ void Function::record(LPARAM lParam, ULONGLONG pTime, UINT state, int size, COLO
 
 // 기본 그리기 기능에 브러쉬 기능 코드 추가함.
 void Function::draw(HWND hWnd, PINFO dInfo, bool isRecord)// 뒤에 브러쉬 추가
-
-void Function::draw(HWND hWnd, LPARAM lParam, ULONGLONG pTime, UINT state, int size, COLORREF col)// 뒤에 브러쉬 추가
->>>>>>> origin/feature/brushShape
 {
 
 	hdc = GetDC(hWnd);
