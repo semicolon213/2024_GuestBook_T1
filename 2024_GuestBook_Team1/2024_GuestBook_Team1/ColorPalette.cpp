@@ -1,5 +1,7 @@
 #include "ColorPalette.h" /// colorpalette.h 헤더 파일을 포함한다
 
+COLORREF ColorPalette::colorArr[] = { RGB(0,0,0),RGB(0,0,0), RGB(0,0,0) };
+
 void ColorPalette::colorSelect(HWND hWnd, int penNum)
 {
 	ZeroMemory(&cc, sizeof(cc)); /// 색상 선택 창 설정, 호출을 기본값으로 설정
@@ -9,33 +11,14 @@ void ColorPalette::colorSelect(HWND hWnd, int penNum)
 	cc.rgbResult = RGB(0, 0, 0); /// 색상 창이 처음 열릴 떄 보여지는 색상 (초기 색상 : 검은색)
 	cc.Flags = CC_FULLOPEN | CC_RGBINIT; /// 대화 상자 플래그 설정
 
-	if (ChooseColor(&cc)) { /// 색상 선택 대화 상자 표시
-		if (hBrush) {
-			DeleteObject(hBrush); /// 기존 브러쉬 삭제
-		}
-		hBrush = CreateSolidBrush(cc.rgbResult); /// 새로운 브러쉬 생성
+	if (ChooseColor(&cc))			/// 색상 선택 대화 상자 표시
+	{ 
 		colorArr[penNum] = cc.rgbResult;
-		InvalidateRect(hWnd, NULL, TRUE);
 	}
 }
 
-void ColorPalette::paint(PAINTSTRUCT ps, HDC hdc)
-{
-	if (hBrush)
-	{
-		FillRect(hdc, &ps.rcPaint, hBrush);
-	}
 
-}
-
-void ColorPalette::destroy()
-{
-	if (hBrush)
-	{
-		DeleteObject(hBrush); /// 브러쉬 삭제
-	}
-}
 
 COLORREF ColorPalette::getColor(int penNum) {
-	return colorArr[penNum];
+	return ColorPalette::colorArr[penNum];
 }
