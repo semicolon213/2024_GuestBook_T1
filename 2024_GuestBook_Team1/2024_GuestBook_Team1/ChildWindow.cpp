@@ -30,7 +30,7 @@ void ChildWindow::CreatePop(HWND hParentWnd, LPCWSTR className, LPCWSTR windowNa
     RegisterClass(&wc);
 
     cWnd = CreateWindowEx(
-        0, className, windowName, WS_POPUP | WS_VISIBLE,
+        0, className, windowName, WS_POPUP | WS_VISIBLE | WS_CLIPCHILDREN,
         x, y, width, height, hParentWnd, NULL, cInst, this);
 
     cInst = (HINSTANCE)GetWindowLongPtr(cWnd, GWLP_HINSTANCE);
@@ -72,7 +72,7 @@ HWND ChildWindow::GetHWND() const
 RECT ChildWindow::GetChildPos(HWND hWndParent, HWND hWndChild)
 {
     RECT rect;
-    GetClientRect(hWndChild, &rect);
+    GetWindowRect(hWndChild, &rect);
     MapWindowPoints(hWndChild, hWndParent, (POINT*)&rect, 2);
     
     return rect;

@@ -36,7 +36,6 @@ ATOM Window::MyRegisterClass(HINSTANCE hInstance)
 }
 
 
-
 static RECT DesktopRT;      //사용자 화면 크기 받기용
 static RECT MainRT;         //메인 윈도우 크기 받기용
 
