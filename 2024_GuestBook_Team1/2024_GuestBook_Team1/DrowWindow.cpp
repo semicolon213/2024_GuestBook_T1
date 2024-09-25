@@ -4,32 +4,27 @@
 #include "DrowWindow.h"
 
 DrowWindow::DrowWindow(HINSTANCE hInstance)
-	:ChildWindow(RGB(249, 243, 240))
+    :ChildWindow(RGB(249, 243, 240))
 {
-	dInst = hInstance;
+    dInst = hInstance;
     DrowRT = { 0 };
     dWnd = nullptr;
     ToolCnt = TRUE;
 
     SideMenu = nullptr;
     s_hWnd = nullptr;
+    pt = { 0 };
+    DesktopRT = { 0 };
 }
 
-DW_NameBar* NameBar = nullptr;
-HWND n_hWnd = nullptr;
-
-
-DW_ToolMenu* ToolMenu = nullptr;
-HWND t_hWnd = nullptr;
-
-DW_Canvas* Canvas = nullptr;
-HWND C_hWnd = nullptr;
 
 void DrowWindow::Create(HWND hParentWnd, int x, int y, int width, int height) 
 {
 	ChildWindow::Create(hParentWnd, L"BlueWindowClass", L"Blue Child Window", x, y, width, height);
 	dWnd = cWnd;
 
+    GetWindowRect(GetDesktopWindow(), &DesktopRT);
+    GetWindowRect(GetParent(dWnd), &MainRT);
 
     DrowRT = ChildWindow::GetRT();
 
@@ -51,7 +46,7 @@ void DrowWindow::Create(HWND hParentWnd, int x, int y, int width, int height)
 
 
     SideMenu = new DW_SideMenu(dInst);
-    SideMenu->Create(dWnd, DrowRT.right - 350, 0, 350, 600);
+    SideMenu->CreatePop(dWnd, MainRT.right - 350, MainRT.top, 350, 600);
     s_hWnd = SideMenu->GetHWND();
 
     SideMenu->Show(FALSE);
@@ -59,29 +54,24 @@ void DrowWindow::Create(HWND hParentWnd, int x, int y, int width, int height)
 }
 
 
-HDC pHdc = nullptr;
-PAINTSTRUCT d_ps = { 0 };
-HPEN partition = nullptr;
-HPEN DrowPen = nullptr;
-HBRUSH DrowBrush = nullptr;
 
 LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message)
     {
-        DrowRT = ChildWindow::GetRT();
 
-
-    case WM_CREATE:
-        DrowRT = ChildWindow::GetRT();
-        // 뒤로가기 버튼 생성
-        /*CreateWindow(L"BUTTON", L"<", WS_CHILD | WS_VISIBLE,
-            10, 10, 30, 30, dWnd, (HMENU)1, dInst, NULL)*/;
-
-
-
-        break;
     case WM_SIZE:
-        DrowRT = ChildWindow::GetRT();
+        DrowRT = GetRT();
+        
+        /*SetWindowPos(n_hWnd, HWND_BOTTOM, 0, 0, DrowRT.right, 52, NULL);
+
+        SetWindowPos(t_hWnd, HWND_BOTTOM, -1, 52, DrowRT.right, 98, NULL);
+
+        SetWindowPos(C_hWnd, HWND_BOTTOM, (DrowRT.right - 1300) / 2, (DrowRT.bottom - 750) / 2 + 75,
+            (DrowRT.right + 1300) / 2, (DrowRT.bottom + 750) / 2 + 75, NULL);
+
+        SetWindowPos(s_hWnd, HWND_TOPMOST, DrowRT.right - 350, 0, DrowRT.right, 600, NULL);*/
+
+        //InvalidateRect(dWnd, nullptr, true);
 
         MoveWindow(n_hWnd, 0, 0, DrowRT.right, 52,TRUE);
 
@@ -89,10 +79,18 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
 
         MoveWindow(C_hWnd, (DrowRT.right - 1300) / 2, (DrowRT.bottom - 750) / 2 + 75, 1300, 700, TRUE);
 
-        MoveWindow(s_hWnd, DrowRT.right - 350, 0, 350, 600, true);
+
+        InvalidateRect(dWnd, nullptr, true);
+
+        break;
+
+    case WM_MOVE:
+
+
+        break;
 
     case WM_COMMAND:
-
+        DrowRT = GetRT();
         switch (LOWORD(wParam))
         {
         case NB_BACK_BT:
@@ -104,8 +102,12 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
             break;
 
         case NB_SIDE_BT:
+            /*POINT pt;
+            ClientToScreen(dWnd, &pt);
+            MoveWindow(s_hWnd,DrowRT.left-300,DrowRT.top)*/
             SideMenu->Show(true);
             SetFocus(s_hWnd);
+            InvalidateRect(dWnd, NULL, true);
             InvalidateRect(s_hWnd, NULL, true);
             break;
 
@@ -113,6 +115,12 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
             break;
         }
         
+        break;
+
+    case WM_LBUTTONDOWN:
+        DrowRT = GetRT();
+        
+
         break;
 
     case WM_PAINT:

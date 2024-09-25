@@ -52,6 +52,8 @@ private :
 	HWND LoadBT = nullptr;
 	HWND CreditBT = nullptr;
 
+
+
 public :
 	Window() = default;
 	~Window() = default;
@@ -66,6 +68,7 @@ public :
 	BOOL InitInstance(HINSTANCE, int);
 
 	static Window* GetInstance();
+	
 
 };
 

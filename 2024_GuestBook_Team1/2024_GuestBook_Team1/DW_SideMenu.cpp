@@ -13,9 +13,9 @@ DW_SideMenu::DW_SideMenu(HINSTANCE hInstance)
     Credit = nullptr;
 }
 
-void DW_SideMenu::Create(HWND hParentWnd, int x, int y, int width, int height)
+void DW_SideMenu::CreatePop(HWND hParentWnd, int x, int y, int width, int height)
 {
-    ChildWindow::Create(hParentWnd, L"DW_SideMenuClass", L"Side Child Window", x, y, width, height);
+    ChildWindow::CreatePop(hParentWnd, L"DW_SideMenuClass", L"Side Child Window", x, y, width, height);
     sWnd = cWnd;
 
     NewFile = CreateWindow(L"BUTTON", L"NewFile", WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, 
@@ -28,6 +28,7 @@ void DW_SideMenu::Create(HWND hParentWnd, int x, int y, int width, int height)
         10, 320, 330, 80, sWnd, (HMENU)SD_FILEMANAGER_BT, sInst, nullptr);
     Credit = CreateWindow(L"BUTTON", L"Credit", WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, 
         10, 420, 330, 80, sWnd, (HMENU)SD_CREDIT_BT, sInst, nullptr);
+
 }
 
 PAINTSTRUCT s_ps = { 0 };
@@ -65,10 +66,15 @@ LRESULT DW_SideMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
             break;
         }
 
+
+    case WM_SETFOCUS:
+        
+
+        break;
+
     case WM_KILLFOCUS:
 
-        Show(FALSE);
-        InvalidateRect(GetParent(sWnd), nullptr, true);
+        Show(false);
         break;
 
     case WM_PAINT:

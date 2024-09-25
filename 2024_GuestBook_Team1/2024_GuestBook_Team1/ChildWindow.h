@@ -84,10 +84,19 @@ protected:
      */
     virtual LRESULT HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
+    /// 인스턴스 핸들
     HINSTANCE cInst;
+
+    /// 배경 색
     COLORREF bgColor;
+
+    /// 윈도우 핸들
     HWND cWnd;
+
+    /// 배경 브러쉬
     HBRUSH hBrush;
+
+    /// 윈도우 RECT
     RECT ChildRT;
 
 private:
