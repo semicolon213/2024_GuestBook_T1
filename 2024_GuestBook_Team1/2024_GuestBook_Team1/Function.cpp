@@ -1,14 +1,15 @@
 /**
 @author 조재현
-@date 2024.09.15
+@date 2024.09.25
 	브러쉬 종류 기능 업뎃
-@todo 그림판 처럼 깔끔한 브러쉬 기능 연구중	  
-      ex) 선 빨리 그어도 깔끔하게 이어지게
+	using namespace Gdiplus 삭제 및 수정
+	Resource.h / 브러쉬 종류 변수 이름 설정
+	Function.h / setPenStyle 인수 설정, 변수 bshape 값 설정
+	DW_Canvas.cpp / GDI+ 기능을 사용하기 위한 시작 코드 한 줄 추가
 **/
 #include "Function.h"
 
 using namespace std;
-using namespace Gdiplus;
 
 void Function::record(PINFO inputPI)
 {
@@ -26,7 +27,7 @@ void Function::draw(HWND hWnd, PINFO dInfo, bool isRecord)// 뒤에 브러쉬 추가
 		x = LOWORD(dInfo.lParam);
 		y = HIWORD(dInfo.lParam);
 
-		setPenStyle(dInfo.pWidth, dInfo.lParam, dInfo.pColor);
+		setPenStyle(dInfo.pWidth, dInfo, dInfo.pColor);
 
 		MoveToEx(hdc, x, y, NULL);
 		LineTo(hdc, px, py);
@@ -148,10 +149,10 @@ void Function::clearDrawing(HWND hWnd) {
 	UpdateWindow(hWnd);
 }
 
-void Function::setPenStyle(int size, LPARAM lParam, COLORREF col)
+void Function::setPenStyle(int size, PINFO dinfo, COLORREF col)
 {
-	x = LOWORD(lParam);
-	y = HIWORD(lParam);
+	x = LOWORD(dinfo.lParam);
+	y = HIWORD(dinfo.lParam);
 
 	// 브러쉬 선택하면 거기에 맞는 펜 제공
 	switch (bShape)
@@ -160,6 +161,24 @@ void Function::setPenStyle(int size, LPARAM lParam, COLORREF col)
 		nPen = CreatePen(PS_SOLID, size, col);
 		oPen = (HPEN)SelectObject(hdc, nPen);
 		break;
+	case BRUSH:
+		break;
+	case PENCIL:
+	{
+	Gdiplus::Graphics graphics(hdc);
+	int alpha = 15; // 기본 투명도 설정    		
+	Gdiplus::PointF points[80]; // 도형 꼭짓점 갯수
+	for (int i = 0; i < 80; ++i) 
+		{
+		INT angle = rand() % 6 * 3.14159f * i / 80; // 꼭짓점 좌표 
+		points[i] = Gdiplus::PointF(x + size * cos(angle) / 2, y + size * sin(angle) / 2); // 꼭짓점 설정
+		}
+	Gdiplus::SolidBrush brush(Gdiplus::Color(alpha, GetRValue(col), GetGValue(col), GetBValue(col)));	// 색상 설정
+	graphics.FillPolygon(&brush, points, 80); // 정형화 되지 않는 도형 그리기	
+	ReleaseDC(hWnd, hdc);	
+	break;
+	}
+	
 
 	case SPRAY: // 스프레이 (점을 흩뿌림)
 		for (int i = 0; i < 200; ++i)
@@ -175,24 +194,30 @@ void Function::setPenStyle(int size, LPARAM lParam, COLORREF col)
 		break;
 	case MARKER:		
 	{
-		Graphics graphics(hdc);
-		SolidBrush marker(Color(40, GetRValue(col), GetGValue(col), GetBValue(col)));
+		Gdiplus::Graphics graphics(hdc);
+		Gdiplus::SolidBrush marker(Gdiplus::Color(40, GetRValue(col), GetGValue(col), GetBValue(col)));
 		graphics.FillRectangle(&marker, x - size, y - size, size * 2, size * 2);
 		ReleaseDC(hWnd, hdc);		
 		break;
 	}
 	case WATERCOLOR:
 	{
-		Graphics graphics(hdc);		
-		int alpha = 10; // 기본 투명도 설정    		
-		PointF points[50]; // 도형 꼭짓점 갯수
-		for (int i = 0; i < 50; ++i) {			
-			float angle = 2 * 3.14159f * i / 50; // 꼭짓점 좌표 
+		Gdiplus::Graphics graphics(hdc);
+		int alpha = 10; // 기본 투명도 설정
+		const int numPoints = 20; // 꼭짓점 갯수
+		Gdiplus::PointF points[numPoints];
 
-			points[i] = PointF(x + size * cos(angle), y + size * sin(angle)); // 꼭짓점 설정
-		}		
-		SolidBrush brush(Color(alpha, GetRValue(col), GetGValue(col), GetBValue(col)));	// 색상 설정
-		graphics.FillPolygon(&brush, points, 50); // 정형화 되지 않는 도형 그리기	
+		// 무작위 각도를 사용하여 비정형적인 모양을 만들기
+		for (int i = 0; i < numPoints; ++i) {
+			float angle = 2 * 3.14159f * i / numPoints; // 원형 좌표
+			float radius = size + (rand() % 10); // 무작위 반경 변화
+			points[i] = Gdiplus::PointF(x + radius * cos(angle), y + radius * sin(angle)); // 꼭짓점 설정
+		}
+
+		Gdiplus::SolidBrush brush(Gdiplus::Color(alpha, GetRValue(col), GetGValue(col), GetBValue(col))); // 색상 설정
+		graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias); // 부드럽게 그리기
+		graphics.FillPolygon(&brush, points, numPoints); // 비정형 도형 그리기
+
 		ReleaseDC(hWnd, hdc);
 		break;
 	}	
@@ -232,9 +257,9 @@ bool Function::getDrawLInfoEmpty()
 }
 void Function::GDIPlusStart()
 {
-	GdiplusStartupInput gdiplusStartupInput;
+	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
 	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 }
 void Function::GDIPlusEnd() { //gdi 종료
-	GdiplusShutdown(gdiplusToken);
+	Gdiplus::GdiplusShutdown(gdiplusToken);
 }

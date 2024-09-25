@@ -21,14 +21,13 @@
 
 ///사용자 정의 상수
 
-// 브러쉬 종류 버튼 (이름 수정 필요)
+// 브러쉬 종류 버튼 
 #define BASIC 300
 #define BRUSH 301
 #define PENCIL 302 
 #define SPRAY 303
 #define MARKER 304
 #define WATERCOLOR 305
-#define RECTANGLE 306
 
 // 버튼 호출 상수
 #define COLOR1 1001

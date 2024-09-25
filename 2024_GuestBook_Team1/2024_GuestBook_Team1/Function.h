@@ -27,7 +27,7 @@ private:
 
 	int x, y;
 
-	int bShape = BASIC;
+	int bShape = WATERCOLOR; // 브러쉬 종류 버튼 없어서 해당 코드에다 변수 넣어서 사용.
 
 	bool isLeftClick = false;
 	bool isReplay = false;
@@ -57,7 +57,7 @@ public:
 
 	void setBShape(int);
 
-	void setPenStyle(int, LPARAM, COLORREF);
+	void setPenStyle(int, PINFO, COLORREF); // LPARAM 인수 에서 PINFO 로 바꿈
 	void GDIPlusStart(); // gdi+ 시작 함수 
 	void GDIPlusEnd(); // gdi+ 종료 함수
 
