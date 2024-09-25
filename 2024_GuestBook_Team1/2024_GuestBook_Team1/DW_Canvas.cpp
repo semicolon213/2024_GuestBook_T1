@@ -39,7 +39,7 @@ LRESULT DW_Canvas::HandleMessage(HWND CWnd, UINT message, WPARAM wParam, LPARAM 
         drawPInfo.lParam = lParam;
         drawPInfo.pColor = colorPalette->getColor(penNum);
         drawPInfo.pTime = (DWORD)GetTickCount64();
-        drawPInfo.pWidth = 10;
+        drawPInfo.pWidth = 20;
         drawPInfo.state = message;
         function->draw(CWnd, drawPInfo, TRUE); 
         break;

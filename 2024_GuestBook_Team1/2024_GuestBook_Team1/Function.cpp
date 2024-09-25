@@ -26,8 +26,12 @@ void Function::draw(HWND hWnd, PINFO dInfo, bool isRecord)// 뒤에 브러쉬 추가
 	{
 		x = LOWORD(dInfo.lParam);
 		y = HIWORD(dInfo.lParam);
+		DrawTime = std::chrono::steady_clock::now(); // 붓 브러쉬 사용을 위한 그리는 시작 시간 저장.
+		lastThicknessChangeTime = DrawTime;
+		int currentThickness = dInfo.pWidth; // 붓 브러쉬 사용을 위한 현재 펜 사이즈 저장.
 
-		setPenStyle(dInfo.pWidth, dInfo, dInfo.pColor);
+		setPenStyle(dInfo.pWidth, dInfo, dInfo.pColor,currentThickness);
+		
 
 		MoveToEx(hdc, x, y, NULL);
 		LineTo(hdc, px, py);
@@ -149,7 +153,7 @@ void Function::clearDrawing(HWND hWnd) {
 	UpdateWindow(hWnd);
 }
 
-void Function::setPenStyle(int size, PINFO dinfo, COLORREF col)
+void Function::setPenStyle(int size, PINFO dinfo, COLORREF col, int currentThickness)
 {
 	x = LOWORD(dinfo.lParam);
 	y = HIWORD(dinfo.lParam);
@@ -161,8 +165,35 @@ void Function::setPenStyle(int size, PINFO dinfo, COLORREF col)
 		nPen = CreatePen(PS_SOLID, size, col);
 		oPen = (HPEN)SelectObject(hdc, nPen);
 		break;
+
 	case BRUSH:
-		break;
+	{
+		auto currentTime = std::chrono::steady_clock::now(); // 현재 시간
+		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - DrawTime).count();
+		double distance = sqrt(pow(x - px, 2) + pow(y - py, 2));
+		double speed = (duration > 0) ? (distance / duration) * 1000 : 0; // 픽셀/초로 변환
+		int targetThickness = size;
+		if (speed > Threshold_Speed) {
+			targetThickness = size - (int)((speed - Threshold_Speed) / (Threshold_Speed / (size - Min_Thickness)));
+			targetThickness = max(targetThickness, Min_Thickness);
+		}
+		else {
+			targetThickness = Min_Thickness + (int)((Threshold_Speed - speed) / (Threshold_Speed / (size - Min_Thickness)));
+			targetThickness = min(targetThickness, size);
+		}
+		currentThickness = targetThickness;
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastThicknessChangeTime).count() >= Update_Interval)
+		{
+			if (currentThickness < size)
+				currentThickness += Smoothing_Factor;
+			else if (currentThickness > size)
+				currentThickness -= Smoothing_Factor;
+
+			lastThicknessChangeTime = currentTime;
+		}		
+		break;		
+	}
+
 	case PENCIL:
 	{
 	Gdiplus::Graphics graphics(hdc);
@@ -179,7 +210,6 @@ void Function::setPenStyle(int size, PINFO dinfo, COLORREF col)
 	break;
 	}
 	
-
 	case SPRAY: // 스프레이 (점을 흩뿌림)
 		for (int i = 0; i < 200; ++i)
 		{
@@ -192,6 +222,7 @@ void Function::setPenStyle(int size, PINFO dinfo, COLORREF col)
 		}
 		ReleaseDC(hWnd, hdc);
 		break;
+
 	case MARKER:		
 	{
 		Gdiplus::Graphics graphics(hdc);
@@ -200,6 +231,7 @@ void Function::setPenStyle(int size, PINFO dinfo, COLORREF col)
 		ReleaseDC(hWnd, hdc);		
 		break;
 	}
+
 	case WATERCOLOR:
 	{
 		Gdiplus::Graphics graphics(hdc);
@@ -221,6 +253,7 @@ void Function::setPenStyle(int size, PINFO dinfo, COLORREF col)
 		ReleaseDC(hWnd, hdc);
 		break;
 	}	
+
 	default:		
 		break;
 	}	
