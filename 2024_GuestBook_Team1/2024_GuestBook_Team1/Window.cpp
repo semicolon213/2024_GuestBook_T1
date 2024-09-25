@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "PenThickness.h"
 
 using namespace std;
 
@@ -164,6 +165,12 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         // 메뉴 선택을 구문 분석합니다:
         switch (wmId)
         {
+        /// 펜 굵기 설정
+        case P_WIDTH: {
+            PenThickness penThickness;
+            penThickness.Show(hInst, hWnd);
+            break;
+        }
         case COLOR1:
             if (penNum == 0)
                 colorPalette->colorSelect(hWnd, penNum);
@@ -253,7 +260,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         drawPInfo.lParam = lParam;
         drawPInfo.pColor = colorPalette->getColor(penNum);
         drawPInfo.pTime = (DWORD)GetTickCount64();
-        drawPInfo.pWidth = 10;
+        drawPInfo.pWidth = PenThickness::GetPenWidth(); /// 펜 굵기 설정
         drawPInfo.state = message;
         function->draw(hWnd, drawPInfo, true); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
         break;
@@ -264,7 +271,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         drawPInfo.lParam = lParam;
         drawPInfo.pColor = colorPalette->getColor(penNum);
         drawPInfo.pTime = (DWORD)GetTickCount64();
-        drawPInfo.pWidth = 10;
+        drawPInfo.pWidth = PenThickness::GetPenWidth(); /// 펜 굵기 설정
         drawPInfo.state = message;
         function->mouseUD(drawPInfo,true);
 

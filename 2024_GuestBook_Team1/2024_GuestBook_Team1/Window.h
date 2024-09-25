@@ -13,6 +13,7 @@
 #include "Function.h"
 #include "ColorPalette.h"
 #include "Struct.h"
+#include "PenThickness.h" 
 
 #define MAX_LOADSTRING 100
 

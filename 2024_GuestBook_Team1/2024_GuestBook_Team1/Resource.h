@@ -30,6 +30,10 @@
 #define PEN 305
 #define RECTANGLE 306
 
+#define IDC_THICKNESS_SLIDER    503  // 슬라이더의 ID
+#define IDC_THICKNESS_EDIT      502  // 에디트 박스의 ID
+#define IDD_PEN_THICKNESS		501
+
 // 버튼 호출 상수
 #define COLOR1 1001
 #define COLOR2 1002
@@ -41,6 +45,10 @@
 #define LOAD 1008
 #define FILE_MANAER 1009
 #define CREDIT 1010
+
+#define IDD_PEN_THICKNESS      1100
+#define IDC_THICKNESS_SLIDER   1101
+#define IDC_THICKNESS_EDIT     1102
 
 
 #ifndef IDC_STATIC

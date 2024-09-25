@@ -19,6 +19,8 @@ void ColorPalette::colorSelect(HWND hWnd, int penNum)
 	}
 }
 
+/// 선택된 색상을 사용하여 윈도우를 페인트
+
 void ColorPalette::paint(PAINTSTRUCT ps, HDC hdc)
 {
 	if (hBrush)
@@ -28,6 +30,8 @@ void ColorPalette::paint(PAINTSTRUCT ps, HDC hdc)
 
 }
 
+/// 브러시 객체를 삭제하여 리소스를 해제
+
 void ColorPalette::destroy()
 {
 	if (hBrush)
@@ -35,6 +39,9 @@ void ColorPalette::destroy()
 		DeleteObject(hBrush); /// 브러쉬 삭제
 	}
 }
+
+/// penNum에 해당하는 색상을 반환
+
 
 COLORREF ColorPalette::getColor(int penNum) {
 	return colorArr[penNum];
