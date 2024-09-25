@@ -224,7 +224,8 @@ void Function::setPenStyle(int size, PINFO dinfo, COLORREF col)
 
 		ReleaseDC(hWnd, hdc);
 		break;
-	}	
+	}
+
 	default:		
 		break;
 	}	
