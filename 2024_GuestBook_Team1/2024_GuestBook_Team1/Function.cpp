@@ -1,11 +1,14 @@
 /**
-@author 조재현
-@date 2024.09.25
+* @author 조재현
+* @date 2024.09.25
+* @detailes 
 	브러쉬 종류 기능 업뎃
 	using namespace Gdiplus 삭제 및 수정
 	Resource.h / 브러쉬 종류 변수 이름 설정
 	Function.h / setPenStyle 인수 설정, 변수 bshape 값 설정
 	DW_Canvas.cpp / GDI+ 기능을 사용하기 위한 시작 코드 한 줄 추가
+* @todo 붓 브러쉬 기능 다른 파일에서 구현 중
+*@	
 **/
 #include "Function.h"
 
@@ -162,6 +165,7 @@ void Function::setPenStyle(int size, PINFO dinfo, COLORREF col)
 		oPen = (HPEN)SelectObject(hdc, nPen);
 		break;
 	case BRUSH:
+		// 구현 중..
 		break;
 	case PENCIL:
 	{
@@ -195,7 +199,7 @@ void Function::setPenStyle(int size, PINFO dinfo, COLORREF col)
 	case MARKER:		
 	{
 		Gdiplus::Graphics graphics(hdc);
-		Gdiplus::SolidBrush marker(Gdiplus::Color(40, GetRValue(col), GetGValue(col), GetBValue(col)));
+		Gdiplus::SolidBrush marker(Gdiplus::Color(40, GetRValue(col), GetGValue(col), GetBValue(col)));		
 		graphics.FillRectangle(&marker, x - size, y - size, size * 2, size * 2);
 		ReleaseDC(hWnd, hdc);		
 		break;

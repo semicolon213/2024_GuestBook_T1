@@ -27,7 +27,7 @@ private:
 
 	int x, y;
 
-	int bShape = WATERCOLOR; // 브러쉬 종류 버튼 없어서 해당 코드에다 변수 넣어서 사용.
+	int bShape = MARKER; // 브러쉬 종류 버튼 없어서 해당 코드에다 변수 넣어서 사용.
 
 	bool isLeftClick = false;
 	bool isReplay = false;
