@@ -4,30 +4,7 @@
 */
 
 #include "ConnExcel.h"
-
-ConnExcel::ConnExcel()
-{
-	///---------- 소멸자 --------------
-
-	///OLE(프로그램 연결 기능) 초기화
-	OleInitialize(NULL);
-}
-
-ConnExcel::~ConnExcel()
-{
-	///---------- 소멸자 --------------
-	
-	///사용이 끝난 객체 싹 다 해제
-	if (pRange) pRange->Release();
-	if (pSheet) pSheet->Release();
-	if (pSheets) pSheets->Release();
-	if (pExcel) pExcel->Release();
-	if (pWorkBooks) pWorkBooks->Release();
-	if (appInst) pRange->Release();
-
-	///OLE 해체
-	OleUninitialize();
-}
+using namespace std;
 
 /**
 @fn  ConnExcel::insertExcel(const wchar_t* excelPath, const wchar_t* visitName)
@@ -36,157 +13,178 @@ ConnExcel::~ConnExcel()
 @param visitName 저장된파일이름(방문자명)
 */
 
-void ConnExcel::insertExcel(const wchar_t* excelPath, const wchar_t* visitName)
+void ConnExcel::insertExcel(const wstring visitName)
 {
-	///CLSID(프로그램 참조 레지스트리) 가져오기
-	hr = CLSIDFromProgID(L"Excel.Application", &clsid);
-	if (FAILED(hr))
+
+	ofstream ofile(EXCEL, ios::app);
+	ifstream ifile(EXCEL);
+	bool hasHeader = false;
+
+	int rowCnt = 0;
+
+	string line;
+	if (ifile.is_open())
 	{
-		wcout << L"Excel CLSID 가져오기 실패" << endl;
-		return;
-	}
-
-	///프로그램(엑셀) 인스턴스 생성
-	hr = CoCreateInstance(clsid, NULL, CLSCTX_LOCAL_SERVER, IID_IDispatch, (void**)&appInst);
-	if (FAILED(hr) || appInst == NULL)
-	{
-		wcout << L"Excel 인스턴스 생성 실패" << endl;
-		return;
-	}
-
-	///Excel 표시설정 - 보이지 않게
-	{
-		VARIANT a;			///여러 타입을 가지고 있는 열거체 변수
-
-		a.vt = VT_I4;		///열거체 타입을 long형으로 설정
-		a.lVal = 1;			///프로그램 표시를 보이지 않게 설정
-
-		hr = appInst->GetIDsOfNames(IID_NULL, (OLECHAR**)&szVisible, 1, LOCALE_USER_DEFAULT, &dispID);
-		if (SUCCEEDED(hr))
+		if (getline(ifile, line))
 		{
-			DISPPARAMS dp = { &a, NULL, 1, 0 };
-			appInst->Invoke(dispID, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYPUT, &dp, NULL, NULL, NULL);
-		}
-	}
-
-	///WorkBooks(Excel 베이스 프로그램) 열기
-	{
-		hr = appInst->GetIDsOfNames(IID_NULL, (OLECHAR**)&szWorkbooks, 1, LOCALE_USER_DEFAULT, &dispID);
-		if (SUCCEEDED(hr))
-		{
-			VARIANT result;
-			DISPPARAMS dpNoArgs = { NULL, NULL, 0,0 };
-			appInst->Invoke(dispID, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dpNoArgs, &result, NULL, NULL);
-			pWorkBooks = result.pdispVal;
-		}
-	}
-
-	///Excel 파일 열기
-	{
-		VARIANT varFileName;
-		varFileName.vt = VT_BSTR;
-		varFileName.bstrVal = SysAllocString(excelPath);
-
-		VARIANT result;
-		DISPPARAMS dp = { &varFileName, NULL, 1,0 };
-		hr = pWorkBooks->GetIDsOfNames(IID_NULL, (OLECHAR**)&szOpen, 1, LOCALE_USER_DEFAULT, &dispID);
-		if (SUCCEEDED(hr))
-		{
-			pWorkBooks->Invoke(dispID, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, &result, NULL, NULL);
-			pExcel = result.pdispVal;
-		}
-		SysFreeString(varFileName.bstrVal);
-	}
-
-	///Sheet를 선택 후 첫번째 시트 선택
-	{
-		hr = pExcel->GetIDsOfNames(IID_NULL, (OLECHAR**)&szSheets, 1, LOCALE_USER_DEFAULT, &dispID);
-
-		if (SUCCEEDED(hr))
-		{
-			VARIANT result;
-			DISPPARAMS dpNoArgs = { NULL,NULL, 0,0 };
-
-			pExcel->Invoke(dispID, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dpNoArgs, &result, NULL, NULL);
-			pSheets = result.pdispVal;
+			/// 첫 번째 행이 헤더인 경우
+			hasHeader = true;
 		}
 
-		hr = pSheets->GetIDsOfNames(IID_NULL, (OLECHAR**)&szItem, 1, LOCALE_USER_DEFAULT, &dispID);
-		if (SUCCEEDED(hr))
+		while (getline(ifile, line))
 		{
-			VARIANT varIndex;
-			varIndex.vt = VT_I4;
-			varIndex.lVal = 1;		///시트 번호
-
-			DISPPARAMS dp = { &varIndex, NULL, 1, 0 };
-			VARIANT result;
-
-			pSheets->Invoke(dispID, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, &result, NULL, NULL);
-			pSheet = result.pdispVal;
+			rowCnt++;
 		}
+		ifile.close();
+	}
+	else
+	{
+		cerr << "파일 열기 실패!" << endl;
 	}
 
-	///첫 번째 빈 행 찾기
+
+	if (ofile.is_open())
 	{
-		hr = pSheet->GetIDsOfNames(IID_NULL, (OLECHAR**)&szCells, 1, LOCALE_USER_DEFAULT, &dispID);
-		if (SUCCEEDED(hr))
-		{
-			VARIANT varRow, varCol;
-			varRow.vt = VT_I4;
-			varCol.vt = VT_I4;
-			varCol.lVal = 1;		///열 번호
-
-			for (int row = 1; row < 1000; row++)
-			{
-				varRow.lVal = row;
-				VARIANT cellRC[2] = { varRow, varCol };			///현재 탐색중인 셀의 열,행(순서 중요!!)
-
-				DISPPARAMS dp = { cellRC, NULL, 2,0 };
-
-				VARIANT result;
-				hr = pSheet->Invoke(dispID, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result, NULL, NULL);
-				if (SUCCEEDED(hr))
-				{
-					pRange = result.pdispVal;
-
-					VARIANT varValue;
-					DISPPARAMS dpNoArgs = { NULL, NULL, 0,0 };
-
-					hr = pRange->Invoke(DISPID_VALUE, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dpNoArgs, &varValue, NULL, NULL);
-					if (varValue.vt == VT_EMPTY)
-					{
-						///셀이 비어있다면 탈출
-						break;
-					}
-				}
-			}
-		}
+		ofile << wcharToChar(visitName) << ",";
+		ofile.close();
+	}
+	else
+	{
+		cerr << "파일 열기 실패!" << endl;
 	}
 
-	///엑셀 파일에 방문자 이름(저장 파일명) 추가
+}
+
+wstring ConnExcel::getVisitList()
+{
+	ofstream ofile(EXCEL, ios::app);
+	ifstream ifile(EXCEL);
+	bool hasHeader = false;
+
+	string line;
+	string getVisit = "방문해 주신 분들 :    ";
+	if (ifile.is_open())
 	{
-		if (pRange)
+		if (getline(ifile, line))
 		{
-			VARIANT varVisitName;
-			varVisitName.vt = VT_BSTR;
-			varVisitName.bstrVal = SysAllocString(visitName);
-
-			DISPPARAMS dp = { &varVisitName, NULL, 1, 0 };
-			pRange->Invoke(DISPID_VALUE, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, NULL, NULL, NULL);
-
-			SysFreeString(varVisitName.bstrVal);
+			/// 첫 번째 행이 헤더인 경우
+			hasHeader = true;
 		}
+
+		while (getline(ifile, line))
+		{
+			replace(line.begin(), line.end(), ',', ' ');
+			getVisit = getVisit.append(line);
+		}
+		ifile.close();
+	}
+	else
+	{
+		cerr << "파일 열기 실패!" << endl;
 	}
 
-	///엑셀 파일 변경내용 저장
-	{
-		DISPID dispIDSave;
-		hr = pExcel->GetIDsOfNames(IID_NULL, (OLECHAR**)&szSave, 1, LOCALE_USER_DEFAULT, &dispIDSave);
+	return charToWchar(getVisit);
+}
 
-		if (SUCCEEDED(hr))
+/**
+@fn  ConnExcel::listScroll(HWND hWnd, int clientWidth)
+@brief WM_TIMER가 입력될 때마다 방문자 명단의 위치를 왼쪽으로 옮기는 메소드
+@param hWnd 윈도우 헨들러를 전달함
+@param clientWidth 화면의 크기를 전달
+*/
+
+void ConnExcel::listScroll(HWND hWnd, int clientWidth, RECT mainRT)
+{
+	while (isListRunning)
+	{
+		textPosX -= TEXTSPEED;
+
+		if (textPosX < -getTextSize(hWnd, getVisitList()))
 		{
-			DISPPARAMS dpNoArgs = { NULL, NULL, 0, 0 };
-			pExcel->Invoke(dispIDSave, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dpNoArgs, NULL, NULL, NULL);
+			textPosX = clientWidth;
 		}
+
+		InvalidateRect(hWnd, NULL, FALSE);
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
 	}
 }
+
+void ConnExcel::listScrollThread(HWND hWnd, int clientWidth, RECT mainRT)
+{
+
+	if (listScrollThreadHandle.joinable())
+		return;
+
+	else
+		//std::thread를 사용하여 스레드를 시작
+		listScrollThreadHandle = thread(&ConnExcel::listScroll, this, hWnd, clientWidth, mainRT);
+
+	//스레드가 종료될 때 자동으로 자원이 반환되도록 함
+	listScrollThreadHandle.detach();
+}
+
+int ConnExcel::getTextSize(HWND hWnd, wstring list)
+{
+	SIZE textSize;
+	wsprintf(text, list.c_str());
+	GetTextExtentPoint32(GetDC(hWnd), text, lstrlen(text), &textSize);
+
+	return textSize.cx;
+}
+
+string ConnExcel::wcharToChar(const wstring wcharStr)
+{
+
+	int strSize = WideCharToMultiByte(CP_ACP, 0, wcharStr.c_str(), -1, NULL, 0, NULL, NULL);
+	if (strSize <= 0) {
+		throw runtime_error("필요한 버퍼의 크기를 계산하는데 실패했습니다");
+	}
+	string charStr(strSize, 0);
+
+	int result = WideCharToMultiByte(CP_ACP, 0, wcharStr.c_str(), -1, &charStr[0], strSize, NULL, NULL);
+	if (result == 0)
+	{
+		throw runtime_error("wstring to string 변환 실패...");
+	}
+	size_t lastDot = charStr.find_last_of('.');
+	if (lastDot != string::npos)
+	{
+		return charStr.substr(0, lastDot);
+	}
+
+	return charStr;
+
+}
+
+wstring ConnExcel::charToWchar(const string charStr)
+{
+
+	int wStrSize = MultiByteToWideChar(CP_ACP, 0, charStr.c_str(), -1, nullptr, 0);
+	if (wStrSize <= 0)
+	{
+		throw runtime_error("필요한 버퍼의 크기를 계산하는데 실패했습니다.");
+	}
+	wstring wcharStr(wStrSize, 0);
+
+	int result = MultiByteToWideChar(CP_ACP, 0, charStr.c_str(), -1, &wcharStr[0], wStrSize);
+	wcharStr.resize(wStrSize - 1);
+	if (result == 0)
+	{
+		throw runtime_error("string to wstring 변환 실패...");
+	}
+
+	return wcharStr;
+}
+
+int ConnExcel::getTextPosX()
+{
+	return textPosX;
+}
+
+void ConnExcel::setTextPosX(int textPosX)
+{
+	this->textPosX = textPosX;
+}
+

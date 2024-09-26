@@ -1,11 +1,4 @@
-﻿/**
-@author 김형균
-@date 2024.08.01
-    기본 그리기 코드 추가
-    그린 내용 유지 코드 추가
-@todo 그린 내용 replay 구현
-**/
-
+﻿
 #include "2024_GuestBook_Team1.h"
 #include "Resource.h"
 
@@ -187,7 +180,7 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
         case DEF_DROW_BT:
             EnableWindow(d_hWnd, true);
-            dWindow->ToolCnt = true;
+            dWindow->toolCnt = true;
             dWindow->Show(true);
             EnableWindow(DrowBT, FALSE);
             EnableWindow(LoadBT, FALSE);
@@ -197,7 +190,7 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         case DEF_LOAD_BT:
             EnableWindow(d_hWnd, true);
-            dWindow->ToolCnt = FALSE;
+            dWindow->toolCnt = FALSE;
             dWindow->Show(true);
             EnableWindow(DrowBT, FALSE);
             EnableWindow(LoadBT, FALSE);

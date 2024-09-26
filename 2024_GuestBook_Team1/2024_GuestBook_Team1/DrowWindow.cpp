@@ -1,55 +1,60 @@
-
-
-
 #include "DrowWindow.h"
 
 DrowWindow::DrowWindow(HINSTANCE hInstance)
     :ChildWindow(RGB(249, 243, 240))
 {
     dInst = hInstance;
-    DrowRT = { 0 };
+    drowRT = { 0 };
     dWnd = nullptr;
-    ToolCnt = TRUE;
+    toolCnt = TRUE;
 
-    SideMenu = nullptr;
-    s_hWnd = nullptr;
+    sideMenu = nullptr;
+    sHWnd = nullptr;
     pt = { 0 };
-    DesktopRT = { 0 };
+    desktopRT = { 0 };
 }
 
 
 void DrowWindow::Create(HWND hParentWnd, int x, int y, int width, int height) 
 {
-	ChildWindow::Create(hParentWnd, L"BlueWindowClass", L"Blue Child Window", x, y, width, height);
+	ChildWindow::Create(hParentWnd, L"DrowWindow", L"DrowWindow", x, y, width, height);
 	dWnd = cWnd;
 
-    GetWindowRect(GetDesktopWindow(), &DesktopRT);
+    GetWindowRect(GetDesktopWindow(), &desktopRT);
     GetWindowRect(GetParent(dWnd), &MainRT);
 
-    DrowRT = ChildWindow::GetRT();
+    drowRT = ChildWindow::GetRT();
 
-    NameBar = new DW_NameBar(dInst);
-    NameBar->Create(dWnd, 0, 0, DrowRT.right, 52);
-    n_hWnd = NameBar->GetHWND();
+    nameBar = make_unique<DW_NameBar>(dInst);
+    nameBar->Create(dWnd, 0, 0, drowRT.right, 52);
+    nHWnd = nameBar->GetHWND();
 
-    ToolMenu = new DW_ToolMenu(dInst);
-    ToolMenu->Create(dWnd, -1, 52, DrowRT.right, 46);
-    //ToolMenu->Show(true);
-    t_hWnd = ToolMenu->GetHWND();
-    ToolCnt = TRUE;
-    ToolMenu->tCnt = &ToolCnt;
-    NameBar->tCnt = &ToolCnt;
+    toolMenu = make_unique<DW_ToolMenu>(dInst);
+    toolMenu->Create(dWnd, -1, 52, drowRT.right, 46);
+    //toolMenu->Show(true);
+    tHWnd = toolMenu->GetHWND();
+    toolCnt = TRUE;
+    toolMenu->tCnt = &toolCnt;
+    nameBar->tCnt = &toolCnt;
 
-    Canvas = new DW_Canvas(dInst);
-    Canvas->Create(dWnd, (DrowRT.right - 1300) / 2, (DrowRT.bottom - 750) / 2 + 75, 1300, 700);
-    C_hWnd = Canvas->GetHWND();
+    canvas = make_unique<DW_Canvas>(dInst);
+    canvas->Create(dWnd, (drowRT.right - 1300) / 2, (drowRT.bottom - 750) / 2 + 75, 1300, 700);
+    cHWnd = canvas->GetHWND();
 
 
-    SideMenu = new DW_SideMenu(dInst);
-    SideMenu->CreatePop(dWnd, MainRT.right - 350, MainRT.top, 350, 600);
-    s_hWnd = SideMenu->GetHWND();
+    sideMenu = make_unique<DW_SideMenu>(dInst);
+    sideMenu->CreatePop(dWnd, MainRT.right - 350, MainRT.top, 350, 600);
+    sHWnd = sideMenu->GetHWND();
 
-    SideMenu->Show(FALSE);
+    sideMenu->Show(FALSE);
+
+    connExcel = make_unique<ConnExcel>();
+    
+    connExcel->listScrollThread(dWnd, getDWWidth(), drowRT);
+
+    list = connExcel->getVisitList().c_str();
+
+    connExcel->setTextPosX(drowRT.right);
 
 }
 
@@ -60,24 +65,24 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
     {
 
     case WM_SIZE:
-        DrowRT = GetRT();
+        drowRT = GetRT();
         
-        /*SetWindowPos(n_hWnd, HWND_BOTTOM, 0, 0, DrowRT.right, 52, NULL);
+        /*SetWindowPos(nHWnd, HWND_BOTTOM, 0, 0, drowRT.right, 52, NULL);
 
-        SetWindowPos(t_hWnd, HWND_BOTTOM, -1, 52, DrowRT.right, 98, NULL);
+        SetWindowPos(tHWnd, HWND_BOTTOM, -1, 52, drowRT.right, 98, NULL);
 
-        SetWindowPos(C_hWnd, HWND_BOTTOM, (DrowRT.right - 1300) / 2, (DrowRT.bottom - 750) / 2 + 75,
-            (DrowRT.right + 1300) / 2, (DrowRT.bottom + 750) / 2 + 75, NULL);
+        SetWindowPos(cHWnd, HWND_BOTTOM, (drowRT.right - 1300) / 2, (drowRT.bottom - 750) / 2 + 75,
+            (drowRT.right + 1300) / 2, (drowRT.bottom + 750) / 2 + 75, NULL);
 
-        SetWindowPos(s_hWnd, HWND_TOPMOST, DrowRT.right - 350, 0, DrowRT.right, 600, NULL);*/
+        SetWindowPos(sHWnd, HWND_TOPMOST, drowRT.right - 350, 0, drowRT.right, 600, NULL);*/
 
         //InvalidateRect(dWnd, nullptr, true);
 
-        MoveWindow(n_hWnd, 0, 0, DrowRT.right, 52,TRUE);
+        MoveWindow(nHWnd, 0, 0, drowRT.right, 52,TRUE);
 
-        MoveWindow(t_hWnd, -1, 52, DrowRT.right, 46, TRUE);
+        MoveWindow(tHWnd, -1, 52, drowRT.right, 46, TRUE);
 
-        MoveWindow(C_hWnd, (DrowRT.right - 1300) / 2, (DrowRT.bottom - 750) / 2 + 75, 1300, 700, TRUE);
+        MoveWindow(cHWnd, (drowRT.right - 1300) / 2, (drowRT.bottom - 750) / 2 + 75, 1300, 700, TRUE);
 
 
         InvalidateRect(dWnd, nullptr, true);
@@ -90,7 +95,7 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
         break;
 
     case WM_COMMAND:
-        DrowRT = GetRT();
+        drowRT = GetRT();
         switch (LOWORD(wParam))
         {
         case NB_BACK_BT:
@@ -104,11 +109,11 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
         case NB_SIDE_BT:
             /*POINT pt;
             ClientToScreen(dWnd, &pt);
-            MoveWindow(s_hWnd,DrowRT.left-300,DrowRT.top)*/
-            SideMenu->Show(true);
-            SetFocus(s_hWnd);
+            MoveWindow(sHWnd,drowRT.left-300,drowRT.top)*/
+            sideMenu->Show(true);
+            SetFocus(sHWnd);
             InvalidateRect(dWnd, NULL, true);
-            InvalidateRect(s_hWnd, NULL, true);
+            InvalidateRect(sHWnd, NULL, true);
             break;
 
         default:
@@ -118,15 +123,21 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
         break;
 
     case WM_LBUTTONDOWN:
-        DrowRT = GetRT();
+        drowRT = GetRT();
         
 
         break;
 
     case WM_PAINT:
-        DrowRT = ChildWindow::GetRT();
+        drowRT = ChildWindow::GetRT();
         pHdc = BeginPaint(dWnd, &d_ps);
-        RECT ToolRT = this->GetChildPos(dWnd, t_hWnd);
+        RECT toolRT = this->GetChildPos(dWnd, tHWnd);
+        SIZE textSize;
+        list = connExcel->getVisitList().c_str();
+        wsprintf(text,list.c_str());
+        SetBkColor(pHdc, RGB(249, 243, 240));
+        TextOut(pHdc, connExcel->getTextPosX(), drowRT.bottom - 15, text, lstrlen(text));
+
         EndPaint(dWnd, &d_ps);
         break;
 
@@ -134,4 +145,9 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
         return ChildWindow::HandleMessage(dWnd, message, wParam, lParam);
     }
     return 0;
+}
+
+int DrowWindow::getDWWidth()
+{
+    return drowRT.right - drowRT.left;
 }
