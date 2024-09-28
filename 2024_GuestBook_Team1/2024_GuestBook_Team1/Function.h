@@ -38,6 +38,7 @@ private:
 	const int Smoothing_Factor = 2; // 두께 전환 시 부드러움 정도 (값 클수록 확 줄어듬)
 	const int Update_Interval = 30; // 두께 업데이트 간격 (밀리초) (값 클수록 크기 변하는 주기가 줄어듬)
 	int currentThickness = 0; // 붓 브러쉬 크기가 바뀌는 변수 (초기화 할려고 0 집어넣음)
+	//여기까지 브러쉬 변수 추가
 
 	int bShape = BRUSH; // 브러쉬 종류 버튼 없어서 해당 코드에다 변수 넣어서 사용.
 
