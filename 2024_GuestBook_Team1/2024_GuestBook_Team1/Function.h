@@ -30,12 +30,14 @@ private:
 	int x, y;
 
 	// 붓 브러쉬 변수 
-	std::chrono::steady_clock::time_point DrawTime; // 그리기 시작한 시간
-	std::chrono::steady_clock::time_point lastThicknessChangeTime;
+	std::chrono::steady_clock::time_point DrawTime; // 좌클릭 한 시간
+	std::chrono::steady_clock::time_point currentTime; // 그리기 시작한 시간
+	std::chrono::steady_clock::time_point lastThicknessChangeTime; // 두께 변하는 시간
 	const int Min_Thickness = 4;  // 최소 두께
-	const int Threshold_Speed = 600; // 속도 임계값 (픽셀/초)
-	const int Smoothing_Factor = 2; // 두께 전환 시 부드러움 정도
-	const int Update_Interval = 10; // 두께 업데이트 간격 (밀리초)
+	const int Threshold_Speed = 100; // 속도 임계값 (값 낮을 수록 느리게 그려도 짦아짐)
+	const int Smoothing_Factor = 2; // 두께 전환 시 부드러움 정도 (값 클수록 확 줄어듬)
+	const int Update_Interval = 30; // 두께 업데이트 간격 (밀리초) (값 클수록 크기 변하는 주기가 줄어듬)
+	int currentThickness = 0; // 붓 브러쉬 크기가 바뀌는 변수 (초기화 할려고 0 집어넣음)
 
 	int bShape = BRUSH; // 브러쉬 종류 버튼 없어서 해당 코드에다 변수 넣어서 사용.
 
@@ -67,7 +69,7 @@ public:
 
 	void setBShape(int);
 
-	void setPenStyle(int, PINFO, COLORREF,int); // LPARAM 인수 에서 PINFO 로 바꿈
+	void setPenStyle(PINFO, COLORREF); // LPARAM 인수 에서 PINFO 로 바꿈
 	void GDIPlusStart(); // gdi+ 시작 함수 
 	void GDIPlusEnd(); // gdi+ 종료 함수
 
