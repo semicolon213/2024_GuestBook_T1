@@ -16,7 +16,7 @@ protected:
     LRESULT HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
     HINSTANCE tInst;
     HWND tWnd;
-    RECT ToolRT;
+    RECT toolRT;
 
     HWND Color1BT = nullptr;
     HWND Color2BT = nullptr;
@@ -26,6 +26,8 @@ protected:
     HWND SaveBT = nullptr;
     HWND PlayBT = nullptr;
     HWND ResetBT = nullptr;
+
+    HRGN roundRgn;
 };
 
 #endif

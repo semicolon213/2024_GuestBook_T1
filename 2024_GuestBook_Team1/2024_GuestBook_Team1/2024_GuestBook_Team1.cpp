@@ -169,6 +169,8 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         dWindow->Show(FALSE);
         d_hWnd = dWindow->GetHWND();
 
+        SetWindowRgn(CreditBT, CreateEllipticRgn(0, 0, 30, 30), false);
+
         break;
 
     case WM_COMMAND:
@@ -238,6 +240,8 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
         GetClientRect(hWnd, &MainRT);
 
+
+        DeleteObject(hbr);
         EndPaint(hWnd, &ps);
     }
     break;

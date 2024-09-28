@@ -71,11 +71,10 @@ LRESULT DW_Canvas::HandleMessage(HWND CWnd, UINT message, WPARAM wParam, LPARAM 
         CanvasRT = ChildWindow::GetRT();
         CHdc = GetDC(CWnd);
         CHdc = BeginPaint(CWnd, &C_ps);
-        CanvasBrush = (HBRUSH)SelectObject(CHdc, GetStockObject(NULL_BRUSH));
         CanvasPen = (HPEN)SelectObject(CHdc, CreatePen(PS_SOLID, 1, RGB(234, 234, 234)));
         Rectangle(CHdc, CanvasRT.left, CanvasRT.top, CanvasRT.right, CanvasRT.bottom);
         SelectObject(CHdc, CanvasPen);
-        SelectObject(CHdc, CanvasBrush);
+        DeleteObject(CanvasPen);
         EndPaint(CWnd, &C_ps);
 
     default:

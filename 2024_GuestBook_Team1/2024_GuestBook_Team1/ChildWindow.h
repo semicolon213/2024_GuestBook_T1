@@ -69,6 +69,7 @@ public:
     * @param HWND hWndParent 부모의 윈도우 핸들.
     * @param HWND hWndChild 자식의 윈도우 핸들.
     * @return RECT 부모 윈도우 내부에있는 자식 윈도우의 위치를 반환.
+    * 아직 공사중...
     */
     RECT GetChildPos(HWND hWndParent, HWND hWndChild);
 
@@ -98,6 +99,10 @@ protected:
 
     /// 윈도우 RECT
     RECT ChildRT;
+
+    RECT desktopRT;
+
+    POINT cPT;
 
 private:
     static LRESULT CALLBACK ChildWndProc(HWND cWnd, UINT message, WPARAM wParam, LPARAM lParam);

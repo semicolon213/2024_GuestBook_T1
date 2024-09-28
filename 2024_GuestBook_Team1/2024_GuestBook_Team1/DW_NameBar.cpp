@@ -20,13 +20,13 @@ void DW_NameBar::Create(HWND hParentWnd, int x, int y, int width, int height)
 
 
     BackB = CreateWindow(L"BUTTON", L"<", WS_CHILD | WS_VISIBLE,
-        10, 10, 30, 30, nWnd, (HMENU)NB_BACK_BT, nullptr, NULL);
+        10, 12, 30, 30, nWnd, (HMENU)NB_BACK_BT, nullptr, NULL);
 
     FileNameW = CreateWindow(L"STATIC", L"이름 없음", WS_CHILD | WS_VISIBLE,
-        50, 10, 300, 30, nWnd, (HMENU)NB_FILE_NAME, nullptr, NULL);
+        50, 12, 300, 30, nWnd, (HMENU)NB_FILE_NAME, nullptr, NULL);
 
     SideB = CreateWindow(L"BUTTON", L":", WS_CHILD | WS_VISIBLE,
-        NameRT.right-40, 10, 30, 30, nWnd, (HMENU)NB_SIDE_BT, nullptr, NULL);
+        NameRT.right - 40, 12, 30, 30, nWnd, (HMENU)NB_SIDE_BT, nullptr, NULL);
 
     HFONT hFont = CreateFont(24, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
         DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
@@ -54,7 +54,7 @@ LRESULT DW_NameBar::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARAM
 
     case WM_SIZE:
         NameRT = GetRT();
-        MoveWindow(SideB, NameRT.right - 40, 10, 30, 30, true);
+        MoveWindow(SideB, NameRT.right - 40, 12, 30, 30, true);
 
     case WM_COMMAND:
         switch (LOWORD(wParam))
@@ -80,6 +80,11 @@ LRESULT DW_NameBar::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARAM
         NameRT = ChildWindow::GetRT();
         nHdc = GetDC(tWnd);
         nHdc = BeginPaint(tWnd, &n_ps);
+
+
+
+
+
         EndPaint(tWnd, &n_ps);
 
     default:

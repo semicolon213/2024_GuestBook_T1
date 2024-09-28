@@ -73,8 +73,10 @@ RECT ChildWindow::GetChildPos(HWND hWndParent, HWND hWndChild)
 {
     RECT rect;
     GetWindowRect(hWndChild, &rect);
-    MapWindowPoints(hWndChild, hWndParent, (POINT*)&rect, 2);
-    
+    /*MapWindowPoints(hWndChild, hWndParent, (POINT*)&rect, 2);*/
+    ScreenToClient(hWndParent, &cPT);
+    rect = { rect.left + cPT.x, rect.top + cPT.y, rect.right + cPT.x, rect.bottom + cPT.y }; 
+
     return rect;
 }
 

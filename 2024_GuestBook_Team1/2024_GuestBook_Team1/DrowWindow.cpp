@@ -20,17 +20,17 @@ void DrowWindow::Create(HWND hParentWnd, int x, int y, int width, int height)
 	ChildWindow::Create(hParentWnd, L"DrowWindow", L"DrowWindow", x, y, width, height);
 	dWnd = cWnd;
 
-    GetWindowRect(GetDesktopWindow(), &desktopRT);
+    desktopRT = { 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
     GetWindowRect(GetParent(dWnd), &MainRT);
 
     drowRT = ChildWindow::GetRT();
 
     nameBar = make_unique<DW_NameBar>(dInst);
-    nameBar->Create(dWnd, 0, 0, drowRT.right, 52);
+    nameBar->Create(dWnd, 0, 0, drowRT.right, 57);
     nHWnd = nameBar->GetHWND();
 
     toolMenu = make_unique<DW_ToolMenu>(dInst);
-    toolMenu->Create(dWnd, -1, 52, drowRT.right, 46);
+    toolMenu->Create(dWnd, -1, 57, drowRT.right, 51);
     //toolMenu->Show(true);
     tHWnd = toolMenu->GetHWND();
     toolCnt = TRUE;
@@ -67,20 +67,10 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
     case WM_SIZE:
         drowRT = GetRT();
         
-        /*SetWindowPos(nHWnd, HWND_BOTTOM, 0, 0, drowRT.right, 52, NULL);
 
-        SetWindowPos(tHWnd, HWND_BOTTOM, -1, 52, drowRT.right, 98, NULL);
+        MoveWindow(nHWnd, 0, 0, drowRT.right, 57,TRUE);
 
-        SetWindowPos(cHWnd, HWND_BOTTOM, (drowRT.right - 1300) / 2, (drowRT.bottom - 750) / 2 + 75,
-            (drowRT.right + 1300) / 2, (drowRT.bottom + 750) / 2 + 75, NULL);
-
-        SetWindowPos(sHWnd, HWND_TOPMOST, drowRT.right - 350, 0, drowRT.right, 600, NULL);*/
-
-        //InvalidateRect(dWnd, nullptr, true);
-
-        MoveWindow(nHWnd, 0, 0, drowRT.right, 52,TRUE);
-
-        MoveWindow(tHWnd, -1, 52, drowRT.right, 46, TRUE);
+        MoveWindow(tHWnd, -1, 57, drowRT.right, 51, TRUE);
 
         MoveWindow(cHWnd, (drowRT.right - 1300) / 2, (drowRT.bottom - 750) / 2 + 75, 1300, 700, TRUE);
 
@@ -107,13 +97,15 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
             break;
 
         case NB_SIDE_BT:
-            /*POINT pt;
+            GetClientRect(dWnd, &drowRT);
+            pt = { 0 };
             ClientToScreen(dWnd, &pt);
-            MoveWindow(sHWnd,drowRT.left-300,drowRT.top)*/
+            IntersectRect(&drowRT, &desktopRT, &drowRT);
+
+            DSideRT = GetChildPos(dWnd, sHWnd);
+
+            MoveWindow(sHWnd, pt.x + drowRT.right - 351, pt.y + drowRT.top, 350, 600, true);
             sideMenu->Show(true);
-            SetFocus(sHWnd);
-            InvalidateRect(dWnd, NULL, true);
-            InvalidateRect(sHWnd, NULL, true);
             break;
 
         default:
@@ -131,7 +123,6 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
     case WM_PAINT:
         drowRT = ChildWindow::GetRT();
         pHdc = BeginPaint(dWnd, &d_ps);
-        RECT toolRT = this->GetChildPos(dWnd, tHWnd);
         SIZE textSize;
         list = connExcel->getVisitList().c_str();
         wsprintf(text,list.c_str());
