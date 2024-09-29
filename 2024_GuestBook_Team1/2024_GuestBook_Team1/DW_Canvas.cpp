@@ -1,4 +1,5 @@
 #include "DW_Canvas.h"
+
 DW_Canvas::DW_Canvas(HINSTANCE hInstance)
     :ChildWindow(RGB(255, 255, 255))
 {
@@ -41,7 +42,7 @@ LRESULT DW_Canvas::HandleMessage(HWND CWnd, UINT message, WPARAM wParam, LPARAM 
         drawPInfo.pTime = (DWORD)GetTickCount64();
         drawPInfo.pWidth = 10;
         drawPInfo.state = message;
-        function->draw(CWnd, drawPInfo, TRUE); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
+        Function::globalFunction.draw(CWnd, drawPInfo, TRUE); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
         break;
 
     case WM_LBUTTONDOWN:
@@ -52,7 +53,7 @@ LRESULT DW_Canvas::HandleMessage(HWND CWnd, UINT message, WPARAM wParam, LPARAM 
         drawPInfo.pTime = (DWORD)GetTickCount64();
         drawPInfo.pWidth = 10;
         drawPInfo.state = message;
-        function->mouseUD(drawPInfo, TRUE);
+        Function::globalFunction.mouseUD(drawPInfo, TRUE);
 
         break;
 

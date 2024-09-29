@@ -7,13 +7,24 @@
 **/
 #include "Function.h"
 
+
 using namespace std;
 using namespace Gdiplus;
+Function Function::globalFunction;
 
 void Function::record(PINFO inputPI)
 {
+	
+
 	inputPI.bShape = bShape;
 	drawLInfo.pInfo.push_back(inputPI);
+
+	/*std::wstring message = L"record() 호출됨, drawLInfo.pInfo 크기: " + std::to_wstring(drawLInfo.pInfo.size()) +
+		L"\nFunction 객체 주소: " + std::to_wstring((uintptr_t)this);
+	MessageBox(nullptr, message.c_str(), L"디버깅: record", MB_OK); */
+
+	
+
 }
 
 // 기본 그리기 기능에 브러쉬 기능 코드 추가함.
@@ -132,6 +143,7 @@ void Function::replay(HWND hWnd)
 			DeleteObject(nPen);
 		}
 
+
 		ReleaseDC(hWnd, hdc);
 
 		// 반복 간격 조절
@@ -213,6 +225,9 @@ void Function::setBShape(int bShape)
 
 LINFO Function::getDrawLInfo()
 {
+	/*std::wstring message = L"getDrawLInfo() 호출, drawLInfo.pInfo 크기: " + std::to_wstring(drawLInfo.pInfo.size()) +
+		L"\nFunction 객체 주소: " + std::to_wstring((uintptr_t)this);
+	MessageBox(nullptr, message.c_str(), L"디버깅: getDrawLInfo", MB_OK); */
 	return drawLInfo;
 }
 

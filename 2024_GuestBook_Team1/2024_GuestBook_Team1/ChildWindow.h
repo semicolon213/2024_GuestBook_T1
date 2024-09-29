@@ -11,6 +11,7 @@
 
 #include <windows.h>
 #include "Resource.h"
+#include "FileManager.h"
 
 class ChildWindow 
 {

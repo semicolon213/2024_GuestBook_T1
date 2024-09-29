@@ -33,7 +33,7 @@ void ChildWindow::CreatePop(HWND hParentWnd, LPCWSTR className, LPCWSTR windowNa
         0, className, windowName, WS_POPUP | WS_VISIBLE | WS_CLIPCHILDREN,
         x, y, width, height, hParentWnd, NULL, cInst, this);
 
-    cInst = (HINSTANCE)GetWindowLongPtr(cWnd, GWLP_HINSTANCE);
+    cInst = (HINSTANCE)GetWindowLongPtr(cWnd, GWLP_HINSTANCE); 
 }
 
 void ChildWindow::Create(HWND hParentWnd, LPCWSTR className, LPCWSTR windowName, int x, int y, int width, int height)
@@ -78,7 +78,7 @@ RECT ChildWindow::GetChildPos(HWND hWndParent, HWND hWndChild)
     return rect;
 }
 
-LRESULT CALLBACK ChildWindow::ChildWndProc(HWND cWnd, UINT message, WPARAM wParam, LPARAM lParam) 
+LRESULT CALLBACK ChildWindow::ChildWndProc(HWND cWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     ChildWindow* pThis = (ChildWindow*)GetWindowLongPtr(cWnd, GWLP_USERDATA);
 
@@ -99,7 +99,7 @@ LRESULT CALLBACK ChildWindow::ChildWndProc(HWND cWnd, UINT message, WPARAM wPara
     }
 }
 
-LRESULT ChildWindow::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM lParam) 
+LRESULT ChildWindow::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message) 
     {

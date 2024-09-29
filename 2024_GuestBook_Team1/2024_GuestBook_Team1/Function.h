@@ -39,11 +39,11 @@ private:
 
 	ULONG_PTR gdiplusToken;
 
-	void replay(HWND);
+
 	void record(PINFO);
 
 public:
-
+	void replay(HWND);
 	void draw(HWND, PINFO, bool);		//뒤에 브러쉬 추가
 	void mouseUD(PINFO, bool);
 	void replayThread(HWND);
@@ -60,7 +60,7 @@ public:
 	void setPenStyle(int, LPARAM, COLORREF);
 	void GDIPlusStart(); // gdi+ 시작 함수 
 	void GDIPlusEnd(); // gdi+ 종료 함수
-
+	static Function globalFunction;
 	LINFO getDrawLInfo();
 
 };
