@@ -11,6 +11,8 @@ void DW_Canvas::Create(HWND hParentWnd, int x, int y, int width, int height)
 {
     ChildWindow::Create(hParentWnd, L"DW_CanvasClass", L"Canvas Child Window", x, y, width, height);
     CWnd = cWnd;
+
+    Function::hWnd = CWnd;        
 }
 
 PAINTSTRUCT C_ps = { 0 };
@@ -18,7 +20,7 @@ HBRUSH CanvasBrush = nullptr;
 HPEN CanvasPen = nullptr;
 HDC CHdc = nullptr;
 
-LRESULT DW_Canvas::HandleMessage(HWND CWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message)
     {
     case WM_CREATE:
@@ -27,6 +29,27 @@ LRESULT DW_Canvas::HandleMessage(HWND CWnd, UINT message, WPARAM wParam, LPARAM 
         break;
 
     case WM_COMMAND:
+        if (wParam == TL_CLEAR_BT)
+        {
+            function->clearDrawing(cWnd);
+            break;
+        }
+        if (wParam == TL_PLAY_BT)
+        {
+            function->replayThread(cWnd);
+        }
+        if (wParam == TL_PLAY_BT && lParam == 1)
+        {
+            function->setIsReplay(false);
+        }
+        if (wParam == TL_RESET_BT)
+        {
+            function->stopReplay(cWnd);
+        }
+        if (wParam == TL_RESET_BT && lParam == 1)
+        {
+            function->reDrawing(cWnd);
+        }
         if (LOWORD(wParam) == 1) 
         {
         }
@@ -41,7 +64,7 @@ LRESULT DW_Canvas::HandleMessage(HWND CWnd, UINT message, WPARAM wParam, LPARAM 
         drawPInfo.pTime = (DWORD)GetTickCount64();
         drawPInfo.pWidth = 10;
         drawPInfo.state = message;
-        function->draw(CWnd, drawPInfo, TRUE); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
+        function->draw(cWnd, drawPInfo, TRUE); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
         break;
 
     case WM_LBUTTONDOWN:
@@ -65,7 +88,7 @@ LRESULT DW_Canvas::HandleMessage(HWND CWnd, UINT message, WPARAM wParam, LPARAM 
 
     case WM_ERASEBKGND:
         ///화면 깜빡임 방지
-        return 1;
+        return DefWindowProc(cWnd, message, wParam, lParam);
         break;
     case WM_PAINT:
         CanvasRT = ChildWindow::GetRT();

@@ -10,6 +10,9 @@
 using namespace std;
 using namespace Gdiplus;
 
+LINFO Function::drawLInfo = { };
+HWND Function::hWnd = nullptr;
+
 void Function::record(PINFO inputPI)
 {
 	inputPI.bShape = bShape;
@@ -40,7 +43,6 @@ void Function::draw(HWND hWnd, PINFO dInfo, bool isRecord)// 뒤에 브러쉬 추가
 			record(dInfo);
 
 	}
-
 }
 
 void Function::mouseUD(PINFO dInfo, bool isRecord)
@@ -62,6 +64,7 @@ void Function::mouseUD(PINFO dInfo, bool isRecord)
 	
 	if (isRecord)
 		record(dInfo);
+	
 }
 
 void Function::replayThread(HWND hWnd)
@@ -78,6 +81,7 @@ void Function::replayThread(HWND hWnd)
 	replayThreadHandle.detach();
 }
 
+// 기본 리플레이 동작 함수
 void Function::replay(HWND hWnd)
 {
 	HDC hdc;
@@ -134,18 +138,53 @@ void Function::replay(HWND hWnd)
 
 		ReleaseDC(hWnd, hdc);
 
-		// 반복 간격 조절
+		// 반복 간격 조절	
 		Sleep(500);
 	}
 }
 
-void Function::clearDrawing(HWND hWnd) {
+// RESET 버튼 클릭 시 작동되는 함수 (원래 형태로 복원)
+void Function::reDrawing(HWND hWnd)
+{
+	HDC hdc = GetDC(hWnd);
+
+	for (const auto& replayInfo : drawLInfo.pInfo)
+	{
+		x = LOWORD(replayInfo.lParam);
+		y = HIWORD(replayInfo.lParam);
+
+		setBShape(replayInfo.bShape);
+
+		switch (replayInfo.state)
+		{
+		case WM_LBUTTONDOWN:
+			mouseUD(replayInfo, false);
+			break;
+
+		case WM_MOUSEMOVE:
+			draw(hWnd, replayInfo, false);
+			break;
+
+		case WM_LBUTTONUP:
+			mouseUD(replayInfo, false);
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	ReleaseDC(hWnd, hdc);
+}
+
+void Function::clearDrawing(HWND hWnd)
+{
 	// 기록 삭제
 	drawLInfo.pInfo.clear();
 
 	// 화면 초기화
 	InvalidateRect(hWnd, NULL, TRUE);
-	UpdateWindow(hWnd);
+	UpdateWindow(hWnd);		
 }
 
 void Function::setPenStyle(int size, LPARAM lParam, COLORREF col)
@@ -226,6 +265,14 @@ bool Function::getIsReplay()
 	return isReplay;
 }
 
+// RESET 버튼 클릭 시 호출되는 함수
+void Function::stopReplay(HWND hWnd)
+{
+	setIsReplay(false);
+	reDrawing(hWnd);
+}
+
+// 벡터가 비어있는지 검사
 bool Function::getDrawLInfoEmpty()
 {
 	return drawLInfo.pInfo.empty();
@@ -235,6 +282,6 @@ void Function::GDIPlusStart()
 	GdiplusStartupInput gdiplusStartupInput;
 	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 }
-void Function::GDIPlusEnd() { //gdi 종료
+void Function::GDIPlusEnd(){ //gdi 종료
 	GdiplusShutdown(gdiplusToken);
 }

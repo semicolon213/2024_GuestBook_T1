@@ -1,8 +1,8 @@
 #include "DW_ToolMenu.h"
 DW_ToolMenu::DW_ToolMenu(HINSTANCE hInstance)
-	:ChildWindow(RGB(249, 249, 249))
+    :ChildWindow(RGB(249, 249, 249))
 {
-	tInst = hInstance;
+    tInst = hInstance;
     ToolRT = { 0 };
     tWnd = nullptr;
     tCnt = nullptr;
@@ -11,13 +11,13 @@ DW_ToolMenu::DW_ToolMenu(HINSTANCE hInstance)
 
 void DW_ToolMenu::Create(HWND hParentWnd, int x, int y, int width, int height)
 {
-	ChildWindow::Create(hParentWnd, L"DW_ToolMenuClass", L"Tool Child Window", x, y, width, height);
-	tWnd = cWnd;
+    ChildWindow::Create(hParentWnd, L"DW_ToolMenuClass", L"Tool Child Window", x, y, width, height);
+    tWnd = cWnd;
 
     ToolRT = GetRT();
 
     Color1BT = CreateWindowW(L"BUTTON", L"색1", WS_CHILD | WS_VISIBLE,
-        (ToolRT.right / 2) - 100,8, 30, 30, tWnd, (HMENU)TL_COLOR1_BT, tInst, nullptr);
+        (ToolRT.right / 2) - 100, 8, 30, 30, tWnd, (HMENU)TL_COLOR1_BT, tInst, nullptr);
     Color2BT = CreateWindowW(L"BUTTON", L"색2", WS_CHILD | WS_VISIBLE,
         (ToolRT.right / 2) - 50, 8, 30, 30, tWnd, (HMENU)TL_COLOR2_BT, tInst, nullptr);
     Color3BT = CreateWindowW(L"BUTTON", L"색3", WS_CHILD | WS_VISIBLE,
@@ -46,9 +46,13 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
     switch (message)
     {
         ToolRT = ChildWindow::GetRT();
-  
+
+    case WM_CREATE:
+        function = make_unique<Function>();
+        break;
+
     case WM_COMMAND:
-        
+
         switch (wParam)
         {
         case TL_COLOR1_BT:
@@ -57,9 +61,9 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
             {
                 /*
                 버튼을 더블클릭했을때
-                
+
                 여기다가 컬러팔레트 기능 넣어주세용
-                
+
                 */
             }
 
@@ -120,22 +124,32 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
             break;
 
         case TL_CLEAR_BT:
-
+            if (function->getDrawLInfoEmpty())  break;
+            if (!function->getIsReplay())
+                SendMessage(Function::hWnd, WM_COMMAND, TL_CLEAR_BT, 0);
             break;
+
 
         case TL_SAVE_BT:
 
             break;
 
         case TL_PLAY_BT:
-            
+            if (function->getDrawLInfoEmpty())  break;
             if (pCnt)
             {
-                SetWindowText(PlayBT, L"∥");
-                pCnt = FALSE;
+                if (!function->getIsReplay())
+                {
+                    SendMessage(Function::hWnd, WM_COMMAND, TL_PLAY_BT, 0);
+                    
+                    SetWindowText(PlayBT, L"∥");
+                    pCnt = FALSE;
+                }
             }
             else
             {
+                SendMessage(Function::hWnd, WM_COMMAND, TL_PLAY_BT, 1);
+                
                 SetWindowText(PlayBT, L"▶");
                 pCnt = true;
             }
@@ -145,6 +159,10 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
             break;
 
         case TL_RESET_BT:
+            if (function->getIsReplay())
+                SendMessage(Function::hWnd, WM_COMMAND, TL_RESET_BT, 0);
+            else
+                SendMessage(Function::hWnd, WM_COMMAND, TL_RESET_BT, 1);
 
             SetWindowText(PlayBT, L"▶");
             pCnt = true;
@@ -205,7 +223,7 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 
         }
 
-        
+
         SelectObject(tHdc, ToolPen);
         SelectObject(tHdc, ToolBrush);
 
