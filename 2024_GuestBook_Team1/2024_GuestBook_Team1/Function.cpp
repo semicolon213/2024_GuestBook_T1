@@ -120,8 +120,6 @@ void Function::replay(HWND hWnd)
 			}
 
 			PINFO replayInfo = drawLInfo.pInfo[i];
-			x = LOWORD(replayInfo.lParam);
-			y = HIWORD(replayInfo.lParam);
 
 			setBShape(replayInfo.bShape);
 
@@ -168,9 +166,6 @@ void Function::reDrawing(HWND hWnd)
 
 	for (const auto& replayInfo : drawLInfo.pInfo)
 	{
-		x = LOWORD(replayInfo.lParam);
-		y = HIWORD(replayInfo.lParam);
-
 		setBShape(replayInfo.bShape);
 
 		switch (replayInfo.state)
