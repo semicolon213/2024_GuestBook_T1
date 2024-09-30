@@ -1,4 +1,6 @@
 #include "DW_ToolMenu.h"
+#include "PenThickness.h"
+
 DW_ToolMenu::DW_ToolMenu(HINSTANCE hInstance)
 	:ChildWindow(RGB(249, 249, 249))
 {
@@ -31,20 +33,17 @@ void DW_ToolMenu::Create(HWND hParentWnd, int x, int y, int width, int height)
 		210, 10, 30, 30, tWnd, (HMENU)WATERCOLOR, tInst, nullptr);
 
 	Color1BT = CreateWindowW(L"BUTTON", L"색1", WS_CHILD | WS_VISIBLE,
-		(toolRT.right / 2) - 150, 10, 30, 30, tWnd, (HMENU)TL_COLOR1_BT, tInst, nullptr);
+		(toolRT.right / 2) - 100, 10, 30, 30, tWnd, (HMENU)TL_COLOR1_BT, tInst, nullptr);
 	Color2BT = CreateWindowW(L"BUTTON", L"색2", WS_CHILD | WS_VISIBLE,
-		(toolRT.right / 2) - 100, 10, 30, 30, tWnd, (HMENU)TL_COLOR2_BT, tInst, nullptr);
+		(toolRT.right / 2) - 50, 10, 30, 30, tWnd, (HMENU)TL_COLOR2_BT, tInst, nullptr);
 	Color3BT = CreateWindowW(L"BUTTON", L"색3", WS_CHILD | WS_VISIBLE,
-		(toolRT.right / 2) - 50, 10, 30, 30, tWnd, (HMENU)TL_COLOR3_BT, tInst, nullptr);
+		toolRT.right / 2, 10, 30, 30, tWnd, (HMENU)TL_COLOR3_BT, tInst, nullptr);
 	PenWidthBT = CreateWindowW(L"BUTTON", L"굵기", WS_CHILD | WS_VISIBLE,
-		toolRT.right / 2, 10, 30, 30, tWnd, (HMENU)TL_PEN_WIDTH_BT, tInst, nullptr);
-	PenStyleBT = CreateWindowW(L"BUTTON", L"모양", WS_CHILD | WS_VISIBLE,
-		(toolRT.right / 2) + 50, 10, 30, 30, tWnd, (HMENU)TL_PEN_STYLE_BT, tInst, nullptr);
+		(toolRT.right / 2) + 50, 10, 30, 30, tWnd, (HMENU)TL_PEN_WIDTH_BT, tInst, nullptr);
 	ClearBT = CreateWindowW(L"BUTTON", L"X", WS_CHILD | WS_VISIBLE,
 		(toolRT.right / 2) + 100, 10, 30, 30, tWnd, (HMENU)TL_CLEAR_BT, tInst, nullptr);
 	SaveBT = CreateWindowW(L"BUTTON", L"저장", WS_CHILD | WS_VISIBLE,
 		toolRT.right - 50, 10, 30, 30, tWnd, (HMENU)TL_SAVE_BT, tInst, nullptr);
-
 
 	PlayBT = CreateWindowW(L"BUTTON", L"▶", WS_CHILD | WS_VISIBLE,
 		(toolRT.right / 2) - 50, 10, 30, 30, tWnd, (HMENU)TL_PLAY_BT, tInst, nullptr);
@@ -95,38 +94,12 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 			break;
 
 		case TL_PEN_WIDTH_BT:
+		{
+			PenThickness penThickness;
+			penThickness.show(tInst, Function::hWnd);
+		}
+		break;
 
-			if (message == WM_LBUTTONDBLCLK)
-			{
-				/*
-				버튼을 더블클릭했을때
-
-				여기다가 굵기 선택 기능 넣어주세용
-
-				*/
-			}
-
-
-
-
-			break;
-
-		case TL_PEN_STYLE_BT:
-
-			if (message == WM_LBUTTONDBLCLK)
-			{
-				/*
-				버튼을 더블클릭했을때
-
-				여기다가 굵기 선택 기능 넣어주세용
-
-				*/
-			}
-
-
-
-
-			break;
 
 		case BASIC:
 			function->setBShape(BASIC);
@@ -156,8 +129,6 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 			if (function->getDrawLInfoEmpty())  break;
 			if (!function->getIsReplay())
 				SendMessage(Function::hWnd, WM_COMMAND, TL_CLEAR_BT, 0);
-			SetWindowText(PlayBT, L"▶");
-			pCnt = true;
 			break;
 
 
@@ -224,15 +195,13 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 			ShowWindow(Color2BT, SW_SHOW);
 			ShowWindow(Color3BT, SW_SHOW);
 			ShowWindow(PenWidthBT, SW_SHOW);
-			ShowWindow(PenStyleBT, SW_SHOW);
 			ShowWindow(ClearBT, SW_SHOW);
 			ShowWindow(SaveBT, SW_SHOW);
 
-			MoveWindow(Color1BT, (toolRT.right / 2) - 200, 10, 30, 30, true);
-			MoveWindow(Color2BT, (toolRT.right / 2) - 150, 10, 30, 30, true);
-			MoveWindow(Color3BT, (toolRT.right / 2) - 100, 10, 30, 30, true);
-			MoveWindow(PenWidthBT, (toolRT.right / 2) - 50, 10, 30, 30, true);
-			MoveWindow(PenStyleBT, toolRT.right / 2, 10, 30, 30, true);
+			MoveWindow(Color1BT, (toolRT.right / 2) - 150, 10, 30, 30, true);
+			MoveWindow(Color2BT, (toolRT.right / 2) - 100, 10, 30, 30, true);
+			MoveWindow(Color3BT, (toolRT.right / 2) - 50, 10, 30, 30, true);
+			MoveWindow(PenWidthBT, toolRT.right / 2, 10, 30, 30, true);
 			MoveWindow(ClearBT, (toolRT.right / 2) + 50, 10, 30, 30, true);
 			MoveWindow(SaveBT, toolRT.right - 50, 10, 30, 30, true);
 
@@ -248,7 +217,6 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 			ShowWindow(Color2BT, SW_HIDE);
 			ShowWindow(Color3BT, SW_HIDE);
 			ShowWindow(PenWidthBT, SW_HIDE);
-			ShowWindow(PenStyleBT, SW_HIDE);
 			ShowWindow(ClearBT, SW_HIDE);
 			ShowWindow(SaveBT, SW_HIDE);
 

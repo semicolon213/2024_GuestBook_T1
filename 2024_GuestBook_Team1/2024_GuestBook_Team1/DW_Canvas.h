@@ -4,6 +4,7 @@
 #include "ColorPalette.h"
 #include "Function.h"
 #include "Struct.h"
+#include "PenThickness.h"
 
 
 
@@ -18,6 +19,7 @@ protected:
 
     std::unique_ptr<Function> function;
     std::unique_ptr<ColorPalette> colorPalette;
+    std::unique_ptr<PenThickness> penThickness;
 
     HINSTANCE cInst;
     HWND canWnd;

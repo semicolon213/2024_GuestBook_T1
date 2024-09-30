@@ -82,7 +82,7 @@ LRESULT DW_SideMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 
     case WM_KILLFOCUS:
 
-        ShowWindow(sWnd, false);
+        
         break;
 
     case WM_PAINT:

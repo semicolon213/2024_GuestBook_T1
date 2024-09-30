@@ -15,6 +15,7 @@ void DW_Canvas::Create(HWND hParentWnd, int x, int y, int width, int height)
     canWnd = cWnd;
 
     Function::hWnd = canWnd;
+    penThickness = make_unique<PenThickness>();
 }
 
 
@@ -60,7 +61,7 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
         drawPInfo.lParam = lParam;
         drawPInfo.pColor = ColorPalette::colorArr[Function::penNum];
         drawPInfo.pTime = (DWORD)GetTickCount64();
-        drawPInfo.pWidth = 20;
+        drawPInfo.pWidth = penThickness->getPenWidth(); /// 펜 굵기 설정
         drawPInfo.state = message;
         function->draw(cWnd, drawPInfo, TRUE); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
         break;
@@ -71,7 +72,7 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
         drawPInfo.lParam = lParam;
         drawPInfo.pColor = ColorPalette::colorArr[Function::penNum];
         drawPInfo.pTime = (DWORD)GetTickCount64();
-        drawPInfo.pWidth = 20;
+        drawPInfo.pWidth = penThickness->getPenWidth(); /// 펜 굵기 설정
         drawPInfo.state = message;
         function->mouseUD(drawPInfo, TRUE);
 

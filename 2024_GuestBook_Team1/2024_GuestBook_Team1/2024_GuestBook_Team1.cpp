@@ -1,6 +1,7 @@
-﻿
-#include "2024_GuestBook_Team1.h"
+﻿#include "2024_GuestBook_Team1.h"
 #include "Resource.h"
+#include "PenThickness.h"
+#include <commctrl.h>
 
 
 #define MAX_LOADSTRING 100
@@ -169,6 +170,7 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         dWindow->Show(FALSE);
         d_hWnd = dWindow->GetHWND();
 
+        SetWindowRgn(CreditBT, CreateEllipticRgn(0, 0, 30, 30), false);
 
         break;
 

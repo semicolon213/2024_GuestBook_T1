@@ -31,7 +31,7 @@ void DrowWindow::Create(HWND hParentWnd, int x, int y, int width, int height)
 
     toolMenu = make_unique<DW_ToolMenu>(dInst);
     toolMenu->Create(dWnd, -1, 57, drowRT.right, 51);
-    //toolMenu->Show(true);
+    //toolMenu->show(true);
     tHWnd = toolMenu->GetHWND();
     toolCnt = TRUE;
     toolMenu->tCnt = &toolCnt;

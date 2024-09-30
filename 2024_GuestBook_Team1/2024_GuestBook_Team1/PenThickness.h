@@ -1,26 +1,29 @@
-#ifndef PENTHICKNESS_H  // 헤더 파일이 여러 번 포함되는 것을 방지하기 위해 정의된 매크로
-#define PENTHICKNESS_H  // 헤더 파일의 시작을 정의
+#ifndef PENTHICKNESS_H
+#define PENTHICKNESS_H
 
-#include <Windows.h>  /// Windows API에 대한 정의를 포함하는 헤더 파일
-#include <vector>     
-
-class PenThickness  /// PenThickness 클래스를 정의
-{
+#include <Windows.h>
+#include <CommCtrl.h>  
+/// 펜 굵기를 설정하기 위한 대화 상자
+class PenThickness {
 public:
-    PenThickness(HINSTANCE hInstance, HWND parentHWnd);  
-    void Show(bool show);  
-    void SetThickness(int thickness);  /// 펜 두께를 설정하는 메서드
-    void SetCurrentThickness(int thickness);  /// 현재 두께를 설정하는 메서드
+    PenThickness();
+    ~PenThickness();
+
+    /// 펜 굵기 설정 대화 상자를 표시
+    void show(HINSTANCE hInst, HWND hWndParent);
+
+    /// 현재 설정된 펜 굵기를 반환
+    static int getPenWidth();
 
 private:
-    HWND hDlg;  
-    HINSTANCE hInst;  
-    HWND parentHWnd;  
-    int currentThickness;  /// 현재 펜 두께
+    /// 대화 상자에서 발생하는 메시지를 처리
+    static INT_PTR CALLBACK dlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-    void InitializeDialog();  /// 대화 상자를 초기화하는 메서드
-    static INT_PTR CALLBACK DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);  
-    void DrawThicknessPreview(HDC hdc);  
+    /// (슬라이더 사용하기 위해 라이브러리를 초기화
+    void initializeCommonControls();
+
+    /// 추가 정적 변수
+    static int penWidth;
 };
 
-#endif 
+#endif
