@@ -5,7 +5,6 @@
 #include "Function.h"
 #include "Struct.h"
 
-#include <memory>
 
 
 class DW_Canvas : public ChildWindow

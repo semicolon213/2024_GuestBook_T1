@@ -7,6 +7,7 @@
 **/
 #include "Function.h"
 
+
 using namespace std;
 
 
@@ -16,8 +17,16 @@ HWND Function::hWnd = nullptr;
 
 void Function::record(PINFO inputPI)
 {
+
 	inputPI.bShape = bShape;
 	drawLInfo.pInfo.push_back(inputPI);
+
+	/*std::wstring message = L"record() 호출됨, drawLInfo.pInfo 크기: " + std::to_wstring(drawLInfo.pInfo.size()) +
+		L"\nFunction 객체 주소: " + std::to_wstring((uintptr_t)this);
+	MessageBox(nullptr, message.c_str(), L"디버깅: record", MB_OK); */
+
+	
+
 }
 
 void Function::draw(HWND hWnd, PINFO dInfo, bool isRecord) // 뒤에 브러쉬 추가
@@ -142,6 +151,7 @@ void Function::replay(HWND hWnd)
 
 			DeleteObject(nPen);
 		}
+
 
 		ReleaseDC(hWnd, hdc);
 
@@ -319,6 +329,9 @@ void Function::setBShape(int bShape)
 
 LINFO Function::getDrawLInfo()
 {
+	/*std::wstring message = L"getDrawLInfo() 호출, drawLInfo.pInfo 크기: " + std::to_wstring(drawLInfo.pInfo.size()) +
+		L"\nFunction 객체 주소: " + std::to_wstring((uintptr_t)this);
+	MessageBox(nullptr, message.c_str(), L"디버깅: getDrawLInfo", MB_OK); */
 	return drawLInfo;
 }
 

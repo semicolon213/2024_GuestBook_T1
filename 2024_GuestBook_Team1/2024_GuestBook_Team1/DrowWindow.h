@@ -17,7 +17,7 @@ public:
     void Create(HWND hParentWnd, int x, int y, int width, int height);
 
     bool toolCnt;
-
+    
 protected:
     LRESULT HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
     HINSTANCE dInst;

@@ -152,7 +152,7 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
     case WM_CREATE:
 
-        //fileManager->getInstance().InitializePanels(hWnd);
+       
 
         GetClientRect(hWnd, &MainRT);
 
@@ -222,7 +222,7 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
 
     case WM_SIZE:
-        //fileManager->getInstance().ResizePanels(hWnd, lParam);  /*패널 크기 조정 함수 호출*/
+        
         GetClientRect(hWnd, &MainRT);
 
         MoveWindow(DrowBT, (MainRT.right / 2) - 120, (MainRT.bottom / 2) - 170, 240, 100, TRUE);
@@ -246,6 +246,7 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     break;
     case WM_DESTROY:
+        FileManager::fileManager.SaveFileList();
         PostQuitMessage(0);
         //function->GDIPlusEnd();
         break;

@@ -1,7 +1,9 @@
 #include "DW_SideMenu.h"
+ 
+
 DW_SideMenu::DW_SideMenu(HINSTANCE hInstance)
-    :ChildWindow(RGB(243, 243, 243))
-{
+    : ChildWindow(RGB(243, 243, 243)), penMemory(new std::vector<PINFO>)
+{   
     sInst = hInstance;
     SideRT = { 0 };
     sWnd = nullptr;
@@ -11,6 +13,8 @@ DW_SideMenu::DW_SideMenu(HINSTANCE hInstance)
     LoadFile = nullptr;
     FileManager = nullptr;
     Credit = nullptr;
+
+   
 }
 
 void DW_SideMenu::CreatePop(HWND hParentWnd, int x, int y, int width, int height)
@@ -47,15 +51,18 @@ LRESULT DW_SideMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
             break;
 
         case SD_SAVEFILE_BT:
-
+            
+            
+            FileManager::fileManager.selectFileMode(SAVE, tWnd, penMemory);
             break;
 
         case SD_LOADFILE_BT:
-
+            FileManager::fileManager.selectFileMode(LOAD, tWnd, penMemory);
             break;
 
         case SD_FILEMANAGER_BT:
-
+        
+            FileManager::fileManager.selectFileMode(SD_FILEMANAGER_BT, tWnd, penMemory);
             break;
 
         case SD_CREDIT_BT:
@@ -65,16 +72,17 @@ LRESULT DW_SideMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
         default:
             break;
         }
+        break;
 
 
     case WM_SETFOCUS:
-        
+       
 
         break;
 
     case WM_KILLFOCUS:
 
-        Show(false);
+        
         break;
 
     case WM_PAINT:
@@ -85,7 +93,7 @@ LRESULT DW_SideMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
         SidePen = (HPEN)SelectObject(sHdc, CreatePen(PS_SOLID, 1, RGB(234, 234, 234)));
         Rectangle(sHdc, SideRT.left, SideRT.top, SideRT.right, SideRT.bottom);
         EndPaint(tWnd, &s_ps);
-
+        
     default:
         return ChildWindow::HandleMessage(tWnd, message, wParam, lParam);
     }
