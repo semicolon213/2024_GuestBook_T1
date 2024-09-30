@@ -1,20 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-﻿/**
-@author 김형균
-@date 2024.08.01
-    기본 그리기 코드 추가
-    그린 내용 유지 코드 추가
-@todo 그린 내용 replay 구현
-**/
-
-=======
-﻿
->>>>>>> origin/develop
-#include "2024_GuestBook_Team1.h"
-=======
 ﻿#include "2024_GuestBook_Team1.h"
->>>>>>> Stashed changes
 #include "Resource.h"
 #include "PenThickness.h"
 #include <commctrl.h>
@@ -186,6 +170,7 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         dWindow->Show(FALSE);
         d_hWnd = dWindow->GetHWND();
 
+        SetWindowRgn(CreditBT, CreateEllipticRgn(0, 0, 30, 30), false);
 
         break;
 

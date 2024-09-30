@@ -26,7 +26,6 @@ protected:
     HWND Color2BT = nullptr;
     HWND Color3BT = nullptr;
     HWND PenWidthBT = nullptr;
-    HWND PenStyleBT = nullptr;
     HWND ClearBT = nullptr;
     HWND SaveBT = nullptr;
     HWND PlayBT = nullptr;
@@ -37,14 +36,6 @@ protected:
 
 
     HRGN roundRgn;
-
-
-    HWND basicBT = nullptr;
-    HWND brushBT = nullptr;
-    HWND pencilBT = nullptr;
-    HWND sprayBT = nullptr;
-    HWND markerBT = nullptr;
-    HWND watercolorBT = nullptr;
 };
 
 #endif

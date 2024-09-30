@@ -29,11 +29,6 @@
 #define MARKER 304
 #define WATERCOLOR 305
 
-#define IDD_PEN_THICKNESS       504
-#define IDC_THICKNESS_SLIDER    503  // 슬라이더의 ID
-#define IDC_THICKNESS_EDIT      502  // 에디트 박스의 ID
-#define IDD_PEN_THICKNESS		501
-
 // 펜 굵기 
 #define IDD_PEN_THICKNESS       504
 #define IDC_THICKNESS_SLIDER    503  // 슬라이더의 ID
@@ -103,19 +98,11 @@
 #define TL_COLOR2_BT				(TOOL_DEF + 2)
 #define TL_COLOR3_BT				(TOOL_DEF + 3)
 #define TL_PEN_WIDTH_BT				(TOOL_DEF + 4)
-#define TL_PEN_STYLE_BT				(TOOL_DEF + 5)
-#define TL_CLEAR_BT					(TOOL_DEF + 6)
+#define TL_CLEAR_BT					(TOOL_DEF + 5)
 #define TL_SAVE_BT					(SD_SAVEFILE_BT)
 #define TL_PLAY_BT					(TOOL_DEF + 7)
 #define TL_RESET_BT					(TOOL_DEF + 8)
 
-
-//#define TL_PEN_STYLE_BASIC			(TL_PEN_STYLE_BT + 1000)
-//#define TL_PEN_STYLE_BRUSH			(TL_PEN_STYLE_BT + 2000)
-//#define TL_PEN_STYLE_PENCIL			(TL_PEN_STYLE_BT + 3000)
-//#define TL_PEN_STYLE_SPRAY			(TL_PEN_STYLE_BT + 4000)
-//#define TL_PEN_STYLE_MARKER		(TL_PEN_STYLE_BT + 5000)
-//#define TL_PEN_STYLE_WATERCOLOR		(TL_PEN_STYLE_BT + 6000)
 
 
 

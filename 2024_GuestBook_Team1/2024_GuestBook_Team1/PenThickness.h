@@ -6,11 +6,7 @@
 /// 펜 굵기를 설정하기 위한 대화 상자
 class PenThickness {
 public:
-<<<<<<< Updated upstream
-    PenThickness(); 
-=======
     PenThickness();
->>>>>>> Stashed changes
     ~PenThickness();
 
     /// 펜 굵기 설정 대화 상자를 표시

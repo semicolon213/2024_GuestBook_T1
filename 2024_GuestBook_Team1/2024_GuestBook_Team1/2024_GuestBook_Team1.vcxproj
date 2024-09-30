@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -122,11 +122,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-<<<<<<< Updated upstream
-      <AdditionalDependencies>Comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-=======
       <AdditionalDependencies>ComCtl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
->>>>>>> Stashed changes
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -158,18 +154,10 @@
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Function.h" />
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
     <ClInclude Include="pch.h" />
->>>>>>> Stashed changes
     <ClInclude Include="PenThickness.h" />
-=======
-    <ClInclude Include="pch.h" />
->>>>>>> origin/develop
     <ClInclude Include="RegisterList.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="resource1.h" />
     <ClInclude Include="Struct.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -190,7 +178,6 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2024_GuestBook_Team1.rc" />
-    <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="2024_GuestBook_Team1.ico" />
