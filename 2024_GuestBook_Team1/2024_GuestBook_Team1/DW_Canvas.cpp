@@ -24,8 +24,8 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
     switch (message)
     {
     case WM_CREATE:
-        function = make_unique<Function>();
-
+        function = make_unique<Function>();     
+        function->GDIPlusStart(); // 붓 gdi 라이브러리 활성화
         break;
 
     case WM_COMMAND:
@@ -62,7 +62,7 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
         drawPInfo.lParam = lParam;
         drawPInfo.pColor = colorPalette->getColor(penNum);
         drawPInfo.pTime = (DWORD)GetTickCount64();
-        drawPInfo.pWidth = 10;
+        drawPInfo.pWidth = 20;
         drawPInfo.state = message;
         function->draw(cWnd, drawPInfo, TRUE); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
         break;
@@ -73,7 +73,7 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
         drawPInfo.lParam = lParam;
         drawPInfo.pColor = colorPalette->getColor(penNum);
         drawPInfo.pTime = (DWORD)GetTickCount64();
-        drawPInfo.pWidth = 10;
+        drawPInfo.pWidth = 20;
         drawPInfo.state = message;
         function->mouseUD(drawPInfo, TRUE);
 
