@@ -163,6 +163,7 @@ void Function::replay(HWND hWnd)
 void Function::reDrawing(HWND hWnd)
 {
 	HDC hdc = GetDC(hWnd);
+	setIsReset(true);
 
 	for (const auto& replayInfo : drawLInfo.pInfo)
 	{
@@ -368,15 +369,26 @@ void Function::setIsReplay(bool isReplay)
 	this->isReplay = isReplay;
 }
 
-bool Function::getIsReplay() 
+bool Function::getIsReplay()
 {
 	return isReplay;
+}
+
+void Function::setIsReset(bool reset)
+{
+	this->reset = reset;
+}
+
+bool Function::getIsReset()
+{
+	return reset;
 }
 
 // RESET 버튼 클릭 시 호출되는 함수
 void Function::stopReplay(HWND hWnd)
 {
 	setIsReplay(false);
+	setIsReset(false);
 	reDrawing(hWnd);
 }
 

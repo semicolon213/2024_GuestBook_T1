@@ -8,6 +8,7 @@
 #include "Function.h"
 #include "Struct.h"
 #include "Resource.h"
+#include "Function.h"
 
 #define ID_FILE_LIST 101
 
@@ -16,6 +17,7 @@ class DW_SideMenu;
 class FileManager
 {
 private:
+
     bool HandleFileOperation(HWND hWnd, std::vector<PINFO>* penMemory, bool isSave);
     bool ConfigureDialog(HWND hWnd, DWORD flags, WCHAR* fileBuffer, DWORD bufferSize);
     bool save(const wchar_t* path, std::vector<PINFO>* penMemory);

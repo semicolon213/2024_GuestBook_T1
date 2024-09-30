@@ -30,25 +30,36 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
     case WM_COMMAND:
         if (wParam == TL_CLEAR_BT)
         {
-            function->clearDrawing(cWnd);
+            if (!function->getIsReplay())
+            {
+                function->clearDrawing(cWnd);
+            }
             break;
         }
+
         if (wParam == TL_PLAY_BT)
         {
+            function->setIsReset(false);
             function->replayThread(cWnd);
         }
+
         if (wParam == TL_PLAY_BT && lParam == 1)
         {
             function->setIsReplay(false);
         }
-        if (wParam == TL_RESET_BT)
+
+        if (!function->getIsReset())
         {
-            function->stopReplay(cWnd);
+            if (wParam == TL_RESET_BT)
+            {
+                function->stopReplay(cWnd);
+            }
+            if (wParam == TL_RESET_BT && lParam == 1)
+            {
+                function->reDrawing(cWnd);
+            }
         }
-        if (wParam == TL_RESET_BT && lParam == 1)
-        {
-            function->reDrawing(cWnd);
-        }
+
         if (LOWORD(wParam) == 1) 
         {
         }
