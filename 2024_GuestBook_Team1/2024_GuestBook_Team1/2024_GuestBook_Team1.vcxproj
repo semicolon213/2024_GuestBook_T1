@@ -120,7 +120,11 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+<<<<<<< Updated upstream
       <AdditionalDependencies>Comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+=======
+      <AdditionalDependencies>ComCtl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+>>>>>>> Stashed changes
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -150,6 +154,10 @@
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Function.h" />
+<<<<<<< Updated upstream
+=======
+    <ClInclude Include="pch.h" />
+>>>>>>> Stashed changes
     <ClInclude Include="PenThickness.h" />
     <ClInclude Include="RegisterList.h" />
     <ClInclude Include="Resource.h" />

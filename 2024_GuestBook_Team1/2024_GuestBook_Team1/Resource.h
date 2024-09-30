@@ -35,6 +35,12 @@
 #define IDC_THICKNESS_EDIT      502  // 에디트 박스의 ID
 #define IDD_PEN_THICKNESS		501
 
+// 펜 굵기 
+#define IDD_PEN_THICKNESS       504
+#define IDC_THICKNESS_SLIDER    503  // 슬라이더의 ID
+#define IDC_THICKNESS_EDIT      502  // 에디트 박스의 ID
+#define IDD_PEN_THICKNESS		501
+
 // 버튼 호출 상수
 #define COLOR1 1001
 #define COLOR2 1002

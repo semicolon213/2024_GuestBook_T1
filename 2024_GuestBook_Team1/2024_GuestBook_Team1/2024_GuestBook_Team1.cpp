@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 ﻿/**
 @author 김형균
 @date 2024.08.01
@@ -7,7 +8,12 @@
 **/
 
 #include "2024_GuestBook_Team1.h"
+=======
+﻿#include "2024_GuestBook_Team1.h"
+>>>>>>> Stashed changes
 #include "Resource.h"
+#include "PenThickness.h"
+#include <commctrl.h>
 
 
 #define MAX_LOADSTRING 100
