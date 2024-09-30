@@ -169,7 +169,6 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         dWindow->Show(FALSE);
         d_hWnd = dWindow->GetHWND();
 
-        SetWindowRgn(CreditBT, CreateEllipticRgn(0, 0, 30, 30), false);
 
         break;
 
