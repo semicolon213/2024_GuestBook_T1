@@ -1,6 +1,8 @@
 #ifndef DW_TOOLMENU_H
 #define DW_TOOLMENU_H
 #include "ChildWindow.h"
+#include "Function.h"
+#include <thread>
 
 
 class DW_ToolMenu : public ChildWindow
@@ -26,6 +28,9 @@ protected:
     HWND SaveBT = nullptr;
     HWND PlayBT = nullptr;
     HWND ResetBT = nullptr;
+
+    std::unique_ptr<Function> function;
+
 
     HRGN roundRgn;
 };

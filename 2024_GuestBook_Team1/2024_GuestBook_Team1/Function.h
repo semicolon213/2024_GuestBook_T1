@@ -10,15 +10,11 @@
 
 using namespace std;
 
-
-
 class Function
 {
 
 private:
 
-
-	HWND hWnd;
 	HDC hdc;
 	HPEN nPen, oPen;
 	HBRUSH hPen;
@@ -32,26 +28,24 @@ private:
 	bool isLeftClick = false;
 	bool isReplay = false;
 
-	LINFO drawLInfo;
-
-	thread replayThreadHandle;
-
-
 	ULONG_PTR gdiplusToken;
 
 	void replay(HWND);
 	void record(PINFO);
 
 public:
+	thread replayThreadHandle;
 
 	void draw(HWND, PINFO, bool);		//뒤에 브러쉬 추가
 	void mouseUD(PINFO, bool);
 	void replayThread(HWND);
 
 	void clearDrawing(HWND);
+	void reDrawing(HWND);
 
 	void setIsReplay(bool);
 	bool getIsReplay();
+	void stopReplay(HWND);
 
 	bool getDrawLInfoEmpty();
 
@@ -63,4 +57,6 @@ public:
 
 	LINFO getDrawLInfo();
 
+	static HWND hWnd;
+	static LINFO drawLInfo;
 };
