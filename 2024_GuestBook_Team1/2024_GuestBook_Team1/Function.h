@@ -27,6 +27,7 @@ private:
 
 	bool isLeftClick = false;
 	bool isReplay = false;
+	bool reset;
 
 	ULONG_PTR gdiplusToken;
 
@@ -45,6 +46,9 @@ public:
 
 	void setIsReplay(bool);
 	bool getIsReplay();
+	void setIsReset(bool);
+	bool getIsReset();
+
 	void stopReplay(HWND);
 
 	bool getDrawLInfoEmpty();

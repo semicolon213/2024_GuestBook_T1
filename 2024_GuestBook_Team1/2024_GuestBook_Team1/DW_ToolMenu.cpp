@@ -125,7 +125,6 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 
         case TL_CLEAR_BT:
             if (function->getDrawLInfoEmpty())  break;
-            if (!function->getIsReplay())
                 SendMessage(Function::hWnd, WM_COMMAND, TL_CLEAR_BT, 0);
             break;
 
@@ -159,6 +158,7 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
             break;
 
         case TL_RESET_BT:
+
             if (function->getIsReplay())
                 SendMessage(Function::hWnd, WM_COMMAND, TL_RESET_BT, 0);
             else
