@@ -2,33 +2,110 @@
 #include "PenThickness.h"
 
 DW_ToolMenu::DW_ToolMenu(HINSTANCE hInstance)
-	:ChildWindow(cInst, RGB(249, 249, 249))
+	:ChildWindow(RGB(249, 249, 249))
 {
 	tInst = hInstance;
-    ToolRT = { 0 };
-    tWnd = nullptr;
+	toolRT = { 0 };
+	tWnd = nullptr;
+	tCnt = nullptr;
+	pCnt = true;
+	roundRgn = { 0 };
 }
 
 void DW_ToolMenu::Create(HWND hParentWnd, int x, int y, int width, int height)
 {
 	ChildWindow::Create(hParentWnd, L"DW_ToolMenuClass", L"Tool Child Window", x, y, width, height);
 	tWnd = cWnd;
+
+	toolRT = GetRT();
+
+	basicBT = CreateWindowW(L"BUTTON", L"기본", WS_CHILD | WS_VISIBLE,
+		10, 10, 30, 30, tWnd, (HMENU)BASIC, tInst, nullptr);
+	brushBT = CreateWindowW(L"BUTTON", L"BR", WS_CHILD | WS_VISIBLE,
+		50, 10, 30, 30, tWnd, (HMENU)BRUSH, tInst, nullptr);
+	pencilBT = CreateWindowW(L"BUTTON", L"BS", WS_CHILD | WS_VISIBLE,
+		90, 10, 30, 30, tWnd, (HMENU)PENCIL, tInst, nullptr);
+	sprayBT = CreateWindowW(L"BUTTON", L"SP", WS_CHILD | WS_VISIBLE,
+		130, 10, 30, 30, tWnd, (HMENU)SPRAY, tInst, nullptr);
+	markerBT = CreateWindowW(L"BUTTON", L"MK", WS_CHILD | WS_VISIBLE,
+		170, 10, 30, 30, tWnd, (HMENU)MARKER, tInst, nullptr);
+	watercolorBT = CreateWindowW(L"BUTTON", L"BS", WS_CHILD | WS_VISIBLE,
+		210, 10, 30, 30, tWnd, (HMENU)WATERCOLOR, tInst, nullptr);
+
+
+
+
+
+	Color1BT = CreateWindowW(L"BUTTON", L"색1", WS_CHILD | WS_VISIBLE,
+		(toolRT.right / 2) - 150, 10, 30, 30, tWnd, (HMENU)TL_COLOR1_BT, tInst, nullptr);
+	Color2BT = CreateWindowW(L"BUTTON", L"색2", WS_CHILD | WS_VISIBLE,
+		(toolRT.right / 2) - 100, 10, 30, 30, tWnd, (HMENU)TL_COLOR2_BT, tInst, nullptr);
+	Color3BT = CreateWindowW(L"BUTTON", L"색3", WS_CHILD | WS_VISIBLE,
+		(toolRT.right / 2) - 50, 10, 30, 30, tWnd, (HMENU)TL_COLOR3_BT, tInst, nullptr);
+	PenWidthBT = CreateWindowW(L"BUTTON", L"굵기", WS_CHILD | WS_VISIBLE,
+		toolRT.right / 2, 10, 30, 30, tWnd, (HMENU)TL_PEN_WIDTH_BT, tInst, nullptr);
+	PenStyleBT = CreateWindowW(L"BUTTON", L"모양", WS_CHILD | WS_VISIBLE,
+		(toolRT.right / 2) + 50, 10, 30, 30, tWnd, (HMENU)TL_PEN_STYLE_BT, tInst, nullptr);
+	ClearBT = CreateWindowW(L"BUTTON", L"X", WS_CHILD | WS_VISIBLE,
+		(toolRT.right / 2) + 100, 10, 30, 30, tWnd, (HMENU)TL_CLEAR_BT, tInst, nullptr);
+	SaveBT = CreateWindowW(L"BUTTON", L"저장", WS_CHILD | WS_VISIBLE,
+		toolRT.right - 50, 10, 30, 30, tWnd, (HMENU)TL_SAVE_BT, tInst, nullptr);
+
+
+	PlayBT = CreateWindowW(L"BUTTON", L"▶", WS_CHILD | WS_VISIBLE,
+		(toolRT.right / 2) - 50, 10, 30, 30, tWnd, (HMENU)TL_PLAY_BT, tInst, nullptr);
+	ResetBT = CreateWindowW(L"BUTTON", L"■", WS_CHILD | WS_VISIBLE,
+		(toolRT.right / 2) + 20, 10, 30, 30, tWnd, (HMENU)TL_RESET_BT, tInst, nullptr);
+
+	roundRgn = CreateEllipticRgn(0, 0, 30, 30);
+
 }
 
+PAINTSTRUCT t_ps = { 0 };
+HBRUSH ToolBrush = nullptr;
+HPEN ToolPen = nullptr;
+HDC tHdc = nullptr;
+
 LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-    switch (message)
-    {
-        ToolRT = ChildWindow::GetRT();
-    case WM_CREATE:
+	switch (message)
+	{
+		toolRT = ChildWindow::GetRT();
+
+
+	case WM_CREATE:
+		function = make_unique<Function>();
+		colorPalette = make_unique<ColorPalette>();
+		break;
+
+	case WM_COMMAND:
+
+		switch (wParam)
+		{
+		case TL_COLOR1_BT:
+			if (Function::penNum == 0)
+				colorPalette->colorSelect(tWnd, 0);
+			else Function::penNum = 0;
+			break;
+
+		case TL_COLOR2_BT:
+			if (Function::penNum == 1)
+				colorPalette->colorSelect(tWnd, 1);
+			else Function::penNum = 1;
+			break;
+
+		case TL_COLOR3_BT:
+
+			if (Function::penNum == 2)
+				colorPalette->colorSelect(tWnd, 2);
+			else Function::penNum = 2;
+			break;
 
 
 
-        break;
 
-    case WM_COMMAND:
-        if (LOWORD(wParam) == 1) {
-            
+			break;
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
         }
         break;
@@ -44,16 +121,76 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 			penThickness.Show(tInst, Function::hWnd);
 		}
 		break;
+=======
+		case TL_PEN_WIDTH_BT:
+
+			if (message == WM_LBUTTONDBLCLK)
+			{
+				/*
+				버튼을 더블클릭했을때
+
+				여기다가 굵기 선택 기능 넣어주세용
+
+				*/
+			}
+>>>>>>> origin/develop
 
 
 
 
 			break;
 
+<<<<<<< HEAD
+=======
+		case TL_PEN_STYLE_BT:
+
+			if (message == WM_LBUTTONDBLCLK)
+			{
+				/*
+				버튼을 더블클릭했을때
+
+				여기다가 굵기 선택 기능 넣어주세용
+
+				*/
+			}
+
+
+
+
+			break;
+
+		case BASIC:
+
+			break;
+		case BRUSH:
+
+			break;
+		case PENCIL:
+
+			break;
+
+		case SPRAY:
+
+			break;
+
+		case MARKER:
+
+			break;
+
+		case WATERCOLOR:
+
+			break;
+
+>>>>>>> origin/develop
 		case TL_CLEAR_BT:
 			if (function->getDrawLInfoEmpty())  break;
 			if (!function->getIsReplay())
 				SendMessage(Function::hWnd, WM_COMMAND, TL_CLEAR_BT, 0);
+<<<<<<< HEAD
+=======
+			SetWindowText(PlayBT, L"▶");
+			pCnt = true;
+>>>>>>> origin/develop
 			break;
 
 
@@ -120,6 +257,7 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 			ShowWindow(Color2BT, SW_SHOW);
 			ShowWindow(Color3BT, SW_SHOW);
 			ShowWindow(PenWidthBT, SW_SHOW);
+<<<<<<< HEAD
 			ShowWindow(ClearBT, SW_SHOW);
 			ShowWindow(SaveBT, SW_SHOW);
 
@@ -127,6 +265,17 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 			MoveWindow(Color2BT, (toolRT.right / 2) - 100, 10, 30, 30, true);
 			MoveWindow(Color3BT, (toolRT.right / 2) - 50, 10, 30, 30, true);
 			MoveWindow(PenWidthBT, toolRT.right / 2, 10, 30, 30, true);
+=======
+			ShowWindow(PenStyleBT, SW_SHOW);
+			ShowWindow(ClearBT, SW_SHOW);
+			ShowWindow(SaveBT, SW_SHOW);
+
+			MoveWindow(Color1BT, (toolRT.right / 2) - 200, 10, 30, 30, true);
+			MoveWindow(Color2BT, (toolRT.right / 2) - 150, 10, 30, 30, true);
+			MoveWindow(Color3BT, (toolRT.right / 2) - 100, 10, 30, 30, true);
+			MoveWindow(PenWidthBT, (toolRT.right / 2) - 50, 10, 30, 30, true);
+			MoveWindow(PenStyleBT, toolRT.right / 2, 10, 30, 30, true);
+>>>>>>> origin/develop
 			MoveWindow(ClearBT, (toolRT.right / 2) + 50, 10, 30, 30, true);
 			MoveWindow(SaveBT, toolRT.right - 50, 10, 30, 30, true);
 
@@ -142,6 +291,10 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 			ShowWindow(Color2BT, SW_HIDE);
 			ShowWindow(Color3BT, SW_HIDE);
 			ShowWindow(PenWidthBT, SW_HIDE);
+<<<<<<< HEAD
+=======
+			ShowWindow(PenStyleBT, SW_HIDE);
+>>>>>>> origin/develop
 			ShowWindow(ClearBT, SW_HIDE);
 			ShowWindow(SaveBT, SW_HIDE);
 
@@ -164,5 +317,8 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 		return ChildWindow::HandleMessage(tWnd, message, wParam, lParam);
 	}
 	return 0;
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> origin/develop
 }

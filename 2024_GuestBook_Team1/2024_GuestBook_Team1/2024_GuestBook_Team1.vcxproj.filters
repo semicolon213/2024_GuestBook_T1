@@ -27,9 +27,6 @@
     <ClInclude Include="2024_GuestBook_Team1.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="ColorPalette.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -45,9 +42,6 @@
     <ClInclude Include="ChildWindow.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="BlueWindow.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="DrowWindow.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -60,6 +54,7 @@
     <ClInclude Include="Struct.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="PenThickness.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -67,14 +62,23 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="PenThickness.h">
+=======
+    <ClInclude Include="pch.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DW_SideMenu.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DW_Canvas.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DW_NameBar.h">
+>>>>>>> origin/develop
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="2024_GuestBook_Team1.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Window.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ColorPalette.cpp">
@@ -92,9 +96,6 @@
     <ClCompile Include="ChildWindow.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="BlueWindow.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="DrowWindow.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -104,10 +105,20 @@
     <ClCompile Include="Function.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="PenThickness.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="PenThickness.cpp">
+=======
+    <ClCompile Include="DW_SideMenu.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DW_Canvas.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DW_NameBar.cpp">
+>>>>>>> origin/develop
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -124,6 +135,12 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="2024_GuestBook_Team1.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="yuhan.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="yuhan256.ico">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
