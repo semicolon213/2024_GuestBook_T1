@@ -9,6 +9,8 @@
 
 using namespace std;
 
+
+int Function::penNum = 0;
 LINFO Function::drawLInfo = { };
 HWND Function::hWnd = nullptr;
 

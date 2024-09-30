@@ -72,4 +72,6 @@ public:
 
 	static HWND hWnd;
 	static LINFO drawLInfo;
+
+	static int penNum;
 };

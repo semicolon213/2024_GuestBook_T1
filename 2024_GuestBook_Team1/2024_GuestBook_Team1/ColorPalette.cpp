@@ -1,6 +1,6 @@
 #include "ColorPalette.h" /// colorpalette.h 헤더 파일을 포함한다
 
-COLORREF ColorPalette::colorArr[] = { RGB(0,0,0),RGB(0,0,0), RGB(0,0,0) };
+COLORREF ColorPalette::colorArr[] = { RGB(0,0,0),RGB(255,0,0), RGB(0,255,0) };
 
 void ColorPalette::colorSelect(HWND hWnd, int penNum)
 {
@@ -12,7 +12,7 @@ void ColorPalette::colorSelect(HWND hWnd, int penNum)
 	cc.Flags = CC_FULLOPEN | CC_RGBINIT; /// 대화 상자 플래그 설정
 
 	if (ChooseColor(&cc))			/// 색상 선택 대화 상자 표시
-	{ 
+	{
 		colorArr[penNum] = cc.rgbResult;
 	}
 }

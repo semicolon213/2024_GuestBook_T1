@@ -1,18 +1,20 @@
 #include "DW_Canvas.h"
+
+
 DW_Canvas::DW_Canvas(HINSTANCE hInstance)
     :ChildWindow(RGB(255, 255, 255))
 {
-    CInst = hInstance;
-    CanvasRT = { 0 };
-    CWnd = nullptr;
+    cInst = hInstance;
+    canvasRT = { 0 };
+    canWnd = nullptr;
 }
 
 void DW_Canvas::Create(HWND hParentWnd, int x, int y, int width, int height)
 {
     ChildWindow::Create(hParentWnd, L"DW_CanvasClass", L"Canvas Child Window", x, y, width, height);
-    CWnd = cWnd;
+    canWnd = cWnd;
 
-    Function::hWnd = CWnd;        
+    Function::hWnd = canWnd;
 }
 
 PAINTSTRUCT C_ps = { 0 };
@@ -24,7 +26,7 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
     switch (message)
     {
     case WM_CREATE:
-        function = make_unique<Function>();     
+        function = make_unique<Function>();
         function->GDIPlusStart(); // 붓 gdi 라이브러리 활성화
         break;
 
@@ -57,10 +59,10 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
 
     case WM_MOUSEMOVE:
         if (function->getIsReplay()) break;
-        hdc = GetDC(CWnd);
+        hdc = GetDC(canWnd);
 
         drawPInfo.lParam = lParam;
-        drawPInfo.pColor = colorPalette->getColor(penNum);
+        drawPInfo.pColor = ColorPalette::colorArr[Function::penNum];
         drawPInfo.pTime = (DWORD)GetTickCount64();
         drawPInfo.pWidth = 20;
         drawPInfo.state = message;
@@ -71,7 +73,7 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
     case WM_LBUTTONUP:
         if (function->getIsReplay()) break;
         drawPInfo.lParam = lParam;
-        drawPInfo.pColor = colorPalette->getColor(penNum);
+        drawPInfo.pColor = ColorPalette::colorArr[Function::penNum];
         drawPInfo.pTime = (DWORD)GetTickCount64();
         drawPInfo.pWidth = 20;
         drawPInfo.state = message;
@@ -91,17 +93,17 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
         return DefWindowProc(cWnd, message, wParam, lParam);
         break;
     case WM_PAINT:
-        CanvasRT = ChildWindow::GetRT();
-        CHdc = GetDC(CWnd);
-        CHdc = BeginPaint(CWnd, &C_ps);
+        canvasRT = ChildWindow::GetRT();
+        CHdc = GetDC(canWnd);
+        CHdc = BeginPaint(canWnd, &C_ps);
         CanvasPen = (HPEN)SelectObject(CHdc, CreatePen(PS_SOLID, 1, RGB(234, 234, 234)));
-        Rectangle(CHdc, CanvasRT.left, CanvasRT.top, CanvasRT.right, CanvasRT.bottom);
+        Rectangle(CHdc, canvasRT.left, canvasRT.top, canvasRT.right, canvasRT.bottom);
         SelectObject(CHdc, CanvasPen);
         DeleteObject(CanvasPen);
-        EndPaint(CWnd, &C_ps);
+        EndPaint(canWnd, &C_ps);
 
     default:
-        return ChildWindow::HandleMessage(CWnd, message, wParam, lParam);
+        return ChildWindow::HandleMessage(canWnd, message, wParam, lParam);
     }
     return 0;
 }

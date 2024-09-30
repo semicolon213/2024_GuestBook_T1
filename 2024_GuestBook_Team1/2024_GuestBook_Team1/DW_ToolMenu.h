@@ -4,6 +4,8 @@
 #include "Function.h"
 #include <thread>
 
+#include "ColorPalette.h"
+
 
 class DW_ToolMenu : public ChildWindow
 {
@@ -30,6 +32,7 @@ protected:
     HWND ResetBT = nullptr;
 
     std::unique_ptr<Function> function;
+    std::unique_ptr<ColorPalette> colorPalette;
 
 
     HRGN roundRgn;
