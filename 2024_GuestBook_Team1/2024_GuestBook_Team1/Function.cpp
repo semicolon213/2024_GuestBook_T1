@@ -14,6 +14,7 @@ using namespace std;
 int Function::penNum = 0;
 LINFO Function::drawLInfo = { };
 HWND Function::hWnd = nullptr;
+int Function::bShape = BASIC;
 
 void Function::record(PINFO inputPI)
 {
@@ -317,7 +318,39 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 	}
 }
 
+void Function::paint(HWND hWnd, RECT canvasRT)
+{
+	cHdc = BeginPaint(hWnd, &cPS);
+	CanvasPen = (HPEN)SelectObject(cHdc, CreatePen(PS_SOLID, 1, RGB(234, 234, 234)));
+	Rectangle(cHdc, canvasRT.left, canvasRT.top, canvasRT.right, canvasRT.bottom);
+	SelectObject(cHdc, CanvasPen);
+	DeleteObject(CanvasPen);
 
+	if (!getIsReplay())
+	{
+		for (const auto& record : getDrawLInfo().pInfo)
+		{
+			setBShape(record.bShape);
+
+			switch (record.state)
+			{
+			case WM_LBUTTONDOWN:
+			case WM_LBUTTONUP:
+				mouseUD(record, FALSE);
+				break;
+
+			case WM_MOUSEMOVE:
+				draw(hWnd, record, FALSE);
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+
+	EndPaint(hWnd, &cPS);
+}
 
 
 

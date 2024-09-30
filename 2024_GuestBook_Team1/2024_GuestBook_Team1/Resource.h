@@ -62,11 +62,7 @@
 #define DW_DEF						(DEF_ID + 100)
 
 
-
-
 #define CANVAS_DEF					(DEF_ID + 200)
-
-
 
 
 #define NAMEBAR_DEF					(DEF_ID + 300)

@@ -17,10 +17,6 @@ void DW_Canvas::Create(HWND hParentWnd, int x, int y, int width, int height)
     Function::hWnd = canWnd;
 }
 
-PAINTSTRUCT C_ps = { 0 };
-HBRUSH CanvasBrush = nullptr;
-HPEN CanvasPen = nullptr;
-HDC CHdc = nullptr;
 
 LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message)
@@ -94,13 +90,8 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
         break;
     case WM_PAINT:
         canvasRT = ChildWindow::GetRT();
-        CHdc = GetDC(canWnd);
-        CHdc = BeginPaint(canWnd, &C_ps);
-        CanvasPen = (HPEN)SelectObject(CHdc, CreatePen(PS_SOLID, 1, RGB(234, 234, 234)));
-        Rectangle(CHdc, canvasRT.left, canvasRT.top, canvasRT.right, canvasRT.bottom);
-        SelectObject(CHdc, CanvasPen);
-        DeleteObject(CanvasPen);
-        EndPaint(canWnd, &C_ps);
+        function->paint(canWnd, canvasRT);
+        
 
     default:
         return ChildWindow::HandleMessage(canWnd, message, wParam, lParam);

@@ -27,7 +27,6 @@ protected:
 
     PINFO drawPInfo;
 
-
 };
 
 #endif

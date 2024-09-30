@@ -30,10 +30,6 @@ void DW_ToolMenu::Create(HWND hParentWnd, int x, int y, int width, int height)
 	watercolorBT = CreateWindowW(L"BUTTON", L"BS", WS_CHILD | WS_VISIBLE,
 		210, 10, 30, 30, tWnd, (HMENU)WATERCOLOR, tInst, nullptr);
 
-
-
-
-
 	Color1BT = CreateWindowW(L"BUTTON", L"»ö1", WS_CHILD | WS_VISIBLE,
 		(toolRT.right / 2) - 150, 10, 30, 30, tWnd, (HMENU)TL_COLOR1_BT, tInst, nullptr);
 	Color2BT = CreateWindowW(L"BUTTON", L"»ö2", WS_CHILD | WS_VISIBLE,
@@ -98,11 +94,6 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 			else Function::penNum = 2;
 			break;
 
-
-
-
-			break;
-
 		case TL_PEN_WIDTH_BT:
 
 			if (message == WM_LBUTTONDBLCLK)
@@ -138,25 +129,27 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 			break;
 
 		case BASIC:
-
+			function->setBShape(BASIC);
 			break;
+
 		case BRUSH:
-
+			function->setBShape(BRUSH);
 			break;
-		case PENCIL:
 
+		case PENCIL:
+			function->setBShape(PENCIL);
 			break;
 
 		case SPRAY:
-
+			function->setBShape(SPRAY);
 			break;
 
 		case MARKER:
-
+			function->setBShape(MARKER);
 			break;
 
 		case WATERCOLOR:
-
+			function->setBShape(WATERCOLOR);
 			break;
 
 		case TL_CLEAR_BT:
