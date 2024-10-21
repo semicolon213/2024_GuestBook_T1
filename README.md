@@ -38,6 +38,7 @@ Visual Studio 2022
 <a href="https://github.com/Seungho1201/Ref_GuestBook">작업 레포지토리</a>
 
 ## 조원
+| 이름 | 역할 |
 | :---: | :---: |
 | 김형균 | <b>PM</b>, 방문자 스레드 |
 | 오승호 | 메인 윈도우 |
