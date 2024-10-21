@@ -53,6 +53,7 @@ void DW_ToolMenu::Create(HWND hParentWnd, int x, int y, int width, int height)
 		(toolRT.right / 2) + 20, 10, 30, 30, tWnd, (HMENU)TL_RESET_BT, tInst, nullptr);
 
 	roundRgn = CreateEllipticRgn(0, 0, 30, 30);
+
 	
 }
 
@@ -65,6 +66,7 @@ HPEN tt1, tt2;
 
 MakeButton t1(10, 10, 40, 40);
 MakeButton t2(50, 10, 80, 40);
+
 
 RECT a;
 RECT mouse;
