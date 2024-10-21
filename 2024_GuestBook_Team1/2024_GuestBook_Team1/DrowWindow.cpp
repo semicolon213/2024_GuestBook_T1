@@ -15,10 +15,10 @@ DrowWindow::DrowWindow(HINSTANCE hInstance)
 }
 
 
-void DrowWindow::Create(HWND hParentWnd, int x, int y, int width, int height) 
+void DrowWindow::Create(HWND hParentWnd, int x, int y, int width, int height)
 {
-	ChildWindow::Create(hParentWnd, L"DrowWindow", L"DrowWindow", x, y, width, height);
-	dWnd = cWnd;
+    ChildWindow::Create(hParentWnd, L"DrowWindow", L"DrowWindow", x, y, width, height);
+    dWnd = cWnd;
 
     desktopRT = { 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
     GetWindowRect(GetParent(dWnd), &MainRT);
@@ -49,10 +49,10 @@ void DrowWindow::Create(HWND hParentWnd, int x, int y, int width, int height)
     sideMenu->Show(FALSE);
 
     connExcel = make_unique<ConnExcel>();
-    
+
     connExcel->listScrollThread(dWnd, getDWWidth(), drowRT);
 
-    list = connExcel->getVisitList().c_str();
+    ConnExcel::list = connExcel->getVisitList().c_str();
 
     connExcel->setTextPosX(drowRT.right);
 
@@ -66,9 +66,9 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
 
     case WM_SIZE:
         drowRT = GetRT();
-        
 
-        MoveWindow(nHWnd, 0, 0, drowRT.right, 57,TRUE);
+
+        MoveWindow(nHWnd, 0, 0, drowRT.right, 57, TRUE);
 
         MoveWindow(tHWnd, -1, 57, drowRT.right, 51, TRUE);
 
@@ -111,12 +111,12 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
         default:
             break;
         }
-        
+
         break;
 
     case WM_LBUTTONDOWN:
         drowRT = GetRT();
-        
+
 
         break;
 
@@ -124,8 +124,7 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
         drowRT = ChildWindow::GetRT();
         pHdc = BeginPaint(dWnd, &d_ps);
         SIZE textSize;
-        list = connExcel->getVisitList().c_str();
-        wsprintf(text,list.c_str());
+        wsprintf(text, ConnExcel::list.c_str());
         SetBkColor(pHdc, RGB(249, 243, 240));
         TextOut(pHdc, connExcel->getTextPosX(), drowRT.bottom - 15, text, lstrlen(text));
 

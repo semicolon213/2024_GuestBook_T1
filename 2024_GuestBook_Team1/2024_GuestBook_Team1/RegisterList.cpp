@@ -20,7 +20,7 @@ void RegisterList::timer(HWND hWnd)
 		listPos = sWidth;
 	}
 
-	InvalidateRect(hWnd, NULL, true);
+	//InvalidateRect(hWnd, NULL, true);
 }
 
 /**

@@ -99,8 +99,10 @@
 #define TL_PLAY_BT					(TOOL_DEF + 7)
 #define TL_RESET_BT					(TOOL_DEF + 8)
 
-
-
+#define IDI_TEST_IMAGE              555
+#define IDI_PEN_ICON                551
+#define IDI_BRUSH_ICON              552
+#define IDI_ERASE_ICON              553
 
 #endif
 // 다음은 새 개체에 사용할 기본값입니다.

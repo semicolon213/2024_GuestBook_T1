@@ -10,14 +10,14 @@
 #include "Resource.h"
 
 
-class DrowWindow : public ChildWindow 
+class DrowWindow : public ChildWindow
 {
 public:
     DrowWindow(HINSTANCE bInstance);
     void Create(HWND hParentWnd, int x, int y, int width, int height);
 
     bool toolCnt;
-    
+
 protected:
     LRESULT HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
     HINSTANCE dInst;
@@ -43,7 +43,7 @@ protected:
     unique_ptr<DW_Canvas> canvas;
     HWND cHWnd = nullptr;
     RECT DCanvasRT = { 0 };
-    
+
     unique_ptr<DW_SideMenu> sideMenu;
     HWND sHWnd = nullptr;
     RECT DSideRT = { 0 };
@@ -55,7 +55,6 @@ protected:
 
     int getDWWidth();
 
-    wstring list;
     WCHAR text[10000];
 };
 

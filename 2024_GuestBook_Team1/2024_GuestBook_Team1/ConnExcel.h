@@ -18,38 +18,38 @@
 
 #include "Resource.h"
 
-using namespace std;
 
 class ConnExcel
 {
 public:
 
-	void insertExcel(const wstring);
-	wstring getVisitList();
-	void listScroll(HWND, int, RECT);
+    void insertExcel(const std::wstring);
+    std::wstring getVisitList();
+    void listScroll(HWND, int, RECT);
 
-	int getTextSize(HWND, wstring);
-	void listScrollThread(HWND, int, RECT);
+    int getTextSize(HWND, std::wstring);
+    void listScrollThread(HWND, int, RECT);
 
-	int getTextPosX();
-	void setTextPosX(int);
+    int getTextPosX();
+    void setTextPosX(int);
+
+
+    static std::wstring list;
 
 private:
+    std::wstring uniVisit;
+    std::string multiVisit;
 
-	wstring uniVisit;
-	string multiVisit;
+    std::string wcharToChar(const std::wstring);
+    std::wstring charToWchar(const std::string);
 
-	string wcharToChar(const wstring);
-	wstring charToWchar(const string);
+    std::thread listScrollThreadHandle;
 
-	thread listScrollThreadHandle;
+    WCHAR text[10000];
+    int textPosX;
+    int textWidth = 0;
 
 
-	int textPosX;
-	int textWidth = 0;
-
-	WCHAR text[10000];
-
-	bool isListRunning = true;
+    bool isListRunning = true;
 
 };

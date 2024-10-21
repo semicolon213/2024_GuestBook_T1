@@ -5,6 +5,7 @@
 #include <thread>
 
 #include "ColorPalette.h"
+#include "MakeButton.h"
 
 
 class DW_ToolMenu : public ChildWindow
