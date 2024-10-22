@@ -3,7 +3,7 @@
 @date 2024.09.28
 	붓 브러쉬 기능 추가
 	draw 함수 내용 조정
-	mouseUD 함수 내용 조정	
+	mouseUD 함수 내용 조정
 **/
 #include "Function.h"
 
@@ -26,7 +26,7 @@ void Function::record(PINFO inputPI)
 		L"\nFunction 객체 주소: " + std::to_wstring((uintptr_t)this);
 	MessageBox(nullptr, message.c_str(), L"디버깅: record", MB_OK); */
 
-	
+
 
 }
 
@@ -35,21 +35,21 @@ void Function::draw(HWND hWnd, PINFO dInfo, bool isRecord) // 뒤에 브러쉬 추가
 
 	hdc = GetDC(hWnd);
 	if (isLeftClick)
-	{		
+	{
 		px = LOWORD(dInfo.lParam); // 그리기 시작한 좌표
 		py = HIWORD(dInfo.lParam);
 
 		currentTime = std::chrono::steady_clock::now(); // 그리기 시간 저장
 
 		setPenStyle(dInfo, dInfo.pColor);
-		
+
 		MoveToEx(hdc, x, y, NULL);
 		LineTo(hdc, px, py);
 		DeleteObject(nPen);
-				
-		x = px; 
+
+		x = px;
 		y = py;
-		
+
 		DrawTime = currentTime; // 마지막 시간 업데이트
 
 		if (isRecord)
@@ -73,37 +73,41 @@ void Function::mouseUD(PINFO dInfo, bool isRecord)
 
 
 		isLeftClick = true;
-	} else
+	}
+	else
 	{
 		isLeftClick = false;
 	}
 
-	
+
 	if (isRecord)
 		record(dInfo);
-	
+
 }
 
 void Function::replayThread(HWND hWnd)
 {
+	// 스레드가 실행 중인지 확인하고, 실행 중이면 종료
+	if (replayThreadHandle.joinable()) {
+		replayThreadHandle.join();
+	}
+
 	setIsReplay(true);
+	setIsReset(false);
 
-	if (replayThreadHandle.joinable())
-		return;
-	else
-		// std::thread를 사용하여 스레드 시작
-		replayThreadHandle = thread(&Function::replay, this, hWnd);
+	// std::thread를 사용하여 스레드 시작
+	replayThreadHandle = thread(&Function::replay, this, hWnd);
 
-	// 스레드가 종료될 때 자동으로 자원이 반환되도록 함
-	replayThreadHandle.detach();
+	threadHandle = replayThreadHandle.native_handle();
+	
 }
 
-// 기본 리플레이 동작 함수
+ //기본 리플레이 동작 함수
 void Function::replay(HWND hWnd)
 {
 	HDC hdc;
 
-	while (isReplay)
+	while (1)
 	{
 		// 화면 초기화
 		InvalidateRect(hWnd, NULL, TRUE);
@@ -113,12 +117,6 @@ void Function::replay(HWND hWnd)
 
 		for (size_t i = 0; i < drawLInfo.pInfo.size(); i++)
 		{
-			if (!isReplay)
-			{
-				isLeftClick = false;
-				break;
-			}
-
 			PINFO replayInfo = drawLInfo.pInfo[i];
 
 			setBShape(replayInfo.bShape);
@@ -139,31 +137,31 @@ void Function::replay(HWND hWnd)
 
 			default:
 				break;
-
 			}
 
 			// 재생 속도 조절
-			if (i < drawLInfo.pInfo.size() - 1)
+			if (i+1 < drawLInfo.pInfo.size() && drawLInfo.pInfo[i+1].state == WM_MOUSEMOVE)
 			{
-				Sleep(drawLInfo.pInfo[i + 1].pTime - drawLInfo.pInfo[i].pTime);
+				Sleep((int)((drawLInfo.pInfo[i + 1].pTime - drawLInfo.pInfo[i].pTime)/10));
 			}
 
 			DeleteObject(nPen);
 		}
 
-
 		ReleaseDC(hWnd, hdc);
 
-		// 반복 간격 조절	
+		// 반복 간격 조절
 		Sleep(500);
 	}
 }
+
 
 // RESET 버튼 클릭 시 작동되는 함수 (원래 형태로 복원)
 void Function::reDrawing(HWND hWnd)
 {
 	HDC hdc = GetDC(hWnd);
-	setIsReset(true);
+	//setIsReset(true);
+
 
 	for (const auto& replayInfo : drawLInfo.pInfo)
 	{
@@ -189,6 +187,8 @@ void Function::reDrawing(HWND hWnd)
 	}
 
 	ReleaseDC(hWnd, hdc);
+
+	InvalidateRect(hWnd, NULL, TRUE);
 }
 
 void Function::clearDrawing(HWND hWnd)
@@ -198,8 +198,13 @@ void Function::clearDrawing(HWND hWnd)
 
 	// 화면 초기화
 	InvalidateRect(hWnd, NULL, TRUE);
-	UpdateWindow(hWnd);		
+	UpdateWindow(hWnd);	
+
+	// 마우스 상태 초기화 (그리기 중지)
+	isLeftClick = false;  // 마우스 클릭 상태 초기화
+	setIsReplay(false);    // 리플레이 상태 초기화
 }
+
 void Function::setPenStyle(PINFO dinfo, COLORREF col)
 {
 	// 브러쉬 선택하면 거기에 맞는 펜 제공
@@ -374,23 +379,42 @@ bool Function::getIsReplay()
 	return isReplay;
 }
 
-void Function::setIsReset(bool reset)
+void Function::setIsReset(bool isReset)
 {
-	this->reset = reset;
+	this->isReset = isReset;
 }
 
 bool Function::getIsReset()
 {
-	return reset;
+	return isReset;
+}
+
+void Function::suspendReplay()
+{
+	setIsReset(true);
+	SuspendThread(threadHandle);
+}
+
+void Function::resumeReplay()
+{
+	setIsReset(false);
+	ResumeThread(threadHandle);
 }
 
 // RESET 버튼 클릭 시 호출되는 함수
 void Function::stopReplay(HWND hWnd)
 {
-	setIsReplay(false);
-	setIsReset(false);
-	reDrawing(hWnd);
+    setIsReplay(false);
+    
+    // 스레드가 실행 중인 경우만 join 호출
+    if(replayThreadHandle.joinable())
+        replayThreadHandle.join();
+
+    replayThreadHandle = std::thread(); // 스레드 객체 초기화
+
+	InvalidateRect(hWnd, NULL, TRUE);
 }
+
 
 // 벡터가 비어있는지 검사
 bool Function::getDrawLInfoEmpty()
