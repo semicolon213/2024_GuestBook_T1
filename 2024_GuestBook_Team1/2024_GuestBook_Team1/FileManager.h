@@ -9,8 +9,9 @@
 #include "Struct.h"
 #include "Resource.h"
 #include "Function.h"
+#include <unordered_set> //파일리스트 중복 방지 헤더  
+#include <shlobj.h> //세이브파일 절대 경로 확인 
 
-#define ID_FILE_LIST 101
 
 class DW_SideMenu;
 

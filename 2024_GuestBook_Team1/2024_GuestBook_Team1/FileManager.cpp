@@ -8,10 +8,6 @@
  * @todo UI업데이트에 맞게 좌표 및 기능 재배치, 펜 메모리에 데이터가 들어가지 않는 오류 수정
  * 
  */
-
-
-
-
 #include "FileManager.h"
 
 
@@ -76,8 +72,8 @@ void FileManager::InitializePanels(HWND tWnd)
         listBoxX, listBoxY, listBoxWidth, listBoxHeight,
         hRightPanel, nullptr, hInst, nullptr);
 
-    /*SetWindowPos(hRightPanel, HWND_TOP, 0, 0, 0, 0, 
-        SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);*/ ///패널을 맨 앞으로 가져옴(임시 방편)
+    SetWindowPos(hRightPanel, HWND_TOP, 0, 0, 0, 0, 
+        SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);///패널을 맨 앞으로 가져옴(임시 방편)
 
 }
 
@@ -94,7 +90,7 @@ void FileManager::ResizePanels(HWND hWnd, LPARAM lParam)
     static const int fixedWidth = 300;
 
     /// 패널 크기 조정
-    MoveWindow(hRightPanel, width - fixedWidth, 0, fixedWidth, height, TRUE);
+    //MoveWindow(hRightPanel, width - fixedWidth, 0, fixedWidth, height, TRUE);
 }
 
 /**
@@ -145,14 +141,11 @@ void FileManager::UpdateFileListUI()
 
 
 bool FileManager::HandleFileOperation(HWND hWnd, std::vector<PINFO>* penMemory, bool isSave) {
-    if (penMemory == nullptr) {
-        MessageBox(nullptr, L"penMemory가 null입니다 - HandleFileOperation 호출", L"오류", MB_OK);
-        return false;
-    }
+    
 
     /// penMemory 크기 확인
-    std::wstring message = L"HandleFileOperation에서 penMemory 크기: " + std::to_wstring(penMemory->size());
-    MessageBox(nullptr, message.c_str(), L"디버깅: HandleFileOperation", MB_OK);
+    /*std::wstring message = L"HandleFileOperation에서 penMemory 크기: " + std::to_wstring(penMemory->size());
+    MessageBox(nullptr, message.c_str(), L"디버깅: HandleFileOperation", MB_OK); */
 
     DWORD flags = isSave ? (OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT) : (OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST);
     WCHAR* filePath = isSave ? fileName : fileOpenName;
@@ -161,8 +154,8 @@ bool FileManager::HandleFileOperation(HWND hWnd, std::vector<PINFO>* penMemory, 
         if (isSave) {
             /// 파일 확장자가 .gb가 없으면 추가
             std::wstring path(filePath);
-            if (path.find(L".gb") == std::wstring::npos) {
-                path += L".gb";  /// .gb 확장자 추가
+            if (path.find(L".txt") == std::wstring::npos) {
+                path += L".txt";  /// .gb 확장자 추가
                 wcscpy_s(filePath, sizeof(fileName) / sizeof(WCHAR), path.c_str());
 
             }
@@ -335,7 +328,7 @@ bool FileManager::load(const wchar_t* path, std::vector<PINFO>* penMemory, HWND 
 bool FileManager::ConfigureDialog(HWND hWnd, DWORD flags, WCHAR* fileBuffer, DWORD bufferSize) {
     OFN.lStructSize = sizeof(OPENFILENAME);
     OFN.hwndOwner = hWnd;
-    OFN.lpstrFilter = L"GB 파일(*.gb)\0*.gb\0모든 파일(*.*)\0*.*\0"; ///GB로 확장자 설정 
+    OFN.lpstrFilter = L"txt 파일(*.txt)\0*.txt\0모든 파일(*.*)\0*.*\0"; ///txt로 확장자 설정 (임시) 
     OFN.lpstrFile = fileBuffer;
     OFN.nMaxFile = bufferSize;
     OFN.Flags = flags;
@@ -364,14 +357,28 @@ bool FileManager::openForRead(const wchar_t* path) {
 
 void FileManager::SaveFileList()
 {
-    std::wofstream ofs(L"FileList.txt", std::ios::out | std::ios::trunc);
+    // 사용자 프로필 경로를 가져옴
+    wchar_t userProfilePath[MAX_PATH];
+    if (FAILED(SHGetFolderPathW(NULL, CSIDL_PROFILE, NULL, 0, userProfilePath))) {
+        // 만약 경로를 얻지 못했다면 그냥 종료
+        MessageBox(nullptr, L"경로 설정에 실패했습니다.", L"오류", MB_OK);
+        return;
+    }
+
+    // 기본 프로필 경로에 저장할 파일 경로를 추가
+    std::wstring filePath = std::wstring(userProfilePath) + L"\\2024_GuestBook_T1\\file\\FileList.txt";
+
+    // 파일 열기 (경로에 파일이 없으면 새로 생성됨)
+    std::wofstream ofs(filePath, std::ios::out | std::ios::trunc);
     if (!ofs.is_open())
     {
         MessageBox(nullptr, L"파일 리스트 저장에 실패했습니다.", L"오류", MB_OK);
         return;
     }
 
-    for (const auto& file : savedFileList)
+    // 중복된 파일을 방지하기 위해 savedFileList를 처리하여 저장
+    std::unordered_set<std::wstring> uniqueFiles(savedFileList.begin(), savedFileList.end());
+    for (const auto& file : uniqueFiles)
     {
         ofs << file << std::endl;
     }
@@ -381,7 +388,18 @@ void FileManager::SaveFileList()
 
 void FileManager::LoadFileList()
 {
-    std::wifstream ifs(L"C:\\Users\\tnrlf\\R_FileManager\\2024_GuestBook_Team1\\2024_GuestBook_Team1\\savefile\\FileList.txt"); ///경로 수정 할게요 
+    // 사용자 프로필 경로를 가져옴
+    wchar_t userProfilePath[MAX_PATH];
+    if (FAILED(SHGetFolderPathW(NULL, CSIDL_PROFILE, NULL, 0, userProfilePath))) {
+        // 만약 경로를 얻지 못했다면 그냥 종료
+        return;
+    }
+
+    // 기본 프로필 경로에 파일 경로를 추가
+    std::wstring filePath = std::wstring(userProfilePath) + L"\\2024_GuestBook_T1\\file\\FileList.txt";
+
+    // 파일 열기
+    std::wifstream ifs(filePath);
     if (!ifs.is_open())
     {
         return;
