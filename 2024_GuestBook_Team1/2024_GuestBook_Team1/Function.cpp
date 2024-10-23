@@ -87,11 +87,6 @@ void Function::mouseUD(PINFO dInfo, bool isRecord)
 
 void Function::replayThread(HWND hWnd)
 {
-	// 스레드가 실행 중인지 확인하고, 실행 중이면 종료
-	if (replayThreadHandle.joinable()) {
-		replayThreadHandle.join();
-	}
-
 	setIsReplay(true);
 	setIsReset(false);
 
@@ -99,7 +94,6 @@ void Function::replayThread(HWND hWnd)
 	replayThreadHandle = thread(&Function::replay, this, hWnd);
 
 	threadHandle = replayThreadHandle.native_handle();
-	
 }
 
  //기본 리플레이 동작 함수
@@ -107,7 +101,7 @@ void Function::replay(HWND hWnd)
 {
 	HDC hdc;
 
-	while (1)
+	while (isReplay)
 	{
 		// 화면 초기화
 		InvalidateRect(hWnd, NULL, TRUE);
@@ -117,6 +111,12 @@ void Function::replay(HWND hWnd)
 
 		for (size_t i = 0; i < drawLInfo.pInfo.size(); i++)
 		{
+			if (!isReplay)
+			{
+				isLeftClick = false;
+				break;
+			}
+
 			PINFO replayInfo = drawLInfo.pInfo[i];
 
 			setBShape(replayInfo.bShape);
@@ -159,50 +159,32 @@ void Function::replay(HWND hWnd)
 // RESET 버튼 클릭 시 작동되는 함수 (원래 형태로 복원)
 void Function::reDrawing(HWND hWnd)
 {
-	HDC hdc = GetDC(hWnd);
-	//setIsReset(true);
-
-
-	for (const auto& replayInfo : drawLInfo.pInfo)
+	if (replayThreadHandle.joinable())
 	{
-		setBShape(replayInfo.bShape);
-
-		switch (replayInfo.state)
-		{
-		case WM_LBUTTONDOWN:
-			mouseUD(replayInfo, false);
-			break;
-
-		case WM_MOUSEMOVE:
-			draw(hWnd, replayInfo, false);
-			break;
-
-		case WM_LBUTTONUP:
-			mouseUD(replayInfo, false);
-			break;
-
-		default:
-			break;
-		}
+		isReplay = false;
+		ResumeThread(threadHandle);
+		stopReplay(hWnd);
 	}
 
-	ReleaseDC(hWnd, hdc);
-
 	InvalidateRect(hWnd, NULL, TRUE);
+	UpdateWindow(hWnd);
 }
 
 void Function::clearDrawing(HWND hWnd)
 {
+	if (replayThreadHandle.joinable())
+	{
+		isReplay = false;
+		ResumeThread(threadHandle);
+		stopReplay(hWnd);
+	}
+
 	// 기록 삭제
 	drawLInfo.pInfo.clear();
 
 	// 화면 초기화
 	InvalidateRect(hWnd, NULL, TRUE);
 	UpdateWindow(hWnd);	
-
-	// 마우스 상태 초기화 (그리기 중지)
-	isLeftClick = false;  // 마우스 클릭 상태 초기화
-	setIsReplay(false);    // 리플레이 상태 초기화
 }
 
 void Function::setPenStyle(PINFO dinfo, COLORREF col)
@@ -392,28 +374,28 @@ bool Function::getIsReset()
 void Function::suspendReplay()
 {
 	setIsReset(true);
+	isLeftClick = false;
 	SuspendThread(threadHandle);
 }
 
 void Function::resumeReplay()
 {
 	setIsReset(false);
+	setIsReplay(true);
 	ResumeThread(threadHandle);
 }
 
-// RESET 버튼 클릭 시 호출되는 함수
 void Function::stopReplay(HWND hWnd)
 {
-    setIsReplay(false);
-    
-    // 스레드가 실행 중인 경우만 join 호출
-    if(replayThreadHandle.joinable())
-        replayThreadHandle.join();
+	setIsReplay(false);
+	setIsReset(true);
 
-    replayThreadHandle = std::thread(); // 스레드 객체 초기화
-
-	InvalidateRect(hWnd, NULL, TRUE);
+	if (replayThreadHandle.joinable())
+	{
+		replayThreadHandle.join();
+	}
 }
+
 
 
 // 벡터가 비어있는지 검사
