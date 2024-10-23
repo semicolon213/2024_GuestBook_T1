@@ -58,7 +58,7 @@ LRESULT DW_SideMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 
         case SD_LOADFILE_BT:
             FileManager::fileManager.selectFileMode(LOAD, tWnd, penMemory);
-            SendMessage(GetParent(tWnd), WM_COMMAND, TL_PLAY_BT, 0);   /// ¿Ã∞≈ πŸ≤Ò
+            SendMessage(GetParent(tWnd), WM_COMMAND, TL_PLAY_BT, 0);   
             break;
 
         case SD_FILEMANAGER_BT:
