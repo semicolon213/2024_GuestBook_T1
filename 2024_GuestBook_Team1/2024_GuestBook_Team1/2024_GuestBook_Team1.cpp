@@ -215,6 +215,10 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             DestroyWindow(hWnd);
             break;
 
+        case TL_PLAY_BT:
+            SendMessage(d_hWnd, WM_COMMAND, TL_PLAY_BT, 0); /// 이거 바뀜
+            break;
+
         default:
             return DefWindowProc(hWnd, message, wParam, lParam);
         }

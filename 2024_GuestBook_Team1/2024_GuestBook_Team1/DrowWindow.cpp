@@ -108,6 +108,10 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
             sideMenu->Show(true);
             break;
 
+        case TL_PLAY_BT:
+            SendMessage(tHWnd, WM_COMMAND, TL_PLAY_BT, 0); /// ¿Ã∞≈ πŸ≤Ò
+            break;
+
         default:
             break;
         }
