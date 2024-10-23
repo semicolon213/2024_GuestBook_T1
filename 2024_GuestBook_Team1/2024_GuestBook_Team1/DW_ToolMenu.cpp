@@ -14,7 +14,6 @@ MakeButton colorButton1;
 MakeButton colorButton2;
 MakeButton colorButton3;
 
-
 MakeButton eraseButton;		/// 지우개 버튼 생성
 MakeButton playButton;		/// 플레이 버튼 생성
 MakeButton stopButton;		/// 중지 버튼 생성
@@ -26,9 +25,6 @@ PAINTSTRUCT t_ps = { 0 };
 HBRUSH ToolBrush = nullptr;
 HPEN ToolPen = nullptr;
 HDC tHdc = nullptr;
-
-HPEN tt1, tt2;
-HBRUSH tb1, tb2;
 
 RECT a;			/// IntersectRect 반환용 RECT
 RECT mouse;		/// 마우스 좌표 기준 RECT 생성
@@ -42,7 +38,6 @@ int selectedIcon = 0;                  // 현재 선택된 아이콘 ID
 
 /// 클릭한 색상 추적용 변수
 MakeButton* selectedColorButton = nullptr;  // 현재 선택된 색상 버튼
-
 
 DW_ToolMenu::DW_ToolMenu(HINSTANCE hInstance)
 	:ChildWindow(RGB(255, 255, 255))
@@ -123,6 +118,7 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 		/// 펜슬
 		else if (IntersectRect(&a, &mouse, &pencilButton.rectButton)) {
 			function->setBShape(PENCIL);
+
 			selectedButton = &pencilButton;
 			selectedIcon = IDI_PENCIL_ICON;
 		}
@@ -156,21 +152,21 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 		}
 
 		/// 색상 버튼 1
-		if (IntersectRect(&a, &mouse, &colorButton1.rectButton)) {
+		else if (IntersectRect(&a, &mouse, &colorButton1.rectButton)) {
 			if (Function::penNum == 0) { colorPalette->colorSelect(tWnd, 0); }
 			else { Function::penNum = 0; }
 
 			selectedColorButton = &colorButton1;	/// 선택한 컬러버튼의 객체 저장
 		}
 		/// 색상 버튼 2
-		if (IntersectRect(&a, &mouse, &colorButton2.rectButton)) {
+		else if (IntersectRect(&a, &mouse, &colorButton2.rectButton)) {
 			if (Function::penNum == 1) { colorPalette->colorSelect(tWnd, 1); }
 			else { Function::penNum = 1; }
 
 			selectedColorButton = &colorButton2;	
 		}
 		/// 색상 버튼 3
-		if (IntersectRect(&a, &mouse, &colorButton3.rectButton)) {
+		else if (IntersectRect(&a, &mouse, &colorButton3.rectButton)) {
 			if (Function::penNum == 2) { colorPalette->colorSelect(tWnd, 2); }
 			else { Function::penNum = 2; }
 
@@ -178,7 +174,7 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 		}
 
 		/// 지우개 버튼 
-		if (IntersectRect(&a, &mouse, &eraseButton.rectButton)) {
+		else if (IntersectRect(&a, &mouse, &eraseButton.rectButton)) {
 
 			if (function->getDrawLInfoEmpty()) { break; }
 			if (!function->getIsReplay()) {
@@ -187,7 +183,7 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 		}
 
 		/// 리플레이 버튼
-		if (IntersectRect(&a, &mouse, &playButton.rectButton)) {
+		else if (IntersectRect(&a, &mouse, &playButton.rectButton)) {
 			if (function->getDrawLInfoEmpty()) { break; }
 
 			playButton.toggleState = !playButton.toggleState;
@@ -227,9 +223,8 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 			InvalidateRect(tWnd, NULL, true);
 			UpdateWindow(tWnd);
 		}
-
 		/// 중지 버튼
-		if (IntersectRect(&a, &mouse, &stopButton.rectButton)) {
+		else if (IntersectRect(&a, &mouse, &stopButton.rectButton)) {
 
 			if (function->getIsReplay()) {
 				SendMessage(Function::hWnd, WM_COMMAND, TL_RESET_BT, 0);
@@ -256,18 +251,15 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 
 			InvalidateRect(tWnd, NULL, true);
 		}
-
 		/// 저장 버튼 
-		if (IntersectRect(&a, &mouse, &saveButton.rectButton)) {
+		else if (IntersectRect(&a, &mouse, &saveButton.rectButton)) {
 			MessageBox(tWnd, L"저장 구현중", L"SOS", MB_OK);
 		}
+
 		InvalidateRect(tWnd, NULL, true);  // 화면 갱신
 		ReleaseDC(tWnd, hdc);
-		break;
-	}
-	case WM_LBUTTONUP:
-	{
 
+		break;
 	}
 	/// 툴 메뉴 바의 PAINT 영역
 	case WM_PAINT:
@@ -295,9 +287,7 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 		sprayButton.drawRectButton(memDC, IDI_SPRAY_ICON);
 		rectpenButton.drawRectButton(memDC, IDI_RECTPEN_ICON);
 		waterpenButton.drawRectButton(memDC, IDI_WATERPEN_ICON);
-
 		eraseButton.drawRectButton(memDC, IDI_ERASE_ICON);
-
 		playButton.doubleImgButton(memDC, IDI_PAUSE_ICON, IDI_PLAY_ICON);
 		stopButton.drawRectButton(memDC, IDI_STOP_ICON);
 		saveButton.drawRectButton(memDC, IDI_SAVE_ICON);
@@ -317,36 +307,20 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 			colorButton3.setCoordinate(midPoint - 40, 10, midPoint - 10, 40);
 
 			/// 선택된 컬러 버튼에 이펙트 적용
+			/// 이펙트 먼저 그린 후 색상 버튼을 그림(drawEllipseButton)
 			if (selectedColorButton != nullptr) {
 				selectedColorButton->clickEffectPen(IDI_COLOREFFECT_ICON, memDC);
 			}
 
-			/// 색상 버튼 1 미리보기
-			tb1 = CreateSolidBrush(colorGet.getColor(0));
-			tb2 = (HBRUSH)SelectObject(memDC, tb1);
-			colorButton1.drawEllipseButton(memDC);
-			SelectObject(memDC, tb2);
-			DeleteObject(tb1);
-
-			// 색상 버튼 2 미리보기
-			tb1 = CreateSolidBrush(colorGet.getColor(1));
-			tb2 = (HBRUSH)SelectObject(memDC, tb1);
-			colorButton2.drawEllipseButton(memDC);
-			SelectObject(memDC, tb2);
-			DeleteObject(tb1);
-
+			/// 색상 버튼 1 미리보기	
+			colorButton1.drawEllipseButton(memDC, colorGet.getColor(0));
+			// 색상 버튼 2 미리보기	
+			colorButton2.drawEllipseButton(memDC, colorGet.getColor(1));
 			// 색상 버튼 3 미리보기
-			tb1 = CreateSolidBrush(colorGet.getColor(2));
-			tb2 = (HBRUSH)SelectObject(memDC, tb1);
-			colorButton3.drawEllipseButton(memDC);
-
-			SelectObject(memDC, tb2);
-			DeleteObject(tb1);
+			colorButton3.drawEllipseButton(memDC, colorGet.getColor(2));
 
 			MoveToEx(memDC, midPoint + 98, 8, nullptr);
 			LineTo(memDC, midPoint + 98, 42);
-
-
 		}
 		// 메모리 DC에서 실제 DC로 복사 (더블 버퍼링 적용)
 		BitBlt(hdc, 0, 0, toolRT.right - toolRT.left, toolRT.bottom - toolRT.top, memDC, 0, 0, SRCCOPY);

@@ -38,9 +38,7 @@ void MakeButton::drawRectButton(HDC tHdc, int icon)
 {
 	this->icon = icon;
 	
-	
-	
-	// 배경을 투명하게 설정 (NULL_BRUSH 사용)
+	/// 배경을 투명하게 설정 (NULL_BRUSH 사용)
 	HBRUSH hOldBrush = (HBRUSH)SelectObject(tHdc, GetStockObject(NULL_BRUSH));
 	HPEN hOldPen = (HPEN)SelectObject(tHdc, GetStockObject(NULL_PEN));
 	
@@ -51,20 +49,25 @@ void MakeButton::drawRectButton(HDC tHdc, int icon)
 		this->rectButton.bottom
 	);
 
-	// 아이콘을 사각형 중앙에 그리기
+	/// 아이콘을 사각형 중앙에 그리기
 	buttonLoadImage(this->icon, tHdc);
 
-	
-	// 이전 브러시와 펜 복원
+	/// 이전 브러시와 펜 복원
 	SelectObject(tHdc, hOldBrush);
 	SelectObject(tHdc, hOldPen);
-	
+
+	/// 리소스 해제
+	DeleteObject(hOldBrush);
+	DeleteObject(hOldPen);
 }
 
 /// 타원 그리기 메서드
-void MakeButton::drawEllipseButton(HDC tHdc)
+void MakeButton::drawEllipseButton(HDC tHdc, COLORREF test)
 {
 	this->icon = icon;
+
+	HBRUSH tb1 = CreateSolidBrush(test);
+	HBRUSH tb2 = (HBRUSH)SelectObject(tHdc, tb1);
 
 	Ellipse(tHdc,
 		rectButton.left, 
@@ -73,13 +76,15 @@ void MakeButton::drawEllipseButton(HDC tHdc)
 		rectButton.bottom
 	);
 
+	SelectObject(tHdc, tb2);
+	DeleteObject(tb1);
+
 	buttonLoadImage(this->icon, tHdc);
 }
 
 /// 버튼에 이미지 삽입 메서드
 void MakeButton::buttonLoadImage(int icon, HDC tHdc)
 {
-	
 	HICON hIcon = (HICON)LoadImage(GetModuleHandle(NULL),
 		MAKEINTRESOURCE(icon),
 		IMAGE_ICON,
@@ -115,7 +120,8 @@ void MakeButton::clickEffectPen(int icon, int clickIcon, HDC tHdc)
 
 	// 아이콘 자원 해제
 	DestroyIcon(hIcon);
-	/// 이펙트 그린 후 기존 아이콘 덮어씌우기
+
+	/// 이펙트 그린 후 기존 아이콘(clickIcon) 덮어씌우기
 	buttonLoadImage(clickIcon, tHdc);
 }
 
