@@ -30,34 +30,34 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
     case WM_COMMAND:
         if (wParam == TL_CLEAR_BT)
         {
-            if (!function->getIsReplay())
+            if (function->getIsReset())
             {
                 function->clearDrawing(cWnd);
             }
-            break;
+
         }
 
-        if (wParam == TL_PLAY_BT)
+        if (wParam == TL_PLAY_BT && lParam == 0)
         {
-            function->setIsReset(false);
-            function->replayThread(cWnd);
+            if (!function->getIsReplay())
+            {  
+                function->replayThread(cWnd);
+            }
+            else
+            {
+                function->resumeReplay();
+            }
         }
+        
 
         if (wParam == TL_PLAY_BT && lParam == 1)
         {
-            function->setIsReplay(false);
+            function->suspendReplay();
         }
-
-        if (!function->getIsReset())
+        
+        if (wParam == TL_RESET_BT)
         {
-            if (wParam == TL_RESET_BT)
-            {
-                function->stopReplay(cWnd);
-            }
-            if (wParam == TL_RESET_BT && lParam == 1)
-            {
-                function->reDrawing(cWnd);
-            }
+            function->reDrawing(cWnd);
         }
 
         if (LOWORD(wParam) == 1) 
@@ -66,7 +66,7 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
         break;
 
     case WM_MOUSEMOVE:
-        if (function->getIsReplay()) break;
+        if (!function->getIsReset()) break;
         hdc = GetDC(canWnd);
 
         drawPInfo.lParam = lParam;
@@ -79,7 +79,7 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
 
     case WM_LBUTTONDOWN:
     case WM_LBUTTONUP:
-        if (function->getIsReplay()) break;
+        if (!function->getIsReset()) break;
         drawPInfo.lParam = lParam;
         drawPInfo.pColor = ColorPalette::colorArr[Function::penNum];
         drawPInfo.pTime = (DWORD)GetTickCount64();
@@ -103,7 +103,6 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
     case WM_PAINT:
         canvasRT = ChildWindow::GetRT();
         function->paint(canWnd, canvasRT);
-        
 
     default:
         return ChildWindow::HandleMessage(canWnd, message, wParam, lParam);

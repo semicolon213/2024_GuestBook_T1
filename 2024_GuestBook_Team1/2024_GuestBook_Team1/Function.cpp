@@ -3,7 +3,7 @@
 @date 2024.09.28
 	붓 브러쉬 기능 추가
 	draw 함수 내용 조정
-	mouseUD 함수 내용 조정	
+	mouseUD 함수 내용 조정
 **/
 #include "Function.h"
 
@@ -18,15 +18,17 @@ int Function::bShape = BASIC;
 
 void Function::record(PINFO inputPI)
 {
+	//if (isReplay) return;
 
 	inputPI.bShape = bShape;
+	inputPI.pWidth = currentThickness;
 	drawLInfo.pInfo.push_back(inputPI);
 
 	/*std::wstring message = L"record() 호출됨, drawLInfo.pInfo 크기: " + std::to_wstring(drawLInfo.pInfo.size()) +
 		L"\nFunction 객체 주소: " + std::to_wstring((uintptr_t)this);
 	MessageBox(nullptr, message.c_str(), L"디버깅: record", MB_OK); */
 
-	
+
 
 }
 
@@ -35,21 +37,21 @@ void Function::draw(HWND hWnd, PINFO dInfo, bool isRecord) // 뒤에 브러쉬 추가
 
 	hdc = GetDC(hWnd);
 	if (isLeftClick)
-	{		
+	{
 		px = LOWORD(dInfo.lParam); // 그리기 시작한 좌표
 		py = HIWORD(dInfo.lParam);
 
 		currentTime = std::chrono::steady_clock::now(); // 그리기 시간 저장
 
 		setPenStyle(dInfo, dInfo.pColor);
-		
+
 		MoveToEx(hdc, x, y, NULL);
 		LineTo(hdc, px, py);
 		DeleteObject(nPen);
-				
-		x = px; 
+
+		x = px;
 		y = py;
-		
+
 		DrawTime = currentTime; // 마지막 시간 업데이트
 
 		if (isRecord)
@@ -73,44 +75,56 @@ void Function::mouseUD(PINFO dInfo, bool isRecord)
 
 
 		isLeftClick = true;
-	} else
+	}
+	else
 	{
 		isLeftClick = false;
 	}
 
-	
+
 	if (isRecord)
 		record(dInfo);
-	
+
 }
 
 void Function::replayThread(HWND hWnd)
 {
 	setIsReplay(true);
+	setIsReset(false);
 
-	if (replayThreadHandle.joinable())
-		return;
-	else
-		// std::thread를 사용하여 스레드 시작
-		replayThreadHandle = thread(&Function::replay, this, hWnd);
+	// std::thread를 사용하여 스레드 시작
+	replayThreadHandle = thread(&Function::replay, this, hWnd);
 
-	// 스레드가 종료될 때 자동으로 자원이 반환되도록 함
-	replayThreadHandle.detach();
+	threadHandle = replayThreadHandle.native_handle();
 }
 
-// 기본 리플레이 동작 함수
+
+ //기본 리플레이 동작 함수
 void Function::replay(HWND hWnd)
 {
-	HDC hdc;
+	// 화면 초기화
+	HDC hdc, memDC;
+	HBITMAP hBitmap;
+	RECT clientRect;
+	GetClientRect(hWnd, &clientRect);  // 클라이언트 영역 크기 얻기
 
 	while (isReplay)
 	{
-		// 화면 초기화
 		InvalidateRect(hWnd, NULL, TRUE);
 		UpdateWindow(hWnd);
 
+		// 화면 DC 가져오기
 		hdc = GetDC(hWnd);
 
+		// 메모리 DC 생성 및 호환 비트맵 할당
+		memDC = CreateCompatibleDC(hdc);
+		hBitmap = CreateCompatibleBitmap(hdc, clientRect.right, clientRect.bottom);
+		SelectObject(memDC, hBitmap);
+
+		// 메모리 DC에서 배경 지우기
+		FillRect(memDC, &clientRect, (HBRUSH)(COLOR_WINDOW + 1));
+
+		// 그리기 작업 메모리 DC에서 수행
 		for (size_t i = 0; i < drawLInfo.pInfo.size(); i++)
 		{
 			if (!isReplay)
@@ -118,6 +132,8 @@ void Function::replay(HWND hWnd)
 				isLeftClick = false;
 				break;
 			}
+			else
+				isLeftClick = true;
 
 			PINFO replayInfo = drawLInfo.pInfo[i];
 
@@ -136,70 +152,68 @@ void Function::replay(HWND hWnd)
 			case WM_LBUTTONUP:
 				mouseUD(replayInfo, false);
 				break;
-
+				
 			default:
 				break;
-
 			}
 
 			// 재생 속도 조절
-			if (i < drawLInfo.pInfo.size() - 1)
+			if (i + 1 < drawLInfo.pInfo.size() && drawLInfo.pInfo[i + 1].state == WM_MOUSEMOVE)
 			{
-				Sleep(drawLInfo.pInfo[i + 1].pTime - drawLInfo.pInfo[i].pTime);
+				Sleep((int)((drawLInfo.pInfo[i + 1].pTime - drawLInfo.pInfo[i].pTime) / 10));
 			}
 
 			DeleteObject(nPen);
 		}
 
+		// 메모리 DC의 내용을 실제 화면에 복사
+		BitBlt(hdc, 0, 0, clientRect.right, clientRect.bottom, memDC, 0, 0, SRCCOPY);
+
+		// 메모리 DC와 비트맵 삭제
+		DeleteObject(hBitmap);
+		DeleteDC(memDC);
 
 		ReleaseDC(hWnd, hdc);
 
-		// 반복 간격 조절	
+		// 반복 간격 조절
 		Sleep(500);
 	}
 }
 
+
 // RESET 버튼 클릭 시 작동되는 함수 (원래 형태로 복원)
 void Function::reDrawing(HWND hWnd)
 {
-	HDC hdc = GetDC(hWnd);
-	setIsReset(true);
-
-	for (const auto& replayInfo : drawLInfo.pInfo)
+	if (replayThreadHandle.joinable())
 	{
-		setBShape(replayInfo.bShape);
-
-		switch (replayInfo.state)
-		{
-		case WM_LBUTTONDOWN:
-			mouseUD(replayInfo, false);
-			break;
-
-		case WM_MOUSEMOVE:
-			draw(hWnd, replayInfo, false);
-			break;
-
-		case WM_LBUTTONUP:
-			mouseUD(replayInfo, false);
-			break;
-
-		default:
-			break;
-		}
+		isReplay = false;
+		ResumeThread(threadHandle);
+		stopReplay(hWnd);
 	}
 
-	ReleaseDC(hWnd, hdc);
+	InvalidateRect(hWnd, NULL, TRUE);
+	UpdateWindow(hWnd);
+
+	
 }
 
 void Function::clearDrawing(HWND hWnd)
 {
+	if (replayThreadHandle.joinable())
+	{
+		isReplay = false;
+		ResumeThread(threadHandle);
+		stopReplay(hWnd);
+	}
+
 	// 기록 삭제
 	drawLInfo.pInfo.clear();
 
 	// 화면 초기화
 	InvalidateRect(hWnd, NULL, TRUE);
-	UpdateWindow(hWnd);		
+	UpdateWindow(hWnd);	
 }
+
 void Function::setPenStyle(PINFO dinfo, COLORREF col)
 {
 	// 브러쉬 선택하면 거기에 맞는 펜 제공
@@ -212,39 +226,46 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 
 	case BRUSH: // 붓 브러쉬
 	{
-		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - DrawTime).count(); //눌렀을 떄 시간부터 그렸을 때 시간 그 사이의 시간(밀리초)
-		duration = max(duration, 1); // 최소 duration 값을 설정하여 0으로 나누는 문제 방지
-
-		double distance = sqrt(pow(px - x, 2) + pow(py - y, 2)); // 선 거리
-		double speed = (distance / duration) * 1000; // 속도 계산
-
-		int targetThickness = dinfo.pWidth; // 속도가 변경될 때 같이 변경 되는 두께 변수
-
-		// 속도가 빠를 때 두께 줄이기
-		if (speed > Threshold_Speed) {
-			targetThickness = dinfo.pWidth - (int)((speed - Threshold_Speed) / (Threshold_Speed / (dinfo.pWidth - Min_Thickness)));
-			targetThickness = max(targetThickness, Min_Thickness);
-		}
-		// 속도가 느릴 때 두께 늘리기
-		else {
-			targetThickness = Min_Thickness + (int)((Threshold_Speed - speed) / (Threshold_Speed / (dinfo.pWidth - Min_Thickness)));
-			targetThickness = min(targetThickness, dinfo.pWidth);
-		}
-
-		// 두께 변화 간격이 지났는지 확인		
-		if (std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastThicknessChangeTime).count() >= Update_Interval)
+		if (!isReplay || isReset)
 		{
-			// 붓 전용 사이즈 조절
-			if (currentThickness < targetThickness)
-				currentThickness += Smoothing_Factor;
-			else if (currentThickness > targetThickness)
-				currentThickness -= Smoothing_Factor;
+			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - DrawTime).count(); //눌렀을 떄 시간부터 그렸을 때 시간 그 사이의 시간(밀리초)
+			duration = max(duration, 1); // 최소 duration 값을 설정하여 0으로 나누는 문제 방지
 
-			// 두께 변경 시간 업데이트
-			lastThicknessChangeTime = currentTime; 		
-		}		
-		// 두께가 변경된 펜 생성
-		nPen = CreatePen(PS_SOLID, currentThickness, col);
+			double distance = sqrt(pow(px - x, 2) + pow(py - y, 2)); // 선 거리
+			double speed = (distance / duration) * 1000; // 속도 계산
+
+			int targetThickness = dinfo.pWidth; // 속도가 변경될 때 같이 변경 되는 두께 변수
+
+			// 속도가 빠를 때 두께 줄이기
+			if (speed > Threshold_Speed) {
+				targetThickness = dinfo.pWidth - (int)((speed - Threshold_Speed) / (Threshold_Speed / (dinfo.pWidth - Min_Thickness)));
+				targetThickness = max(targetThickness, Min_Thickness);
+			}
+			// 속도가 느릴 때 두께 늘리기
+			else {
+				targetThickness = Min_Thickness + (int)((Threshold_Speed - speed) / (Threshold_Speed / (dinfo.pWidth - Min_Thickness)));
+				targetThickness = min(targetThickness, dinfo.pWidth);
+			}
+
+			// 두께 변화 간격이 지났는지 확인		
+			if (std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastThicknessChangeTime).count() >= Update_Interval)
+			{
+				// 붓 전용 사이즈 조절
+				if (currentThickness < targetThickness)
+					currentThickness += Smoothing_Factor;
+				else if (currentThickness > targetThickness)
+					currentThickness -= Smoothing_Factor;
+
+				// 두께 변경 시간 업데이트
+				lastThicknessChangeTime = currentTime;
+			}
+			// 두께가 변경된 펜 생성
+			nPen = CreatePen(PS_SOLID, currentThickness, col);
+		}
+		else  // 리플레이 중에는 두께를 고정
+		{
+			nPen = CreatePen(PS_SOLID, dinfo.pWidth, col);  // 그릴 때 저장된 두께 사용
+		}
 		oPen = (HPEN)SelectObject(hdc, nPen);
 		break;
 	}
@@ -339,6 +360,8 @@ void Function::paint(HWND hWnd, RECT canvasRT)
 				draw(hWnd, record, FALSE);
 				break;
 
+			
+
 			default:
 				break;
 			}
@@ -374,23 +397,47 @@ bool Function::getIsReplay()
 	return isReplay;
 }
 
-void Function::setIsReset(bool reset)
+void Function::setIsReset(bool isReset)
 {
-	this->reset = reset;
+	this->isReset = isReset;
 }
 
 bool Function::getIsReset()
 {
-	return reset;
+	return isReset;
 }
 
-// RESET 버튼 클릭 시 호출되는 함수
+void Function::suspendReplay()
+
+{
+	setIsReplay(true);
+	setIsReset(true);
+	isLeftClick = false;
+	SuspendThread(threadHandle);
+	px2 = px;
+	py2 = py;
+}
+
+void Function::resumeReplay()
+{	
+	setIsReset(false);
+	setIsReplay(true);
+	ResumeThread(threadHandle);
+	isLeftClick = true;
+}
+
 void Function::stopReplay(HWND hWnd)
 {
 	setIsReplay(false);
-	setIsReset(false);
-	reDrawing(hWnd);
+	setIsReset(true);
+
+	if (replayThreadHandle.joinable())
+	{
+		replayThreadHandle.join();
+	}
 }
+
+
 
 // 벡터가 비어있는지 검사
 bool Function::getDrawLInfoEmpty()

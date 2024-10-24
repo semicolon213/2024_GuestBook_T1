@@ -22,7 +22,7 @@ private:
 	HBRUSH hPen;
 
 	int px, py;
-
+	int px2, py2;
 	int x, y;
 
 	// 붓 브러쉬 변수 
@@ -40,7 +40,7 @@ private:
 
 	bool isLeftClick = false;
 	bool isReplay = false;
-	bool reset;
+	bool isReset = true;
 
 	ULONG_PTR gdiplusToken;
 
@@ -53,6 +53,7 @@ private:
 
 public:
 	thread replayThreadHandle;
+	HANDLE threadHandle;
 
 	void draw(HWND, PINFO, bool);		//뒤에 브러쉬 추가
 	void mouseUD(PINFO, bool);
@@ -65,6 +66,9 @@ public:
 	bool getIsReplay();
 	void setIsReset(bool);
 	bool getIsReset();
+
+	void suspendReplay();
+	void resumeReplay();
 
 	void stopReplay(HWND);
 
