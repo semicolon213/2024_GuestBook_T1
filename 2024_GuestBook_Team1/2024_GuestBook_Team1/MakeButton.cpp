@@ -1,7 +1,5 @@
 #include "MakeButton.h"
 
-
-
 MakeButton::MakeButton()
 {
 	this->rectButton.left = 0;
@@ -9,7 +7,7 @@ MakeButton::MakeButton()
 	this->rectButton.right = 0;
 	this->rectButton.bottom = 0;
 	this->icon = 0;
-	this->toggleState = false; // 토글 상태를 추적하는 변수
+	this->toggleState = false; 
 }
 
 
@@ -20,7 +18,7 @@ MakeButton::MakeButton(int left, int top, int right, int bottom)
 	this->rectButton.right = right;
 	this->rectButton.bottom = bottom;
 	this->icon = 0;
-	this->toggleState = false; // 토글 상태를 추적하는 변수
+	this->toggleState = false; 
 }
 
 void MakeButton::setCoordinate(int left, int top, int right, int bottom)
@@ -29,7 +27,6 @@ void MakeButton::setCoordinate(int left, int top, int right, int bottom)
 	this->rectButton.top = top;
 	this->rectButton.right = right;
 	this->rectButton.bottom = bottom;
-
 	this->icon = 0;
 }
 
@@ -38,7 +35,7 @@ void MakeButton::drawRectButton(HDC tHdc, int icon)
 {
 	this->icon = icon;
 	
-	/// 배경을 투명하게 설정 (NULL_BRUSH 사용)
+	/// 사각형 그릴 때 외곽선 없게 처리 (NULL_BRUSH)
 	HBRUSH hOldBrush = (HBRUSH)SelectObject(tHdc, GetStockObject(NULL_BRUSH));
 	HPEN hOldPen = (HPEN)SelectObject(tHdc, GetStockObject(NULL_PEN));
 	
@@ -49,9 +46,9 @@ void MakeButton::drawRectButton(HDC tHdc, int icon)
 		this->rectButton.bottom
 	);
 
-	/// 아이콘을 사각형 중앙에 그리기
+	/// 아이콘 그리기
 	buttonLoadImage(this->icon, tHdc);
-
+	
 	/// 이전 브러시와 펜 복원
 	SelectObject(tHdc, hOldBrush);
 	SelectObject(tHdc, hOldPen);
@@ -82,6 +79,30 @@ void MakeButton::drawEllipseButton(HDC tHdc, COLORREF test)
 	buttonLoadImage(this->icon, tHdc);
 }
 
+void MakeButton::doubleImgButton(HDC tHdc, int icon1, int icon2)
+{
+	/// 현재 토글 상태에 따라 그릴 아이콘 선택
+	int iconToDraw = toggleState ? icon1 : icon2;
+
+	/// 배경을 투명하게 설정 (NULL_BRUSH 사용)
+	HBRUSH hOldBrush = (HBRUSH)SelectObject(tHdc, GetStockObject(NULL_BRUSH));
+	HPEN hOldPen = (HPEN)SelectObject(tHdc, GetStockObject(NULL_PEN));
+
+	Rectangle(tHdc,
+		this->rectButton.left,
+		this->rectButton.top,
+		this->rectButton.right,
+		this->rectButton.bottom
+	);
+
+	/// 아이콘을 사각형 중앙에 그리기
+	buttonLoadImage(iconToDraw, tHdc);
+
+	/// 이전 브러시와 펜 복원
+	SelectObject(tHdc, hOldBrush);
+	SelectObject(tHdc, hOldPen);
+}
+
 /// 버튼에 이미지 삽입 메서드
 void MakeButton::buttonLoadImage(int icon, HDC tHdc)
 {
@@ -93,12 +114,13 @@ void MakeButton::buttonLoadImage(int icon, HDC tHdc)
 		0
 	);
 
+	/// 아이콘 그리기
 	DrawIconEx(tHdc,
 		this->rectButton.left,
 		this->rectButton.top,
 		hIcon, 30, 30, 0, NULL, DI_NORMAL);
 
-	// 아이콘 자원 해제
+	/// 아이콘 자원 해제
 	DestroyIcon(hIcon);
 }
 
@@ -127,6 +149,7 @@ void MakeButton::clickEffectPen(int icon, int clickIcon, HDC tHdc)
 
 void MakeButton::clickEffectPen(int icon, HDC tHdc)
 {
+	/// 이펙트 아이콘
 	HICON hIcon = (HICON)LoadImage(GetModuleHandle(NULL),
 		MAKEINTRESOURCE(icon),
 		IMAGE_ICON,
@@ -135,6 +158,7 @@ void MakeButton::clickEffectPen(int icon, HDC tHdc)
 		0
 	);
 
+	/// 이펙트 그리기
 	DrawIconEx(tHdc,
 		this->rectButton.left-4,
 		this->rectButton.top-4,
@@ -144,26 +168,4 @@ void MakeButton::clickEffectPen(int icon, HDC tHdc)
 	DestroyIcon(hIcon);
 }
 
-void MakeButton::doubleImgButton(HDC tHdc, int icon1, int icon2)
-{
-	/// 현재 토글 상태에 따라 그릴 아이콘 선택
-	int iconToDraw = toggleState ? icon1 : icon2;
 
-	// 배경을 투명하게 설정 (NULL_BRUSH 사용)
-	HBRUSH hOldBrush = (HBRUSH)SelectObject(tHdc, GetStockObject(NULL_BRUSH));
-	HPEN hOldPen = (HPEN)SelectObject(tHdc, GetStockObject(NULL_PEN));
-
-	Rectangle(tHdc,
-		this->rectButton.left,
-		this->rectButton.top,
-		this->rectButton.right,
-		this->rectButton.bottom
-	);
-
-	/// 아이콘을 사각형 중앙에 그리기
-	buttonLoadImage(iconToDraw, tHdc);
-
-	// 이전 브러시와 펜 복원
-	SelectObject(tHdc, hOldBrush);
-	SelectObject(tHdc, hOldPen);
-}
