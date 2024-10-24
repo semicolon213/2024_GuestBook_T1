@@ -148,6 +148,7 @@
 #define TL_SAVE_BT					(SD_SAVEFILE_BT)
 #define TL_PLAY_BT					(TOOL_DEF + 7)
 #define TL_RESET_BT					(TOOL_DEF + 8)
+#define TL_COLORBOX_BT				(TOOL_DEF + 9)
 
 #define IDI_TEST_IMAGE              555
 #define IDI_PEN_ICON                551

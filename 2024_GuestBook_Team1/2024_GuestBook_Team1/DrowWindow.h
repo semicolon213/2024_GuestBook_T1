@@ -6,6 +6,7 @@
 #include "DW_Canvas.h"
 #include "DW_NameBar.h"
 #include "DW_SideMenu.h"
+#include "DW_ColorBox.h"
 
 #include "Resource.h"
 
@@ -53,6 +54,9 @@ protected:
     HWND sHWnd = nullptr;
     RECT DSideRT = { 0 };
 
+    unique_ptr<DW_ColorBox> colorbox;
+    HWND bHWnd = nullptr;
+    RECT DBoxRT = { 0 };
     unique_ptr<ConnExcel> connExcel;
 
     RECT desktopRT;      //사용자 화면 크기 받기용

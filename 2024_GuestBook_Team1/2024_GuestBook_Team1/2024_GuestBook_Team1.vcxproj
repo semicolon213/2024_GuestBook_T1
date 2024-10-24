@@ -145,6 +145,8 @@
     <ClInclude Include="2024_GuestBook_Team1.h" />
     <ClInclude Include="BrushMenu.h" />
     <ClInclude Include="ChildWindow.h" />
+    <ClInclude Include="ColorPicker.h" />
+    <ClInclude Include="DW_ColorBox.h" />
     <ClInclude Include="ColorPalette.h" />
     <ClInclude Include="ConnExcel.h" />
     <ClInclude Include="DrowWindow.h" />
@@ -171,9 +173,11 @@
     <ClCompile Include="BrushMenu.cpp" />
     <ClCompile Include="ChildWindow.cpp" />
     <ClCompile Include="ColorPalette.cpp" />
+    <ClCompile Include="ColorPicker.cpp" />
     <ClCompile Include="ConnExcel.cpp" />
     <ClCompile Include="DrowWindow.cpp" />
     <ClCompile Include="DW_Canvas.cpp" />
+    <ClCompile Include="DW_ColorBox.cpp" />
     <ClCompile Include="DW_NameBar.cpp" />
     <ClCompile Include="DW_SideMenu.cpp" />
     <ClCompile Include="DW_ToolMenu.cpp" />

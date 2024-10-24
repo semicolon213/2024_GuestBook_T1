@@ -50,6 +50,12 @@ void DrowWindow::Create(HWND hParentWnd, int x, int y, int width, int height)
 
     sideMenu->Show(FALSE);
 
+    colorbox = make_unique<DW_ColorBox>(dInst);
+    colorbox->CreatePop(dWnd, 300,100, 300, 400);
+    bHWnd = colorbox->GetHWND();
+
+    colorbox->Show(FALSE);
+
     connExcel = make_unique<ConnExcel>();
 
     connExcel->listScrollThread(dWnd, getDWWidth(), drowRT);
@@ -78,6 +84,7 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
 
         MoveWindow(cHWnd, (drowRT.right - 1300) / 2, (drowRT.bottom - 750) / 2 + 75, 1300, 700, TRUE);
 
+        //MoveWindow(bHWnd, (drowRT.right / 2) - 50, 70, 300, 400, TRUE);
 
         InvalidateRect(dWnd, nullptr, true);
 
