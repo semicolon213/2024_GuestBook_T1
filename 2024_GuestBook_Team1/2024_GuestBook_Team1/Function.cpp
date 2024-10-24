@@ -388,32 +388,24 @@ bool Function::getIsReset()
 }
 
 void Function::suspendReplay()
-<<<<<<< HEAD
-{	
-=======
+
 {
->>>>>>> f7187bf3f32a990719c092b60e9f03b706730ac8
 	setIsReplay(true);
 	setIsReset(true);
 	isLeftClick = false;
 	SuspendThread(threadHandle);
 	px2 = px;
 	py2 = py;
-
 }
 
 void Function::resumeReplay()
 {	
-	
 	setIsReset(false);
 	setIsReplay(true);
 	ResumeThread(threadHandle);
 	isLeftClick = true;
-<<<<<<< HEAD
 	x = px2;
 	y = py2;
-=======
->>>>>>> f7187bf3f32a990719c092b60e9f03b706730ac8
 }
 
 void Function::stopReplay(HWND hWnd)
