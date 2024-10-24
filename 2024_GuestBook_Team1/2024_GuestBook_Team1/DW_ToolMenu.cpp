@@ -92,12 +92,13 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 
 		/// ±âº» Ææ
 		if (IntersectRect(&a, &mouse, &t1.rectButton)) {
-			function->setBShape(BASIC);
+			//function->setBShape(BASIC);
+			function->setBShape(PENCIL);
 			break;
 		}
 		/// Ææ½½
 		if (IntersectRect(&a, &mouse, &t2.rectButton)) {
-			function->setBShape(PENCIL);
+			function->setBShape(BRUSH);
 			break;
 		}
 
@@ -158,9 +159,8 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 			break;
 
 		case TL_CLEAR_BT:
-			if (function->getDrawLInfoEmpty())  break;
-			if (!function->getIsReplay())
-				SendMessage(Function::hWnd, WM_COMMAND, TL_CLEAR_BT, 0);
+			if (function->getDrawLInfoEmpty() || !function->getIsReset())  break;
+			SendMessage(Function::hWnd, WM_COMMAND, TL_CLEAR_BT, 0);
 			break;
 
 
@@ -172,13 +172,10 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 			if (function->getDrawLInfoEmpty())  break;
 			if (pCnt)
 			{
-				if (!function->getIsReplay())
-				{
-					SendMessage(Function::hWnd, WM_COMMAND, TL_PLAY_BT, 0);
+				SendMessage(Function::hWnd, WM_COMMAND, TL_PLAY_BT, 0);
 
-					SetWindowText(PlayBT, L"¡«");
-					pCnt = FALSE;
-				}
+				SetWindowText(PlayBT, L"¡«");
+				pCnt = FALSE;
 			}
 			else
 			{
@@ -193,10 +190,7 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 			break;
 
 		case TL_RESET_BT:
-			if (function->getIsReplay())
-				SendMessage(Function::hWnd, WM_COMMAND, TL_RESET_BT, 0);
-			else
-				SendMessage(Function::hWnd, WM_COMMAND, TL_RESET_BT, 1);
+			SendMessage(Function::hWnd, WM_COMMAND, TL_RESET_BT, 0);
 
 			SetWindowText(PlayBT, L"¢º");
 			pCnt = true;
