@@ -58,6 +58,7 @@ LRESULT DW_SideMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 
         case SD_LOADFILE_BT:
             FileManager::fileManager.selectFileMode(LOAD, tWnd, penMemory);
+            SendMessage(GetParent(tWnd), WM_COMMAND, TL_PLAY_BT, 0);   
             break;
 
         case SD_FILEMANAGER_BT:
@@ -82,7 +83,7 @@ LRESULT DW_SideMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 
     case WM_KILLFOCUS:
 
-        ShowWindow(sWnd, false);
+        /// ShowWindow(sWnd, false);            /// ¿©±â ¹Ù²ñ
         
         break;
 

@@ -88,6 +88,11 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
 
         break;
 
+    case WM_SETTEXT:
+        /// save나 로드시 namebar 텍스트 변경
+        SendMessage(nHWnd, WM_SETTEXT, 0, (LPARAM)FileManager::baseName.c_str());       /// DW_NameBar로 메시지 전달
+        break;
+
     case WM_COMMAND:
         drowRT = GetRT();
         switch (LOWORD(wParam))
@@ -110,6 +115,11 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
 
             MoveWindow(sHWnd, pt.x + drowRT.right - 351, pt.y + drowRT.top, 350, 600, true);
             sideMenu->Show(true);
+            break;
+
+        case TL_PLAY_BT:
+            /// 로드시 리플레이 기능
+            SendMessage(tHWnd, WM_COMMAND, TL_PLAY_BT, 0);          /// DW_SideMenu로 메시지 전달
             break;
 
         default:

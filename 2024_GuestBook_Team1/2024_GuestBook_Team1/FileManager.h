@@ -9,8 +9,9 @@
 #include "Struct.h"
 #include "Resource.h"
 #include "Function.h"
+#include <unordered_set> //파일리스트 중복 방지 헤더  
+#include <shlobj.h> //세이브파일 절대 경로 확인 
 
-#define ID_FILE_LIST 101
 
 class DW_SideMenu;
 
@@ -20,7 +21,7 @@ private:
 
     bool HandleFileOperation(HWND hWnd, std::vector<PINFO>* penMemory, bool isSave);
     bool ConfigureDialog(HWND hWnd, DWORD flags, WCHAR* fileBuffer, DWORD bufferSize);
-    bool save(const wchar_t* path, std::vector<PINFO>* penMemory);
+    bool save(const wchar_t* path, std::vector<PINFO>* penMemory, HWND hWnd);
     bool load(const wchar_t* path, std::vector<PINFO>* penMemory, HWND hWnd);
     bool openForWrite(const wchar_t* path);
     bool openForRead(const wchar_t* path);
@@ -58,4 +59,6 @@ public:
 
     void SaveFileList(); ///파일리스트 저장
     void LoadFileList(); ///파일리스트 불러오기
+
+    static std::wstring baseName; // 정적 변수 선언
 };

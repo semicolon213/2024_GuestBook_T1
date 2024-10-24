@@ -236,6 +236,8 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 		}
 		/// 중지 버튼
 		else if (IntersectRect(&a, &mouse, &stopButton.rectButton)) {
+			
+			InvalidateRect(tWnd, nullptr, true);
 
 			if (function->getIsReplay()) {
 				SendMessage(Function::hWnd, WM_COMMAND, TL_RESET_BT, 0);
