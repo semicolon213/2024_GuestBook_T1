@@ -30,6 +30,8 @@ protected:
     HWND markerBT = nullptr;
     HWND watercolorBT = nullptr;
 
+
+    HWND PaletteBox;
     HWND Color1BT = nullptr;
     HWND Color2BT = nullptr;
     HWND Color3BT = nullptr;

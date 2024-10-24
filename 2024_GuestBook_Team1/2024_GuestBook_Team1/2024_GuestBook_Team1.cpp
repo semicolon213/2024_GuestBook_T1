@@ -2,7 +2,6 @@
 #include "Resource.h"
 #include "PenThickness.h"
 #include <commctrl.h>
-#include "ColorPalette.h"
 
 
 #define MAX_LOADSTRING 100
@@ -265,7 +264,6 @@ INT_PTR About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_INITDIALOG:
- 
         return (INT_PTR)TRUE;
 
     case WM_COMMAND:

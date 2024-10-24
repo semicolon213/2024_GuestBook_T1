@@ -34,6 +34,9 @@ void DW_ToolMenu::Create(HWND hParentWnd, int x, int y, int width, int height)
 	watercolorBT = CreateWindowW(L"BUTTON", L"BS", WS_CHILD | WS_VISIBLE,
 		210, 10, 30, 30, tWnd, (HMENU)WATERCOLOR, tInst, nullptr);
 	
+	PaletteBox= CreateWindow(L"BUTTON", L"색정보", WS_CHILD | WS_VISIBLE,
+		260, 10, 30, 30, tWnd, (HMENU)TL_COLORBOX_BT, tInst, nullptr);
+
 	Color1BT = CreateWindowW(L"BUTTON", L"색1", WS_CHILD | WS_VISIBLE,
 		(toolRT.right / 2) - 100, 10, 30, 30, tWnd, (HMENU)TL_COLOR1_BT, tInst, nullptr);
 	Color2BT = CreateWindowW(L"BUTTON", L"색2", WS_CHILD | WS_VISIBLE,
@@ -106,6 +109,9 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 	case WM_COMMAND:
 		switch (wParam)
 		{
+		case TL_COLORBOX_BT:
+			SendMessage(GetParent(tWnd), message, wParam, lParam);
+			break;
 		case TL_COLOR1_BT:
 			if (Function::penNum == 0)
 				colorPalette->colorSelect(tWnd, 0);

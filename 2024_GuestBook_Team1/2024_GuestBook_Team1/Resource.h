@@ -30,11 +30,6 @@
 #define WATERCOLOR 305
 
 // 펜 굵기 
-
-#define IDC_COLOR_BUTTON 508
-#define IDC_PREVIEW 507
-#define ID_COLOR_THICKNESS_BUTTON 506
-#define IDD_PEN_THICKNESS_DIALOG 505
 #define IDD_PEN_THICKNESS       504
 #define IDC_THICKNESS_SLIDER    503  // 슬라이더의 ID
 #define IDC_THICKNESS_EDIT      502  // 에디트 박스의 ID
@@ -103,6 +98,7 @@
 #define TL_SAVE_BT					(SD_SAVEFILE_BT)
 #define TL_PLAY_BT					(TOOL_DEF + 7)
 #define TL_RESET_BT					(TOOL_DEF + 8)
+#define TL_COLORBOX_BT				(TOOL_DEF + 9)
 
 #define IDI_TEST_IMAGE              555
 #define IDI_PEN_ICON                551

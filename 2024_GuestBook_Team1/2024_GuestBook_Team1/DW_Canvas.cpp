@@ -1,10 +1,8 @@
 #include "DW_Canvas.h"
-#include "PenThickness.h"
-#include "ColorPalette.h"
 
 
 DW_Canvas::DW_Canvas(HINSTANCE hInstance)
-    : ChildWindow(RGB(255, 255, 255))
+    :ChildWindow(RGB(255, 255, 255))
 {
     cInst = hInstance;
     canvasRT = { 0 };
@@ -20,6 +18,7 @@ void DW_Canvas::Create(HWND hParentWnd, int x, int y, int width, int height)
     penThickness = make_unique<PenThickness>();
 }
 
+
 LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message)
     {
@@ -29,27 +28,6 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
         break;
 
     case WM_COMMAND:
-        // 색상 및 굵기 버튼 클릭 처리
-        if (LOWORD(wParam) == ID_COLOR_THICKNESS_BUTTON) // 버튼 ID에 따라 수정
-        {
-            // 색상 선택 기능 호출
-            ColorPalette colorPalette;
-            colorPalette.colorSelect(canWnd, 0); // 첫 번째 펜에 대한 색상 선택
-
-            // 펜 굵기 설정 대화 상자 호출
-            if (DialogBoxParam(cInst, MAKEINTRESOURCE(IDD_PEN_THICKNESS_DIALOG), canWnd, PenThickness::dlgProc, 0) == IDOK) {
-                // 선택된 펜 굵기 값 가져오기
-                int thickness = penThickness->getPenWidth();
-
-                // 선택된 색상과 굵기 출력 (디버깅용, 원하는 대로 처리)
-                COLORREF selectedColor = colorPalette.getColor(0);
-                // 예: printf("선택된 색상: %x, 선택된 굵기: %d\n", selectedColor, thickness);
-
-                // 선택된 펜 굵기와 색상을 적용하는 로직 추가
-                // 예: SetPenThicknessAndColor(thickness, selectedColor);
-            }
-        }
-
         if (wParam == TL_CLEAR_BT)
         {
             if (!function->getIsReplay())
@@ -81,6 +59,10 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
                 function->reDrawing(cWnd);
             }
         }
+
+        if (LOWORD(wParam) == 1) 
+        {
+        }
         break;
 
     case WM_MOUSEMOVE:
@@ -104,26 +86,27 @@ LRESULT DW_Canvas::HandleMessage(HWND cWnd, UINT message, WPARAM wParam, LPARAM 
         drawPInfo.pWidth = penThickness->getPenWidth(); /// 펜 굵기 설정
         drawPInfo.state = message;
         function->mouseUD(drawPInfo, TRUE);
+
         break;
 
     case WM_RBUTTONDOWN:
+
         break;
 
     case WM_SIZE:
-        break;
+
 
     case WM_ERASEBKGND:
-        // 화면 깜빡임 방지
+        ///화면 깜빡임 방지
         return DefWindowProc(cWnd, message, wParam, lParam);
         break;
-
     case WM_PAINT:
         canvasRT = ChildWindow::GetRT();
         function->paint(canWnd, canvasRT);
-        break;
+        
 
     default:
-        return ChildWindow::HandleMessage(cWnd, message, wParam, lParam);
+        return ChildWindow::HandleMessage(canWnd, message, wParam, lParam);
     }
     return 0;
 }
