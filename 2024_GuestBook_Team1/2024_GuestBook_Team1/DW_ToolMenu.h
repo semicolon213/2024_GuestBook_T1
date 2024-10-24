@@ -22,25 +22,8 @@ protected:
     HWND tWnd;
     RECT toolRT;
 
-    HWND basicBT = nullptr;
-    HWND brushBT = nullptr;
-    HWND pencilBT = nullptr;
-    HWND sprayBT = nullptr;
-    HWND markerBT = nullptr;
-    HWND watercolorBT = nullptr;
-
-    HWND Color1BT = nullptr;
-    HWND Color2BT = nullptr;
-    HWND Color3BT = nullptr;
-    HWND PenWidthBT = nullptr;
-    HWND ClearBT = nullptr;
-    HWND SaveBT = nullptr;
-    HWND PlayBT = nullptr;
-    HWND ResetBT = nullptr;
-
     std::unique_ptr<Function> function;
     std::unique_ptr<ColorPalette> colorPalette;
-
 
     HRGN roundRgn;
 };

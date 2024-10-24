@@ -152,7 +152,19 @@
 #define IDI_TEST_IMAGE              555
 #define IDI_PEN_ICON                551
 #define IDI_BRUSH_ICON              552
-#define IDI_ERASE_ICON              553
+//#define IDI_ERASE_ICON              553
+#define IDI_PENCIL_ICON             554
+#define IDI_SPRAY_ICON              556
+#define IDI_RECTPEN_ICON            557
+#define IDI_WATERPEN_ICON           558
+#define IDI_THICK_ICON              560
+#define IDI_PENEFFECT_ICON           561
+#define IDI_COLOREFFECT_ICON        562
+#define IDI_SAVE_ICON               563
+#define IDI_ERASE_ICON              564
+#define IDI_STOP_ICON               565
+#define IDI_PLAY_ICON               566
+#define IDI_PAUSE_ICON              567
 
 #endif
 // 다음은 새 개체에 사용할 기본값입니다.
