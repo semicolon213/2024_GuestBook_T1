@@ -4,7 +4,6 @@
 
 
 
-
 DW_ToolMenu::DW_ToolMenu(HINSTANCE hInstance)
 	:ChildWindow(RGB(255, 255, 255))
 {
@@ -53,7 +52,6 @@ void DW_ToolMenu::Create(HWND hParentWnd, int x, int y, int width, int height)
 		(toolRT.right / 2) + 20, 10, 30, 30, tWnd, (HMENU)TL_RESET_BT, tInst, nullptr);
 
 	roundRgn = CreateEllipticRgn(0, 0, 30, 30);
-
 	
 }
 
@@ -67,6 +65,11 @@ HPEN tt1, tt2;
 MakeButton t1(10, 10, 40, 40);
 MakeButton t2(50, 10, 80, 40);
 
+// 스탬프 버튼 추가
+//MakeButton heart_bt(90, 10, 120, 40);
+//MakeButton uh_bt(130, 10, 160, 40);
+//MakeButton yuhan_bt(170, 10, 200, 40);
+//MakeButton yongbin_bt(210, 10, 240, 40);
 
 RECT a;
 RECT mouse;
@@ -230,7 +233,12 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 		ToolPen = (HPEN)SelectObject(tHdc, CreatePen(PS_SOLID, 1, RGB(234, 234, 234)));
 		Rectangle(tHdc, toolRT.left - 1, toolRT.top, toolRT.right + 1, toolRT.bottom);
 
-		
+
+		// 스탬프 버튼 추가
+		//heart_bt.drawRectButton(tHdc, IDI_BT_HEART_ICON);
+		//uh_bt.drawRectButton(tHdc, IDI_BT_UH_ICON);
+		//yuhan_bt.drawRectButton(tHdc, IDI_BT_YUHAN_ICON);
+		//yongbin_bt.drawRectButton(tHdc, IDI_BT_YONGBIN_ICON);
 
 
 		if (*tCnt)
