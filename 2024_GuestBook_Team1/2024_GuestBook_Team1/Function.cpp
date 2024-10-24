@@ -18,8 +18,10 @@ int Function::bShape = BASIC;
 
 void Function::record(PINFO inputPI)
 {
+	//if (isReplay) return;
 
 	inputPI.bShape = bShape;
+	inputPI.pWidth = currentThickness;
 	drawLInfo.pInfo.push_back(inputPI);
 
 	/*std::wstring message = L"record() 호출됨, drawLInfo.pInfo 크기: " + std::to_wstring(drawLInfo.pInfo.size()) +
@@ -145,6 +147,7 @@ void Function::replay(HWND hWnd)
 			if (i+1 < drawLInfo.pInfo.size() && drawLInfo.pInfo[i+1].state == WM_MOUSEMOVE)
 			{
 				Sleep((int)((drawLInfo.pInfo[i + 1].pTime - drawLInfo.pInfo[i].pTime)/10));
+				//Sleep(drawLInfo.pInfo[i + 1].pTime - drawLInfo.pInfo[i].pTime);
 			}
 
 			DeleteObject(nPen);
@@ -170,6 +173,8 @@ void Function::reDrawing(HWND hWnd)
 
 	InvalidateRect(hWnd, NULL, TRUE);
 	UpdateWindow(hWnd);
+
+	
 }
 
 void Function::clearDrawing(HWND hWnd)
@@ -201,39 +206,46 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 
 	case BRUSH: // 붓 브러쉬
 	{
-		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - DrawTime).count(); //눌렀을 떄 시간부터 그렸을 때 시간 그 사이의 시간(밀리초)
-		duration = max(duration, 1); // 최소 duration 값을 설정하여 0으로 나누는 문제 방지
-
-		double distance = sqrt(pow(px - x, 2) + pow(py - y, 2)); // 선 거리
-		double speed = (distance / duration) * 1000; // 속도 계산
-
-		int targetThickness = dinfo.pWidth; // 속도가 변경될 때 같이 변경 되는 두께 변수
-
-		// 속도가 빠를 때 두께 줄이기
-		if (speed > Threshold_Speed) {
-			targetThickness = dinfo.pWidth - (int)((speed - Threshold_Speed) / (Threshold_Speed / (dinfo.pWidth - Min_Thickness)));
-			targetThickness = max(targetThickness, Min_Thickness);
-		}
-		// 속도가 느릴 때 두께 늘리기
-		else {
-			targetThickness = Min_Thickness + (int)((Threshold_Speed - speed) / (Threshold_Speed / (dinfo.pWidth - Min_Thickness)));
-			targetThickness = min(targetThickness, dinfo.pWidth);
-		}
-
-		// 두께 변화 간격이 지났는지 확인		
-		if (std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastThicknessChangeTime).count() >= Update_Interval)
+		if (!isReplay)
 		{
-			// 붓 전용 사이즈 조절
-			if (currentThickness < targetThickness)
-				currentThickness += Smoothing_Factor;
-			else if (currentThickness > targetThickness)
-				currentThickness -= Smoothing_Factor;
+			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - DrawTime).count(); //눌렀을 떄 시간부터 그렸을 때 시간 그 사이의 시간(밀리초)
+			duration = max(duration, 1); // 최소 duration 값을 설정하여 0으로 나누는 문제 방지
 
-			// 두께 변경 시간 업데이트
-			lastThicknessChangeTime = currentTime; 		
-		}		
-		// 두께가 변경된 펜 생성
-		nPen = CreatePen(PS_SOLID, currentThickness, col);
+			double distance = sqrt(pow(px - x, 2) + pow(py - y, 2)); // 선 거리
+			double speed = (distance / duration) * 1000; // 속도 계산
+
+			int targetThickness = dinfo.pWidth; // 속도가 변경될 때 같이 변경 되는 두께 변수
+
+			// 속도가 빠를 때 두께 줄이기
+			if (speed > Threshold_Speed) {
+				targetThickness = dinfo.pWidth - (int)((speed - Threshold_Speed) / (Threshold_Speed / (dinfo.pWidth - Min_Thickness)));
+				targetThickness = max(targetThickness, Min_Thickness);
+			}
+			// 속도가 느릴 때 두께 늘리기
+			else {
+				targetThickness = Min_Thickness + (int)((Threshold_Speed - speed) / (Threshold_Speed / (dinfo.pWidth - Min_Thickness)));
+				targetThickness = min(targetThickness, dinfo.pWidth);
+			}
+
+			// 두께 변화 간격이 지났는지 확인		
+			if (std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastThicknessChangeTime).count() >= Update_Interval)
+			{
+				// 붓 전용 사이즈 조절
+				if (currentThickness < targetThickness)
+					currentThickness += Smoothing_Factor;
+				else if (currentThickness > targetThickness)
+					currentThickness -= Smoothing_Factor;
+
+				// 두께 변경 시간 업데이트
+				lastThicknessChangeTime = currentTime;
+			}
+			// 두께가 변경된 펜 생성
+			nPen = CreatePen(PS_SOLID, currentThickness, col);
+		}
+		else  // 리플레이 중에는 두께를 고정
+		{
+			nPen = CreatePen(PS_SOLID, dinfo.pWidth, col);  // 그릴 때 저장된 두께 사용
+		}
 		oPen = (HPEN)SelectObject(hdc, nPen);
 		break;
 	}
@@ -376,7 +388,11 @@ bool Function::getIsReset()
 }
 
 void Function::suspendReplay()
+<<<<<<< HEAD
 {	
+=======
+{
+>>>>>>> f7187bf3f32a990719c092b60e9f03b706730ac8
 	setIsReplay(true);
 	setIsReset(true);
 	isLeftClick = false;
@@ -393,8 +409,11 @@ void Function::resumeReplay()
 	setIsReplay(true);
 	ResumeThread(threadHandle);
 	isLeftClick = true;
+<<<<<<< HEAD
 	x = px2;
 	y = py2;
+=======
+>>>>>>> f7187bf3f32a990719c092b60e9f03b706730ac8
 }
 
 void Function::stopReplay(HWND hWnd)
