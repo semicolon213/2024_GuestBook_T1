@@ -1,5 +1,6 @@
 #include "DrowWindow.h"
 
+
 DrowWindow::DrowWindow(HINSTANCE hInstance)
     :ChildWindow(RGB(249, 243, 240))
 {
@@ -14,6 +15,7 @@ DrowWindow::DrowWindow(HINSTANCE hInstance)
     desktopRT = { 0 };
 }
 
+//DrowWindow::colWnd = nullptr;
 
 void DrowWindow::Create(HWND hParentWnd, int x, int y, int width, int height)
 {
@@ -55,6 +57,8 @@ void DrowWindow::Create(HWND hParentWnd, int x, int y, int width, int height)
     ConnExcel::list = connExcel->getVisitList().c_str();
 
     connExcel->setTextPosX(drowRT.right);
+
+    
 
 }
 
@@ -140,4 +144,26 @@ LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM
 int DrowWindow::getDWWidth()
 {
     return drowRT.right - drowRT.left;
+}
+
+void DrowWindow::colorPickerCreate(int colorNum)
+{
+    //int x, y, width, hight;
+    switch(colorNum){
+    case 0:
+        
+        break;
+    case 1:
+
+        break;
+    case 2:
+
+        break;
+    }
+    //DrowWindow::colWnd = CreateWindowEx(WS_EX_TOOLWINDOW, L"DrowWindow", L"DrowWindow", WS_POPUP | WS_VISIBLE | WS_CAPTION ,x,y,width,hight,dWnd,NULL,nullptr,NULL);
+}
+
+void DrowWindow::colorPickerDestroy()
+{
+    //DestroyWindow(colWnd);
 }
