@@ -147,7 +147,6 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     static HWND SideMenu = NULL;
     static DrowWindow* dWindow = nullptr;
     static HWND d_hWnd = nullptr;
-    static HWND b_hWnd = nullptr;
 
     switch (message)
     {
@@ -216,7 +215,8 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
 
         case TL_PLAY_BT:
-            SendMessage(d_hWnd, WM_COMMAND, TL_PLAY_BT, 0); 
+            /// 로드시 리플레이 기능
+            SendMessage(d_hWnd, WM_COMMAND, TL_PLAY_BT, 0);      /// DrowWindow로 메시지 전달
             break;
 
         default:
@@ -249,6 +249,11 @@ LRESULT WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         EndPaint(hWnd, &ps);
     }
     break;
+    case WM_SETTEXT:
+        /// save나 로드시 namebar 텍스트 변경
+        SendMessage(d_hWnd, WM_SETTEXT, 0, (LPARAM)FileManager::baseName.c_str());      /// DrowWindow.cpp로 메시지 전달
+        break;
+
     case WM_DESTROY:
         FileManager::fileManager.SaveFileList();
         PostQuitMessage(0);

@@ -56,6 +56,12 @@ LRESULT DW_NameBar::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARAM
         NameRT = GetRT();
         MoveWindow(SideB, NameRT.right - 40, 12, 30, 30, true);
 
+    case WM_SETTEXT:
+        /// WM_SETTEXT 메시지 처리
+        /// save나 로드시 namebar 텍스트 변경
+        SetWindowText(FileNameW, reinterpret_cast<LPCWSTR>(lParam));
+        break;
+
     case WM_COMMAND:
         switch (LOWORD(wParam))
         {

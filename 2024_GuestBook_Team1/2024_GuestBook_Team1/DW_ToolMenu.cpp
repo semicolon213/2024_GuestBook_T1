@@ -187,13 +187,14 @@ LRESULT DW_ToolMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARA
 				SetWindowText(PlayBT, L"¢º");
 				pCnt = true;
 			}
-
+			
 			InvalidateRect(tWnd, nullptr, true);
 
 			break;
 
 		case TL_RESET_BT:
 			if (function->getIsReplay())
+				SendMessage();
 				SendMessage(Function::hWnd, WM_COMMAND, TL_RESET_BT, 0);
 			else
 				SendMessage(Function::hWnd, WM_COMMAND, TL_RESET_BT, 1);

@@ -33,7 +33,7 @@ FileManager::FileManager() : hRightPanel(nullptr), hFileListBox(nullptr), hInst(
 FileManager::FileManager(HWND hWnd) : hRightPanel(nullptr), hFileListBox(nullptr), hInst(nullptr), m_hWnd(hWnd){}
 
 
-
+std::wstring FileManager::baseName = L""; // 초기화
 
 /**
  * @fn FileManager::InitializePanels(HWND hWnd)
@@ -160,7 +160,7 @@ bool FileManager::HandleFileOperation(HWND hWnd, std::vector<PINFO>* penMemory, 
 
             }
         }
-        return isSave ? save(filePath, penMemory) : load(filePath, penMemory, hWnd);
+        return isSave ? save(filePath, penMemory, hWnd) : load(filePath, penMemory, hWnd);
     }
     return false;
 }
@@ -172,7 +172,7 @@ bool FileManager::HandleFileOperation(HWND hWnd, std::vector<PINFO>* penMemory, 
  * @fn FileManager::save
  * @brief 파일을 저장하는 함수.
  */
-bool FileManager::save(const wchar_t* path, std::vector<PINFO>* penMemory) {
+bool FileManager::save(const wchar_t* path, std::vector<PINFO>* penMemory, HWND hWnd) {
 
 
 
@@ -201,6 +201,17 @@ bool FileManager::save(const wchar_t* path, std::vector<PINFO>* penMemory) {
             break;
         }
     }
+
+    /// 파일 이름만 추출
+    baseName = path;
+    size_t pos = baseName.find_last_of(L"\\/");
+    if (pos != std::wstring::npos) {
+        baseName = baseName.substr(pos + 1);
+    }
+
+    /// FileNameW에 파일 이름 표시
+    SendMessage(GetParent(hWnd), WM_SETTEXT, 0, (LPARAM)baseName.c_str()); /// 2024_GuestBook_Team1로 메시지 전달
+
     this->fs.close();
     AddFileToList(path);
 
@@ -312,7 +323,16 @@ bool FileManager::load(const wchar_t* path, std::vector<PINFO>* penMemory, HWND 
 
     Function::drawLInfo.pInfo = *penMemory;
 
-   
+    /// 파일 이름만 추출
+    baseName = path;
+    size_t pos = baseName.find_last_of(L"\\/");
+    if (pos != std::wstring::npos) {
+        baseName = baseName.substr(pos + 1);
+    }
+
+    /// FileNameW에 파일 이름 표시
+    SendMessage(GetParent(hWnd), WM_SETTEXT, 0, (LPARAM)baseName.c_str()); /// 2024_GuestBook_Team1로 메시지 전달
+
     
     InvalidateRect(hWnd, NULL, TRUE); /// 화면 갱신
     UpdateWindow(hWnd); /// 화면 업데이트
