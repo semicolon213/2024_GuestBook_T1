@@ -22,7 +22,7 @@ private:
 	HBRUSH hPen;
 
 	int px, py;
-
+	int px2, py2;
 	int x, y;
 
 	// 붓 브러쉬 변수 

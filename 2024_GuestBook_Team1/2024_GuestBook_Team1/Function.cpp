@@ -101,16 +101,29 @@ void Function::replayThread(HWND hWnd)
  //기본 리플레이 동작 함수
 void Function::replay(HWND hWnd)
 {
-	HDC hdc;
+	// 화면 초기화
+	HDC hdc, memDC;
+	HBITMAP hBitmap;
+	RECT clientRect;
+	GetClientRect(hWnd, &clientRect);  // 클라이언트 영역 크기 얻기
 
 	while (isReplay)
 	{
-		// 화면 초기화
 		InvalidateRect(hWnd, NULL, TRUE);
 		UpdateWindow(hWnd);
 
+		// 화면 DC 가져오기
 		hdc = GetDC(hWnd);
 
+		// 메모리 DC 생성 및 호환 비트맵 할당
+		memDC = CreateCompatibleDC(hdc);
+		hBitmap = CreateCompatibleBitmap(hdc, clientRect.right, clientRect.bottom);
+		SelectObject(memDC, hBitmap);
+
+		// 메모리 DC에서 배경 지우기
+		FillRect(memDC, &clientRect, (HBRUSH)(COLOR_WINDOW + 1));
+
+		// 그리기 작업 메모리 DC에서 수행
 		for (size_t i = 0; i < drawLInfo.pInfo.size(); i++)
 		{
 			if (!isReplay)
@@ -118,6 +131,8 @@ void Function::replay(HWND hWnd)
 				isLeftClick = false;
 				break;
 			}
+			else
+				isLeftClick = true;
 
 			PINFO replayInfo = drawLInfo.pInfo[i];
 
@@ -142,14 +157,20 @@ void Function::replay(HWND hWnd)
 			}
 
 			// 재생 속도 조절
-			if (i+1 < drawLInfo.pInfo.size() && drawLInfo.pInfo[i+1].state == WM_MOUSEMOVE)
+			if (i + 1 < drawLInfo.pInfo.size() && drawLInfo.pInfo[i + 1].state == WM_MOUSEMOVE)
 			{
-				Sleep((int)((drawLInfo.pInfo[i + 1].pTime - drawLInfo.pInfo[i].pTime)/10));
-				//Sleep(drawLInfo.pInfo[i + 1].pTime - drawLInfo.pInfo[i].pTime);
+				Sleep((int)((drawLInfo.pInfo[i + 1].pTime - drawLInfo.pInfo[i].pTime) / 10));
 			}
 
 			DeleteObject(nPen);
 		}
+
+		// 메모리 DC의 내용을 실제 화면에 복사
+		BitBlt(hdc, 0, 0, clientRect.right, clientRect.bottom, memDC, 0, 0, SRCCOPY);
+
+		// 메모리 DC와 비트맵 삭제
+		DeleteObject(hBitmap);
+		DeleteDC(memDC);
 
 		ReleaseDC(hWnd, hdc);
 
@@ -204,7 +225,7 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 
 	case BRUSH: // 붓 브러쉬
 	{
-		if (!isReplay)
+		if (!isReplay || isReset)
 		{
 			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - DrawTime).count(); //눌렀을 떄 시간부터 그렸을 때 시간 그 사이의 시간(밀리초)
 			duration = max(duration, 1); // 최소 duration 값을 설정하여 0으로 나누는 문제 방지
@@ -389,6 +410,8 @@ void Function::suspendReplay()
 	setIsReset(true);
 	isLeftClick = false;
 	SuspendThread(threadHandle);
+	px2 = px;
+	py2 = py;
 }
 
 void Function::resumeReplay()
@@ -396,7 +419,8 @@ void Function::resumeReplay()
 	setIsReset(false);
 	setIsReplay(true);
 	ResumeThread(threadHandle);
-	isLeftClick = true;
+	x = px2;
+	y = py2;
 }
 
 void Function::stopReplay(HWND hWnd)
