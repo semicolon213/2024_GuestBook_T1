@@ -98,6 +98,7 @@ void Function::replayThread(HWND hWnd)
 	threadHandle = replayThreadHandle.native_handle();
 }
 
+
  //기본 리플레이 동작 함수
 void Function::replay(HWND hWnd)
 {
@@ -151,7 +152,7 @@ void Function::replay(HWND hWnd)
 			case WM_LBUTTONUP:
 				mouseUD(replayInfo, false);
 				break;
-
+				
 			default:
 				break;
 			}
@@ -359,6 +360,8 @@ void Function::paint(HWND hWnd, RECT canvasRT)
 				draw(hWnd, record, FALSE);
 				break;
 
+			
+
 			default:
 				break;
 			}
@@ -405,6 +408,7 @@ bool Function::getIsReset()
 }
 
 void Function::suspendReplay()
+
 {
 	setIsReplay(true);
 	setIsReset(true);
@@ -415,12 +419,11 @@ void Function::suspendReplay()
 }
 
 void Function::resumeReplay()
-{
+{	
 	setIsReset(false);
 	setIsReplay(true);
 	ResumeThread(threadHandle);
-	x = px2;
-	y = py2;
+	isLeftClick = true;
 }
 
 void Function::stopReplay(HWND hWnd)
