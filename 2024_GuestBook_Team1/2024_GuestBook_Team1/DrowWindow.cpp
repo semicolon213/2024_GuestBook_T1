@@ -1,186 +1,180 @@
 #include "DrowWindow.h"
 
-
-DrowWindow::DrowWindow(HINSTANCE hInstance)
-    :ChildWindow(RGB(249, 243, 240))
-{
-    dInst = hInstance;
-    drowRT = { 0 };
-    dWnd = nullptr;
-    toolCnt = TRUE;
-
-    sideMenu = nullptr;
-    sHWnd = nullptr;
-    pt = { 0 };
-    desktopRT = { 0 };
+DrowWindow::DrowWindow(int mode, HINSTANCE hInst)
+    : mode(mode), hInst(hInst), hwnd(nullptr), bkColor(RGB(249, 243, 240)) {
+    wndFunc = std::make_unique<WndFunc>();
+    this->wc = {};
 }
 
-//DrowWindow::colWnd = nullptr;
-
-void DrowWindow::Create(HWND hParentWnd, int x, int y, int width, int height)
+/// 네임바 생성 메서드
+void DrowWindow::createWindowNB(int left, int top, int right, int bottom, HWND parent)
 {
-    ChildWindow::Create(hParentWnd, L"DrowWindow", L"DrowWindow", x, y, width, height);
-    dWnd = cWnd;
-
-    desktopRT = { 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
-    GetWindowRect(GetParent(dWnd), &MainRT);
-
-    drowRT = ChildWindow::GetRT();
-
-    nameBar = make_unique<DW_NameBar>(dInst);
-    nameBar->Create(dWnd, 0, 0, drowRT.right, 57);
-    nHWnd = nameBar->GetHWND();
-
-    toolMenu = make_unique<DW_ToolMenu>(dInst);
-    toolMenu->Create(dWnd, -1, 57, drowRT.right, 51);
-    //toolMenu->show(true);
-    tHWnd = toolMenu->GetHWND();
-    toolCnt = TRUE;
-    toolMenu->tCnt = &toolCnt;
-    nameBar->tCnt = &toolCnt;
-
-    canvas = make_unique<DW_Canvas>(dInst);
-    canvas->Create(dWnd, (drowRT.right - 1300) / 2, (drowRT.bottom - 750) / 2 + 75, 1300, 700);
-    cHWnd = canvas->GetHWND();
+    WNDCLASS wc2 = {};
+    wc2.lpfnWndProc = WndProcNB;  // 네임바 메세지 처리하는 정적 메서드
+    wc2.lpszClassName = L"CustomNameWindowClass";
+    wc2.hInstance = hInst;
+    wc2.hbrBackground = CreateSolidBrush(RGB(243, 243, 243));
 
 
-    sideMenu = make_unique<DW_SideMenu>(dInst);
-    sideMenu->CreatePop(dWnd, MainRT.right - 350, MainRT.top, 350, 600);
-    sHWnd = sideMenu->GetHWND();
-
-    sideMenu->Show(FALSE);
-
-    colorbox = make_unique<DW_ColorBox>(dInst);
-    colorbox->CreatePop(dWnd, 300,100, 300, 400);
-    bHWnd = colorbox->GetHWND();
-
-    colorbox->Show(FALSE);
-
-    connExcel = make_unique<ConnExcel>();
-
-    connExcel->listScrollThread(dWnd, getDWWidth(), drowRT);
-
-    ConnExcel::list = connExcel->getVisitList().c_str();
-
-    connExcel->setTextPosX(drowRT.right);
-
-    
-
-}
-
-
-
-LRESULT DrowWindow::HandleMessage(HWND dWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-    switch (message)
-    {
-
-    case WM_SIZE:
-        drowRT = GetRT();
-
-
-        MoveWindow(nHWnd, 0, 0, drowRT.right, 57, TRUE);
-
-        MoveWindow(tHWnd, -1, 57, drowRT.right, 51, TRUE);
-
-        MoveWindow(cHWnd, (drowRT.right - 1300) / 2, (drowRT.bottom - 750) / 2 + 75, 1300, 700, TRUE);
-
-        //MoveWindow(bHWnd, (drowRT.right / 2) - 50, 70, 300, 400, TRUE);
-
-        InvalidateRect(dWnd, nullptr, true);
-
-        break;
-
-    case WM_MOVE:
-
-
-        break;
-
-    case WM_SETTEXT:
-        /// save나 로드시 namebar 텍스트 변경
-        SendMessage(nHWnd, WM_SETTEXT, 0, (LPARAM)FileManager::baseName.c_str());       /// DW_NameBar로 메시지 전달
-        break;
-
-    case WM_COMMAND:
-        drowRT = GetRT();
-        switch (LOWORD(wParam))
-        {
-        case NB_BACK_BT:
-            Show(false); // 자식 윈도우 숨기기
-            EnableWindow(GetDlgItem(GetParent(dWnd), DEF_DROW_BT), TRUE);
-            EnableWindow(GetDlgItem(GetParent(dWnd), DEF_LOAD_BT), TRUE);
-            EnableWindow(GetDlgItem(GetParent(dWnd), DEF_CREDIT_BT), TRUE);
-            EnableWindow(dWnd, FALSE);
-            break;
-
-        case NB_SIDE_BT:
-            GetClientRect(dWnd, &drowRT);
-            pt = { 0 };
-            ClientToScreen(dWnd, &pt);
-            IntersectRect(&drowRT, &desktopRT, &drowRT);
-
-            DSideRT = GetChildPos(dWnd, sHWnd);
-
-            MoveWindow(sHWnd, pt.x + drowRT.right - 351, pt.y + drowRT.top, 350, 600, true);
-            sideMenu->Show(true);
-            break;
-
-        case TL_PLAY_BT:
-            /// 로드시 리플레이 기능
-            SendMessage(tHWnd, WM_COMMAND, TL_PLAY_BT, 0);          /// DW_SideMenu로 메시지 전달
-            break;
-
-        default:
-            break;
-        }
-
-        break;
-
-    case WM_LBUTTONDOWN:
-        drowRT = GetRT();
-
-
-        break;
-
-    case WM_PAINT:
-        drowRT = ChildWindow::GetRT();
-        pHdc = BeginPaint(dWnd, &d_ps);
-        SIZE textSize;
-        wsprintf(text, ConnExcel::list.c_str());
-        SetBkColor(pHdc, RGB(249, 243, 240));
-        TextOut(pHdc, connExcel->getTextPosX(), drowRT.bottom - 15, text, lstrlen(text));
-
-        EndPaint(dWnd, &d_ps);
-        break;
-
-    default:
-        return ChildWindow::HandleMessage(dWnd, message, wParam, lParam);
+    if (!RegisterClass(&wc2)) {
+        MessageBox(NULL, L"네임 바 등록 실패", L"Error", MB_OK);
+        return;
     }
-    return 0;
+    WndFunc::nameWnd = CreateWindow(
+        L"CustomNameWindowClass",
+        L"Name Window",
+        WS_CHILD | WS_VISIBLE,
+        left, top,
+        right,
+        bottom,
+        parent,
+        nullptr,
+        hInst,
+        reinterpret_cast<LPVOID>(this)  // this 포인터 전달
+    );
+    if (!WndFunc::nameWnd) {
+        DWORD error = GetLastError();
+        wchar_t buf[256];
+        wsprintf(buf, L"네임 바 생성 실패: 오류 코드 %d", error);
+        MessageBox(NULL, buf, L"Error", MB_OK);
+        return;
+    }
+    ShowWindow(WndFunc::nameWnd, SW_SHOW);
 }
 
-int DrowWindow::getDWWidth()
+/// 툴바 생성 메서드
+void DrowWindow::createWindowTB(int left, int top, int right, int bottom, HWND parent)
 {
-    return drowRT.right - drowRT.left;
+    WNDCLASS wc3 = {};
+    wc3.lpfnWndProc = WndProcTB;  // 네임바 메세지 처리하는 정적 메서드
+    wc3.lpszClassName = L"Tool";
+    wc3.hInstance = hInst;
+    wc3.hbrBackground = CreateSolidBrush(RGB(255, 255, 255));
+
+
+    if (!RegisterClass(&wc3)) {
+        MessageBox(NULL, L"툴바 등록 실패", L"Error", MB_OK);
+        return;
+    }
+    WndFunc::toolWnd = CreateWindow(
+        L"Tool",
+        L"Tool1",
+        WS_CHILD | WS_VISIBLE,
+        left, top,
+        right,
+        bottom,
+        parent,
+        nullptr,
+        hInst,
+        reinterpret_cast<LPVOID>(this)  // this 포인터 전달
+    );
+    if (!WndFunc::toolWnd) {
+        DWORD error = GetLastError();
+        wchar_t buf[256];
+        wsprintf(buf, L"툴바 생성 실패: 오류 코드 %d", error);
+        MessageBox(NULL, buf, L"Error", MB_OK);
+        return;
+    }
+    ShowWindow(WndFunc::toolWnd, SW_SHOW);
 }
 
-void DrowWindow::colorPickerCreate(int colorNum)
+/// 캔버스 생성 메서드
+void DrowWindow::createWindowCV(int left, int top, int right, int bottom, HWND parent)
 {
-    //int x, y, width, hight;
-    switch(colorNum){
-    case 0:
+    WNDCLASS wc2 = {};
+    wc2.lpfnWndProc = WndProcCV;  // 네임바 메세지 처리하는 정적 메서드
+    wc2.lpszClassName = L"CustomNameWindowClass1";
+    wc2.hInstance = hInst;
+    wc2.hbrBackground = CreateSolidBrush(RGB(255, 255, 255));
+
+
+    if (!RegisterClass(&wc2)) {
+        MessageBox(NULL, L"cavas 등록 실패", L"Error", MB_OK);
+        return;
+    }
+    WndFunc::canvasWnd = CreateWindow(
+        L"CustomNameWindowClass1",
+        L"Name Window",
+        WS_CHILD | WS_VISIBLE,
+        left, top,
+        right,
+        bottom,
+        parent,
+        nullptr,
+        hInst,
+        reinterpret_cast<LPVOID>(this)  // this 포인터 전달
+    );
+    if (!WndFunc::canvasWnd) {
+        DWORD error = GetLastError();
+        wchar_t buf[256];
+        wsprintf(buf, L"네임 바 생성 실패: 오류 코드 %d", error);
+        MessageBox(NULL, buf, L"Error", MB_OK);
+        return;
+    }
+    ShowWindow(WndFunc::canvasWnd, SW_SHOW);
+}
+
+
+// 정적 윈도우 프로시저
+LRESULT CALLBACK DrowWindow::StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+    DrowWindow* pThis = nullptr;
+
+    if (message == WM_NCCREATE) {
+        CREATESTRUCT* pCreate = reinterpret_cast<CREATESTRUCT*>(lParam);
+        pThis = reinterpret_cast<DrowWindow*>(pCreate->lpCreateParams);
+        SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pThis));
+    }
+    else {
+        pThis = reinterpret_cast<DrowWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+    }
+    if (pThis) {
+        return pThis->handleMessage(hWnd, message, wParam, lParam); // 인스턴스의 가상 함수 호출
+    }
+    return DefWindowProc(hWnd, message, wParam, lParam);
+}
+
+// 가상 함수로 메시지 처리
+LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+    switch (message) 
+    {
+    case WM_CREATE:
+    {
+        /// 네임바 윈도우 생성
+        createWindowNB(0,0, WndFunc::wndSize.right, 57, hWnd);
+
+        /// 툴바 윈도우 생성
+        createWindowTB(-1, 57, WndFunc::wndSize.right, 51, hWnd);
+
+        /// 캔버스 윈도우 생성
+        createWindowCV((
+            WndFunc::wndSize.right - 1300)/2,
+            (WndFunc::wndSize.bottom - 600)/ 2,
+            1300,
+            700, hWnd);
         
         break;
-    case 1:
+    }
+    case WM_SIZE:
+    {
+        RECT sizerect = WndFunc::wndSize;
+        GetClientRect(WndFunc::nameWnd, &sizerect);
 
-        break;
-    case 2:
-
+        MoveWindow(WndFunc::nameWnd, 0, 0, sizerect.right, 57, true);
+        
+        InvalidateRect(WndFunc::drowWnd, NULL, TRUE);
+        UpdateWindow(hWnd);
         break;
     }
-    //DrowWindow::colWnd = CreateWindowEx(WS_EX_TOOLWINDOW, L"DrowWindow", L"DrowWindow", WS_POPUP | WS_VISIBLE | WS_CAPTION ,x,y,width,hight,dWnd,NULL,nullptr,NULL);
-}
+    case WM_PAINT:
+    {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
+        EndPaint(hWnd, &ps);
+        break;
+    }
 
-void DrowWindow::colorPickerDestroy()
-{
-    //DestroyWindow(colWnd);
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+    return 0;
 }

@@ -20,6 +20,12 @@
 #define IDC_MYICON				2
 
 ///사용자 정의 상수
+#define DROW_CLASS L"DrowWindowClass"
+#define DROW_NAME L"DrawWindow"
+
+#define NAME_CLASS L"NameBarClass"
+#define NAME_NAME L"NameBar"
+
 
 // 브러쉬 종류 버튼 
 #define BASIC 300
@@ -161,11 +167,20 @@
 #define IDI_THICK_ICON              560
 #define IDI_PENEFFECT_ICON           561
 #define IDI_COLOREFFECT_ICON        562
-#define IDI_SAVE_ICON               563
 #define IDI_ERASE_ICON              564
 #define IDI_STOP_ICON               565
 #define IDI_PLAY_ICON               566
 #define IDI_PAUSE_ICON              567
+#define IDI_FILE_ICON               568
+#define IDI_MENU_ICON               569
+#define IDI_CLOSE_MENU_ICON         570
+
+#define IDI_NEW_FILE_ICON           571
+#define IDI_SAVE_ICON               563
+#define IDI_LOAD_ICON               572
+#define IDI_FILEMANAGER_ICON        573
+#define IDI_CREDIT_ICON             574
+
 
 #endif
 // 다음은 새 개체에 사용할 기본값입니다.

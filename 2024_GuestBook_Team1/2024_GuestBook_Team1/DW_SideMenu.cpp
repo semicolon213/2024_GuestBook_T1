@@ -1,103 +1,71 @@
 #include "DW_SideMenu.h"
- 
 
-DW_SideMenu::DW_SideMenu(HINSTANCE hInstance)
-    : ChildWindow(RGB(243, 243, 243)), penMemory(new std::vector<PINFO>)
-{   
-    sInst = hInstance;
-    SideRT = { 0 };
-    sWnd = nullptr;
 
-    NewFile = nullptr;
-    SaveFile = nullptr;
-    LoadFile = nullptr;
-    FileManager = nullptr;
-    Credit = nullptr;
 
-   
+
+/// 네임 바 정적 메서드
+LRESULT CALLBACK DrowWindow::WndProcSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+
+    DrowWindow* pThis = nullptr;
+
+    if (message == WM_NCCREATE) {
+        CREATESTRUCT* pCreate = reinterpret_cast<CREATESTRUCT*>(lParam);
+        pThis = reinterpret_cast<DrowWindow*>(pCreate->lpCreateParams);
+        SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pThis));
+    }
+    else {
+        pThis = reinterpret_cast<DrowWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+    }
+
+    if (pThis) {
+        return pThis->handleMessageSB(hWnd, message, wParam, lParam); // 인스턴스의 가상 함수 호출
+    }
+    return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-void DW_SideMenu::CreatePop(HWND hParentWnd, int x, int y, int width, int height)
-{
-    ChildWindow::CreatePop(hParentWnd, L"DW_SideMenuClass", L"Side Child Window", x, y, width, height);
-    sWnd = cWnd;
+MakeButton sideNew(5, 5, 55, 55);
+MakeButton sideSave(5, 65, 55, 115);
+MakeButton sideLoad(5, 125, 55, 175);
+MakeButton sideFM(5, 185, 55, 235);
+MakeButton sideCredit(5, 245, 55, 295);
 
-    NewFile = CreateWindow(L"BUTTON", L"NewFile", WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, 
-        10, 20, 330, 80, sWnd, (HMENU)SD_NEWFILE_BT, sInst, nullptr);
-    SaveFile = CreateWindow(L"BUTTON", L"SaveFile", WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, 
-        10, 120, 330, 80, sWnd, (HMENU)SD_SAVEFILE_BT, sInst, nullptr);
-    LoadFile = CreateWindow(L"BUTTON", L"LoadFile", WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, 
-        10, 220, 330, 80, sWnd, (HMENU)SD_LOADFILE_BT, sInst, nullptr);
-    FileManager = CreateWindow(L"BUTTON", L"FileManager", WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, 
-        10, 320, 330, 80, sWnd, (HMENU)SD_FILEMANAGER_BT, sInst, nullptr);
-    Credit = CreateWindow(L"BUTTON", L"Credit", WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, 
-        10, 420, 330, 80, sWnd, (HMENU)SD_CREDIT_BT, sInst, nullptr);
-
-}
-
-PAINTSTRUCT s_ps = { 0 };
-HBRUSH SideBrush = nullptr;
-HPEN SidePen = nullptr;
-HDC sHdc = nullptr;
-
-LRESULT DW_SideMenu::HandleMessage(HWND tWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+/// 네임 바 메세지 처리 핸들 메서드
+LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message)
     {
-    case WM_COMMAND:
-        switch (wParam)
-        {
-        case SD_NEWFILE_BT:
-
-            break;
-
-        case SD_SAVEFILE_BT:
-            
-            
-            FileManager::fileManager.selectFileMode(SAVE, tWnd, penMemory);
-            break;
-
-        case SD_LOADFILE_BT:
-            FileManager::fileManager.selectFileMode(LOAD, tWnd, penMemory);
-            SendMessage(GetParent(tWnd), WM_COMMAND, TL_PLAY_BT, 0);   
-            break;
-
-        case SD_FILEMANAGER_BT:
-        
-            FileManager::fileManager.selectFileMode(SD_FILEMANAGER_BT, tWnd, penMemory);
-            break;
-
-        case SD_CREDIT_BT:
-
-            break;
-
-        default:
-            break;
-        }
+    case WM_CREATE:
+    {
+        //sideNew.setCoordinate(5, 5, 55, 55);
+        //sideSave.setCoordinate(5, 65, 55, 115);
+        //sideLoad.setCoordinate(5, 125, 55, 175);
         break;
-
-
-    case WM_SETFOCUS:
-       
-
+    }
+    case WM_LBUTTONDOWN:
+    {
+      
         break;
-
-    case WM_KILLFOCUS:
-
-        /// ShowWindow(sWnd, false);            /// 여기 바뀜
-        
-        break;
+    }
 
     case WM_PAINT:
-        SideRT = ChildWindow::GetRT();
-        sHdc = GetDC(tWnd);
-        sHdc = BeginPaint(tWnd, &s_ps);
-        SideBrush = (HBRUSH)SelectObject(sHdc, GetStockObject(NULL_BRUSH));
-        SidePen = (HPEN)SelectObject(sHdc, CreatePen(PS_SOLID, 1, RGB(234, 234, 234)));
-        Rectangle(sHdc, SideRT.left, SideRT.top, SideRT.right, SideRT.bottom);
-        EndPaint(tWnd, &s_ps);
-        
+    {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
+        sideNew.drawRectButton(hdc, IDI_NEW_FILE_ICON);
+        sideSave.drawRectButton(hdc, IDI_SAVE_ICON);
+        sideLoad.drawRectButton(hdc, IDI_LOAD_ICON);
+        sideFM.drawRectButton(hdc, IDI_FILEMANAGER_ICON);
+        sideCredit.drawRectButton(hdc, IDI_CREDIT_ICON);
+        EndPaint(hWnd, &ps);
+        break;
+    }
+
     default:
-        return ChildWindow::HandleMessage(tWnd, message, wParam, lParam);
+        return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
 }
+
+
+
+
+

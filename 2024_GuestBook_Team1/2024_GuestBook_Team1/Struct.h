@@ -7,17 +7,17 @@
 
 typedef struct pointInfo
 {
-	LPARAM lParam;		///좌표
-	int pWidth;			///굵기
-	COLORREF pColor;	///색
-	ULONGLONG pTime;	///그린 시간
-	UINT state;			///마우스 상태
-	int bShape;		///브러쉬 모양
+    LPARAM lParam;      ///좌표
+    int pWidth;         ///굵기
+    COLORREF pColor;   ///색
+    ULONGLONG pTime;   ///그린 시간
+    UINT state;         ///마우스 상태
+    int bShape;      ///브러쉬 모양
 
 }PINFO;
 
 
 typedef struct lineInfo
 {
-	std::vector<PINFO> pInfo;
+    std::vector<PINFO> pInfo;
 }LINFO;

@@ -1,71 +1,52 @@
-#ifndef DROWWINDOW_H
-#define DROWWINDOW_H
-#include "ChildWindow.h"
-#include "ConnExcel.h"
-#include "DW_ToolMenu.h"
-#include "DW_Canvas.h"
-#include "DW_NameBar.h"
-#include "DW_SideMenu.h"
-#include "DW_ColorBox.h"
+#pragma once
 
+#include <Windows.h>
+#include <memory>
 #include "Resource.h"
+#include "WndFunc.h"
 
-
-class DrowWindow : public ChildWindow
-{
+class DrowWindow {
 public:
-    DrowWindow(HINSTANCE bInstance);
-    void Create(HWND hParentWnd, int x, int y, int width, int height);
+    DrowWindow(int mode, HINSTANCE hInst);
 
-    bool toolCnt;
+    //void createWindow(int width, int height, HWND parent); // 창 생성 메서드
+    virtual LRESULT handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
+    static LRESULT CALLBACK StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
 
-    //static HWND colWnd;
+    void createWindowNB(int left, int top, int right, int bottom, HWND parent);
+    void createWindowTB(int left, int top, int right, int bottom, HWND parent);
+    void createWindowCV(int left, int top, int right, int bottom, HWND parent);
+    void createWindowSB(int left, int top, int right, int bottom, HWND parent);
 
-    void colorPickerCreate(int);
-    void colorPickerDestroy();
-
-protected:
-    LRESULT HandleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
-    HINSTANCE dInst;
-    HWND dWnd;
-    RECT drowRT;
-    POINT pt;
-
-    HDC pHdc = nullptr;
-    PAINTSTRUCT d_ps = { 0 };
-    HPEN partition = nullptr;
-    HPEN DrowPen = nullptr;
-    HBRUSH DrowBrush = nullptr;
-
-    unique_ptr<DW_NameBar> nameBar;
-    HWND nHWnd = nullptr;
-    RECT DNameRT = { 0 };
-
-    unique_ptr<DW_ToolMenu> toolMenu;
-    HWND tHWnd = nullptr;
-    RECT DToolRT = { 0 };
+    /// 네임바 정적 윈도우
+    static LRESULT CALLBACK WndProcNB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
+    /// 네임바 메세지 처리 메서드
+    virtual LRESULT handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
 
 
-    unique_ptr<DW_Canvas> canvas;
-    HWND cHWnd = nullptr;
-    RECT DCanvasRT = { 0 };
+    /// 네임바 정적 윈도우
+    static LRESULT CALLBACK WndProcTB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
+    /// 네임바 메세지 처리 메서드
+    virtual LRESULT handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
 
-    unique_ptr<DW_SideMenu> sideMenu;
-    HWND sHWnd = nullptr;
-    RECT DSideRT = { 0 };
 
-    unique_ptr<DW_ColorBox> colorbox;
-    HWND bHWnd = nullptr;
-    RECT DBoxRT = { 0 };
-    unique_ptr<ConnExcel> connExcel;
-
-    RECT desktopRT;      //사용자 화면 크기 받기용
-    RECT MainRT;         //메인 윈도우 크기 받기용
-
-    int getDWWidth();
-
-    WCHAR text[10000];
+    /// 캔버스 영역 정적 윈도우
+    static LRESULT CALLBACK WndProcCV(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
+    /// 캔버스 영역 처리 메서드
+    virtual LRESULT handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
     
-};
+    /// 사이드 메뉴 정적 윈도우
+    static LRESULT CALLBACK WndProcSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
+    /// 사이드 메뉴  처리 메서드
+    virtual LRESULT handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
 
-#endif
+private:
+    HWND hwnd;
+    HINSTANCE hInst;
+    WNDCLASS wc;
+    int mode;
+    RECT drowRT;
+    COLORREF bkColor;
+    std::unique_ptr<WndFunc> wndFunc;
+ 
+};
