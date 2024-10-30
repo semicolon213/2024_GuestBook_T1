@@ -9,14 +9,14 @@ DrowWindow::DrowWindow(int mode, HINSTANCE hInst)
 /// 네임바 생성 메서드
 void DrowWindow::createWindowNB(int left, int top, int right, int bottom, HWND parent)
 {
-    WNDCLASS wc2 = {};
-    wc2.lpfnWndProc = WndProcNB;  // 네임바 메세지 처리하는 정적 메서드
-    wc2.lpszClassName = L"CustomNameWindowClass";
-    wc2.hInstance = hInst;
-    wc2.hbrBackground = CreateSolidBrush(RGB(243, 243, 243));
+    WNDCLASS wc10 = {};
+    wc10.lpfnWndProc = WndProcNB;  // 네임바 메세지 처리하는 정적 메서드
+    wc10.lpszClassName = L"CustomNameWindowClass";
+    wc10.hInstance = hInst;
+    wc10.hbrBackground = CreateSolidBrush(RGB(243, 243, 243));
 
 
-    if (!RegisterClass(&wc2)) {
+    if (!RegisterClass(&wc10)) {
         MessageBox(NULL, L"네임 바 등록 실패", L"Error", MB_OK);
         return;
     }
@@ -114,6 +114,41 @@ void DrowWindow::createWindowCV(int left, int top, int right, int bottom, HWND p
     ShowWindow(WndFunc::canvasWnd, SW_SHOW);
 }
 
+/// 방문자 리스트 생성 메서드
+void DrowWindow::createWindowVL(int left, int top, int right, int bottom, HWND parent)
+{
+    WNDCLASS wc11 = {};
+    wc11.lpfnWndProc = WndProcVL;  // 네임바 메세지 처리하는 정적 메서드
+    wc11.lpszClassName = L"CustomNameWindowClass3";
+    wc11.hInstance = hInst;
+    wc11.hbrBackground = CreateSolidBrush(RGB(0, 255, 255));
+
+
+    if (!RegisterClass(&wc11)) {
+        MessageBox(NULL, L"방문자 리스트 등록 실패", L"Error", MB_OK);
+        return;
+    }
+    WndFunc::visitListWnd = CreateWindow(
+        L"CustomNameWindowClass3",
+        L"Name Window",
+        WS_CHILD | WS_VISIBLE,
+        left, top,
+        right,
+        bottom,
+        parent,
+        nullptr,
+        hInst,
+        reinterpret_cast<LPVOID>(this)  // this 포인터 전달
+    );
+    if (!WndFunc::visitListWnd) {
+        DWORD error = GetLastError();
+        wchar_t buf[256];
+        wsprintf(buf, L"방문자리스트 윈도우 생성 실패: 오류 코드 %d", error);
+        MessageBox(NULL, buf, L"Error", MB_OK);
+        return;
+    }
+    ShowWindow(WndFunc::visitListWnd, SW_SHOW);
+}
 
 // 정적 윈도우 프로시저
 LRESULT CALLBACK DrowWindow::StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -151,7 +186,9 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
             (WndFunc::wndSize.bottom - 600)/ 2,
             1300,
             700, hWnd);
-        
+    	/// 전광판 윈도우 생성
+        createWindowVL(0, WndFunc::wndSize.bottom - 30, WndFunc::wndSize.right, WndFunc::wndSize.bottom, hWnd);
+
         break;
     }
     case WM_SIZE:
@@ -169,6 +206,7 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
     {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
+
         EndPaint(hWnd, &ps);
         break;
     }
@@ -177,4 +215,9 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
+}
+
+int DrowWindow::getDWWidth()
+{
+    return WndFunc::wndSize.right - WndFunc::wndSize.left;
 }

@@ -2,6 +2,8 @@
 
 #include <Windows.h>
 #include <memory>
+
+#include "ConnExcel.h"
 #include "Resource.h"
 #include "WndFunc.h"
 
@@ -17,6 +19,7 @@ public:
     void createWindowTB(int left, int top, int right, int bottom, HWND parent);
     void createWindowCV(int left, int top, int right, int bottom, HWND parent);
     void createWindowSB(int left, int top, int right, int bottom, HWND parent);
+    void createWindowVL(int left, int top, int right, int bottom, HWND parent);
 
     /// 네임바 정적 윈도우
     static LRESULT CALLBACK WndProcNB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
@@ -40,13 +43,23 @@ public:
     /// 사이드 메뉴  처리 메서드
     virtual LRESULT handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
 
+    /// 전광판 윈도우 정적 윈도우
+    static LRESULT CALLBACK WndProcVL(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
+    /// 전광판 처리 메서드
+    virtual LRESULT handleMessageVL(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
+
 private:
     HWND hwnd;
     HINSTANCE hInst;
     WNDCLASS wc;
     int mode;
-    RECT drowRT;
     COLORREF bkColor;
     std::unique_ptr<WndFunc> wndFunc;
- 
+
+
+    int getDWWidth();
+
+    WCHAR text[10000];
+
+    RECT visitRect;
 };

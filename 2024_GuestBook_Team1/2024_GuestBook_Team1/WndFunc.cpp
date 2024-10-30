@@ -7,6 +7,7 @@ HWND WndFunc::toolWnd = nullptr;
 HWND WndFunc::canvasWnd = nullptr;
 HWND WndFunc::menuWnd = nullptr;
 HWND WndFunc::sideWnd = nullptr;
+HWND WndFunc::visitListWnd = nullptr;
 
 HINSTANCE WndFunc::hInst = nullptr;
 RECT WndFunc::wndSize = { 0, 0, 0, 0 };
