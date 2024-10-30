@@ -31,7 +31,17 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
         EndPaint(WndFunc::canvasWnd, &ps);
         break;
     }
+    case WM_LBUTTONDOWN:
+    {
+        
+        int x = LOWORD(lParam);
+        int y = HIWORD(lParam);
+        HDC hdc = GetDC(hWnd);
 
+
+        LineTo(hdc, x, y);
+        break;
+    }
 
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);

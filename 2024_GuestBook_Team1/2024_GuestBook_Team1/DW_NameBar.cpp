@@ -111,7 +111,7 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
             if (WndFunc::sideWnd == nullptr) {  // 사이드바가 없을 때만 생성
                
-                createWindowSB(WndFunc::wndSize.right - 60, 60, 60, 300, WndFunc::drowWnd);
+                createWindowSB(WndFunc::wndSize.right - 60, 110, 60, 300, WndFunc::drowWnd);
             }
             else {  // 이미 열려 있으면 창 삭제
                 DestroyWindow(WndFunc::sideWnd);
