@@ -12,6 +12,7 @@ public:
     static HWND canvasWnd;
     static HWND menuWnd;
     static HWND sideWnd;
+    static HWND visitListWnd;
 
     static HINSTANCE hInst;
 
