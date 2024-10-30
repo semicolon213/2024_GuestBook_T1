@@ -34,8 +34,6 @@ public:
     int getTextPosX();
     void setTextPosX(int);
 
-    void setVisitRect(int, int, int, int);
-
 
     static std::wstring list;
 
@@ -54,7 +52,5 @@ private:
 
 
     bool isListRunning = true;
-
-    RECT visitRect;
 
 };

@@ -39,6 +39,7 @@ void DrowWindow::createWindowNB(int left, int top, int right, int bottom, HWND p
         MessageBox(NULL, buf, L"Error", MB_OK);
         return;
     }
+
     ShowWindow(WndFunc::nameWnd, SW_SHOW);
 }
 
@@ -121,7 +122,7 @@ void DrowWindow::createWindowVL(int left, int top, int right, int bottom, HWND p
     wc11.lpfnWndProc = WndProcVL;  // 네임바 메세지 처리하는 정적 메서드
     wc11.lpszClassName = L"CustomNameWindowClass3";
     wc11.hInstance = hInst;
-    wc11.hbrBackground = CreateSolidBrush(RGB(0, 255, 255));
+    wc11.hbrBackground = CreateSolidBrush(RGB(249, 243, 240));
 
 
     if (!RegisterClass(&wc11)) {
@@ -147,6 +148,14 @@ void DrowWindow::createWindowVL(int left, int top, int right, int bottom, HWND p
         MessageBox(NULL, buf, L"Error", MB_OK);
         return;
     }
+    HFONT hFont = CreateFont(30, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+        DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+        CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY,
+        DEFAULT_PITCH | FF_SWISS, TEXT("나눔고딕"));
+
+    // STATIC 컨트롤에 폰트 설정
+    SendMessage(WndFunc::visitListWnd, WM_SETFONT, (WPARAM)hFont, TRUE);
+
     ShowWindow(WndFunc::visitListWnd, SW_SHOW);
 }
 
@@ -190,7 +199,7 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
             700, hWnd);
     	/// 전광판 윈도우 생성
         createWindowVL(0, WndFunc::wndSize.bottom - 30, WndFunc::wndSize.right, WndFunc::wndSize.bottom, hWnd);
-
+        
         break;
     }
     case WM_RBUTTONDOWN:
@@ -205,8 +214,6 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
             windowRect.right - windowRect.left,
             windowRect.bottom - windowRect.top);
 
-        MoveWindow(WndFunc::nameWnd, 0, 0, sizerect.right, 57, true);
-        
         InvalidateRect(WndFunc::drowWnd, NULL, TRUE);
         UpdateWindow(hWnd);
         break;
@@ -223,9 +230,4 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
-}
-
-int DrowWindow::getDWWidth()
-{
-    return WndFunc::wndSize.right - WndFunc::wndSize.left;
 }

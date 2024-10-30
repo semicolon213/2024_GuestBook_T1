@@ -1,5 +1,10 @@
 #include "ConnExcel.h"
 
+#include <sstream>
+#include <vector>
+
+std::unique_ptr<ConnExcel> connExcel = std::make_unique<ConnExcel>();
+
 /// 네임 바 정적 메서드
 LRESULT CALLBACK DrowWindow::WndProcVL(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     DrowWindow* pThis = nullptr;
@@ -19,35 +24,7 @@ LRESULT CALLBACK DrowWindow::WndProcVL(HWND hWnd, UINT message, WPARAM wParam, L
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-/// 네임 바 메세지 처리 핸들 메서드
-LRESULT DrowWindow::handleMessageVL(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-    switch (message)
-    {
-    case WM_PAINT:
-    {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(WndFunc::visitListWnd, &ps);
 
-        EndPaint(WndFunc::visitListWnd, &ps);
-        break;
-    }
-    case WM_LBUTTONDOWN:
-	    {
-        int x = LOWORD(lParam);
-        int y = HIWORD(lParam);
-        HDC hdc = GetDC(hWnd);
-        LineTo(hdc, x, y);
-
-        MessageBox(hWnd, L"VL", L"VL", MB_OK);
-        break;
-	    }
-
-
-    default:
-        return DefWindowProc(hWnd, message, wParam, lParam);
-    }
-    return 0;
-}
 
 
 
@@ -113,32 +90,45 @@ void ConnExcel::insertExcel(const wstring visitName)
 
 wstring ConnExcel::getVisitList()
 {
-    ofstream ofile(EXCEL, ios::app);
     ifstream ifile(EXCEL);
     bool hasHeader = false;
-
+    vector<string> visitors;
     string line;
     string visit = "방문해 주신 분들 :    ";
-    if (ifile.is_open())
-    {
-        if (getline(ifile, line))
-        {
-            /// 첫 번째 행이 헤더인 경우
+
+    if (ifile.is_open()) {
+        if (getline(ifile, line)) {
+            // 첫 번째 행이 헤더인 경우
             hasHeader = true;
         }
 
-        while (getline(ifile, line))
-        {
+        while (getline(ifile, line)) {
             replace(line.begin(), line.end(), ',', ' ');
-            visit = visit.append(line);
+
+            // 공백을 기준으로 이름 분리하여 벡터에 추가
+            istringstream ss(line);
+            string name;
+            while (ss >> name) {
+                visitors.push_back(name);
+
+                // 방문자 수가 10명을 초과하면 맨 앞의 이름을 삭제
+                if (visitors.size() > 10) {
+                    visitors.erase(visitors.begin());
+                }
+            }
         }
         ifile.close();
     }
-    else
-    {
+    else {
         cerr << "파일 열기 실패!" << endl;
     }
 
+    // 방문자 목록을 문자열로 변환
+    for (const string& visitor : visitors) {
+        visit += visitor + " ";
+    }
+
+    // string -> wstring 변환하여 반환
     return charToWchar(visit);
 }
 
@@ -161,7 +151,7 @@ void ConnExcel::listScroll(HWND hWnd, int clientWidth, RECT mainRT)
             textPosX = clientWidth;
         }
 
-        InvalidateRect(hWnd, &visitRect, FALSE);
+        InvalidateRect(hWnd, NULL, FALSE);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
@@ -246,10 +236,51 @@ void ConnExcel::setTextPosX(int textPosX)
     this->textPosX = textPosX;
 }
 
-void ConnExcel::setVisitRect(int left, int top, int right, int bottom)
-{
-    this->visitRect.left = left;
-    this->visitRect.top = top;
-    this->visitRect.right = right;
-    this->visitRect.bottom = bottom;
+
+/// 네임 바 메세지 처리 핸들 메서드
+LRESULT DrowWindow::handleMessageVL(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+    switch (message)
+    {
+    case WM_CREATE:
+    {
+
+        connExcel->listScrollThread(hWnd, WndFunc::wndSize.right, WndFunc::wndSize);
+
+        ConnExcel::list = connExcel->getVisitList().c_str();
+
+        connExcel->setTextPosX(WndFunc::wndSize.right);
+
+    	break;
+    }
+    case WM_PAINT:
+    {
+
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(WndFunc::visitListWnd, &ps);
+
+        SIZE textSize;
+        wsprintf(text, ConnExcel::list.c_str());
+        SetBkColor(hdc, RGB(249, 243, 240));
+
+        HFONT hFont = CreateFont(24, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+            DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+            CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY,
+            DEFAULT_PITCH | FF_SWISS, TEXT("나눔고딕"));
+        HFONT holdFont = (HFONT)SelectObject(hdc, hFont);
+        TextOut(hdc, connExcel->getTextPosX(), 0, text, lstrlen(text));
+        SelectObject(hdc, holdFont);
+        DeleteObject(hFont);
+        
+
+        EndPaint(hWnd, &ps);
+
+        EndPaint(WndFunc::visitListWnd, &ps);
+        break;
+    }
+
+
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+    return 0;
 }

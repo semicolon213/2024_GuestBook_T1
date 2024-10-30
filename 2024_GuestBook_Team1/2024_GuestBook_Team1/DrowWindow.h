@@ -58,9 +58,6 @@ private:
     std::unique_ptr<WndFunc> wndFunc;
 
 
-    int getDWWidth();
-
     WCHAR text[10000];
 
-    RECT visitRect;
 };
