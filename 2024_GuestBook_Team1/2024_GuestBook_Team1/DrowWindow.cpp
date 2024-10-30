@@ -114,9 +114,9 @@ void DrowWindow::createWindowCV(int left, int top, int right, int bottom, HWND p
     ShowWindow(WndFunc::canvasWnd, SW_SHOW);
 }
 
-
-// 정적 윈도우 프로시저
-LRESULT CALLBACK DrowWindow::StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+/// DrowWindow의 정적 윈도우 프로시저
+LRESULT CALLBACK DrowWindow::StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
+{
     DrowWindow* pThis = nullptr;
 
     if (message == WM_NCCREATE) {
@@ -133,8 +133,9 @@ LRESULT CALLBACK DrowWindow::StaticWndProc(HWND hWnd, UINT message, WPARAM wPara
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-// 가상 함수로 메시지 처리
-LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+/// 가상 함수로 메시지 처리
+LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
+{
     switch (message) 
     {
     case WM_CREATE:
@@ -146,33 +147,27 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
         createWindowTB(-1, 57, WndFunc::wndSize.right, 51, hWnd);
 
         /// 캔버스 윈도우 생성
-        createWindowCV((
-            WndFunc::wndSize.right - 1300)/2,
-            (WndFunc::wndSize.bottom - 600)/ 2,
-            1300,
-            700, hWnd);
+        createWindowCV((WndFunc::wndSize.right - 1300) / 2, (WndFunc::wndSize.bottom - 600) / 2, 1300, 700, hWnd);
         
         break;
     }
-    case WM_SIZE:
+    case WM_RBUTTONDOWN:
     {
-        RECT sizerect = WndFunc::wndSize;
-        GetClientRect(WndFunc::nameWnd, &sizerect);
+        // 현재 윈도우의 크기를 얻기 위해 RECT 구조체 생성
+        RECT windowRect;
+        GetClientRect(hWnd, &windowRect);  // 클라이언트 영역의 크기 가져오기
 
-        MoveWindow(WndFunc::nameWnd, 0, 0, sizerect.right, 57, true);
-        
-        InvalidateRect(WndFunc::drowWnd, NULL, TRUE);
-        UpdateWindow(hWnd);
+        // 창 크기를 문자열로 변환하기 위한 버퍼 생성
+        wchar_t sizeInfo[256];
+        wsprintf(sizeInfo, L"Width: %d, Height: %d",
+            windowRect.right - windowRect.left,
+            windowRect.bottom - windowRect.top);
+
+        // 창 크기 정보를 포함한 메시지 박스 출력
+        MessageBox(hWnd, sizeInfo, L"Window Size", MB_OK);
+
         break;
     }
-    case WM_PAINT:
-    {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hWnd, &ps);
-        EndPaint(hWnd, &ps);
-        break;
-    }
-
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }

@@ -1,16 +1,18 @@
 #include "DW_NameBar.h"
 
+/// 사이드바 생성 메서드
 void DrowWindow::createWindowSB(int left, int top, int right, int bottom, HWND parent)
 {
-    static bool isClassRegistered = false;  // 클래스가 이미 등록되었는지 확인
+    /// 윈도우 등록은 한번만 해야하기 때문에 윈도우 등록 코드는 한번만 실행
+
+    static bool isClassRegistered = false;  /// 클래스가 이미 등록되었는지 확인
 
     if (!isClassRegistered) {
         WNDCLASS wc5 = {};
-        wc5.lpfnWndProc = WndProcSB;  // 네임바 메세지 처리하는 정적 메서드
+        wc5.lpfnWndProc = WndProcSB;  /// 네임바 메세지 처리하는 정적 메서드
         wc5.lpszClassName = L"CustomNameWindowClass2";
         wc5.hInstance = hInst;
         wc5.hbrBackground = CreateSolidBrush(RGB(230, 230, 230));
-
 
         if (!RegisterClass(&wc5)) {
             MessageBox(NULL, L"side 바 등록 실패", L"Error", MB_OK);
@@ -19,7 +21,6 @@ void DrowWindow::createWindowSB(int left, int top, int right, int bottom, HWND p
 
         isClassRegistered = true;  // 클래스가 등록됨을 표시
     }
-    
 
     WndFunc::sideWnd = CreateWindow(
         L"CustomNameWindowClass2",
@@ -42,7 +43,6 @@ void DrowWindow::createWindowSB(int left, int top, int right, int bottom, HWND p
     }
     ShowWindow(WndFunc::sideWnd, SW_SHOW);
 }
-
 
 /// 네임 바 정적 메서드
 LRESULT CALLBACK DrowWindow::WndProcNB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -73,7 +73,8 @@ RECT mousePoint;
 RECT a1;
 
 /// 네임 바 메세지 처리 핸들 메서드
-LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
+{
     switch (message) 
     {
     case WM_CREATE:
@@ -85,10 +86,7 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             50, 12, 300, 30, hWnd, (HMENU)NB_FILE_NAME, nullptr, NULL);
 
         sideMenu.setCoordinate(WndFunc::wndSize.right - 40, 10, WndFunc::wndSize.right - 10, 40);
-        /*
-        sideB = CreateWindow(L"BUTTON", L":", WS_CHILD | WS_VISIBLE,
-           WndFunc::wndSize.right - 40 , 12, 30, 30, hWnd, (HMENU)NB_SIDE_BT, nullptr, NULL);
-           */
+
         HFONT hFont = CreateFont(24, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
             DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
             CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY,
@@ -98,49 +96,51 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         SendMessage(fileNameW, WM_SETFONT, (WPARAM)hFont, TRUE);
         break;
     }
+    case WM_SIZE:
+    {
+        /// 창 크기 변화시 사이드 메뉴 버튼 이동
+        sideMenu.setCoordinate(WndFunc::wndSize.right - 40, 10, WndFunc::wndSize.right - 10, 40);
+        break;
+    }
     case WM_LBUTTONDOWN:
     {
+        /// 버튼 클릭 확인용 마우스 좌표 기준 RECT 생성
         mousePoint.left = LOWORD(lParam);
         mousePoint.top = HIWORD(lParam);
         mousePoint.right = mousePoint.left + 1;
         mousePoint.bottom = mousePoint.top + 1;
 
-        // 사이드 윈도우 존재 시 창 삭제
+        /// 사이드 윈도우 존재 시 창 삭제
         if (IntersectRect(&a1, &mousePoint, &sideMenu.rectButton)) {
-            sideMenu.toggleState = !sideMenu.toggleState;  // 토글 상태 반전
+            /// 토글 상태 반전(버튼 이미지 변경)
+            sideMenu.toggleState = !sideMenu.toggleState;  
 
-            if (WndFunc::sideWnd == nullptr) {  // 사이드바가 없을 때만 생성
-               
-                createWindowSB(WndFunc::wndSize.right - 60, 60, 60, 300, WndFunc::drowWnd);
+            /// 현재 사이드바가 열려있지 않을때 실행
+            if (WndFunc::sideWnd == nullptr) {  
+                createWindowSB(WndFunc::wndSize.right - 60, 110, 60, 300, WndFunc::drowWnd);
             }
-            else {  // 이미 열려 있으면 창 삭제
+            /// 사이드 윈도우가 이미 열려있으면 창 삭제
+            else { 
+                /// 사이드 윈도우 DestroyWindow
                 DestroyWindow(WndFunc::sideWnd);
+                /// 사이드 윈도우 핸들값 초기화
                 WndFunc::sideWnd = nullptr;
             }
         }
         InvalidateRect(hWnd, NULL, TRUE);
         break;
     }
-    case WM_COMMAND:
-    {
-        int wmId = LOWORD(wParam);
-        // 메뉴 선택을 구문 분석합니다:
-        switch (wmId)
-        {
-
-        }
-    }
     case WM_PAINT:
     {
         PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(WndFunc::nameWnd, &ps);
+        HDC hdc = BeginPaint(hWnd, &ps);
 
+        /// 사이드 버튼의 이미지 버튼 두개 
         sideMenu.doubleImgButton(hdc, IDI_CLOSE_MENU_ICON, IDI_MENU_ICON);
 
-        EndPaint(WndFunc::nameWnd, &ps);
+        EndPaint(hWnd, &ps);
         break;
     }
-        
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }

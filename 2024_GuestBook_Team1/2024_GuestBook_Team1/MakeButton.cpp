@@ -35,6 +35,7 @@ void MakeButton::drawRectButton(HDC tHdc, int icon)
 {
     this->icon = icon;
     
+    
     /// 사각형 그릴 때 외곽선 없게 처리 (NULL_BRUSH)
     HBRUSH hOldBrush = (HBRUSH)SelectObject(tHdc, GetStockObject(NULL_BRUSH));
     HPEN hOldPen = (HPEN)SelectObject(tHdc, GetStockObject(NULL_PEN));

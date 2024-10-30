@@ -3,7 +3,8 @@
 #include "DW_NameBar.h"
 
 /// 네임 바 정적 메서드
-LRESULT CALLBACK DrowWindow::WndProcTB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK DrowWindow::WndProcTB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
+{
     DrowWindow* pThis = nullptr;
 
     if (message == WM_NCCREATE) {
@@ -22,7 +23,7 @@ LRESULT CALLBACK DrowWindow::WndProcTB(HWND hWnd, UINT message, WPARAM wParam, L
 }
 
 
-/// 펜 종류 버튼 생성     (창 크기 변경이나 리플레이시에도 위치 변경 없어 생성자로 좌표 초기화)
+/// 펜 종류 버튼 생성 (창 크기 변경이나 리플레이시에도 위치 변경 없어 생성자로 좌표 초기화)
 MakeButton basicPenButton(10, 10, 40, 40);
 MakeButton pencilButton(50, 10, 80, 40);
 MakeButton brushButton(90, 10, 120, 40);
@@ -30,7 +31,7 @@ MakeButton sprayButton(130, 10, 160, 40);
 MakeButton rectpenButton(170, 10, 200, 40);
 MakeButton waterpenButton(210, 10, 240, 40);
 
-/// 색상 종류 버튼 생성   (WM_PAINT로 처리)
+/// 색상 종류 버튼 생성 (그리기는 WM_PAINT로 처리)
 MakeButton colorButton1;
 MakeButton colorButton2;
 MakeButton colorButton3;
@@ -38,7 +39,6 @@ MakeButton colorButton3;
 /// 아래 3개의 버튼은 리플레이시 or 창 크기 변경 시 위치 이동이 있어 
 /// DW_ToolMenu::Create에서 초기 좌표 생성
 /// DW_ToolMenu::HandleMessage의 WM_SIZE나 WM_LBUTTONDOWN의 정지, 리플레이 버튼시 좌표 이동
-
 
 MakeButton eraseButton;      /// 지우개 버튼 생성 
 MakeButton playButton;      /// 플레이 버튼 생성
@@ -67,7 +67,6 @@ MakeButton* selectedColorButton = nullptr;  // 현재 선택된 색상 버튼
 
 bool replayStay = false;   /// 리플레이 중지 시 화면 무효화 발생해도 현재 좌표 유지 위해 선언
 
-
 /// 네임 바 메세지 처리 핸들 메서드
 LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message)
@@ -79,7 +78,6 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
         int midPoint = WndFunc::wndSize.right / 2;
 
-
         /// 프로그램 실행 시 이펙트 적용할 아이콘 설정
         selectedBrushButton = &basicPenButton;   /// 기본 펜 버튼 설정
         selectedIcon = IDI_PEN_ICON;         /// 기본 펜 아이콘 설정
@@ -88,6 +86,7 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         eraseButton.setCoordinate(midPoint + 50, 10, midPoint + 80, 40);
         playButton.setCoordinate(midPoint + 115, 10, midPoint + 145, 40);
         stopButton.setCoordinate(midPoint + 160, 10, midPoint + 190, 40);
+
         break;
     }
     case WM_LBUTTONDOWN:
@@ -300,6 +299,10 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         HDC hdc = BeginPaint(hWnd, &ps);
         int midPoint = WndFunc::wndSize.right / 2;
 
+        eraseButton.setCoordinate(midPoint + 50, 10, midPoint + 80, 40);
+        playButton.setCoordinate(midPoint + 115, 10, midPoint + 145, 40);
+        stopButton.setCoordinate(midPoint + 160, 10, midPoint + 190, 40);
+
         /// 버튼과 이미지 그리기
         basicPenButton.drawRectButton(hdc, IDI_PEN_ICON);
         pencilButton.drawRectButton(hdc, IDI_PENCIL_ICON);
@@ -328,7 +331,7 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             selectedColorButton->clickEffectPen(IDI_COLOREFFECT_ICON, hdc);
         }
 
-        colorButton1.drawEllipseButton(hdc, RGB(0,0,0));   /// 색상 버튼 1 미리보기
+        colorButton1.drawEllipseButton(hdc, RGB(0, 0, 0));   /// 색상 버튼 1 미리보기
         colorButton2.drawEllipseButton(hdc, RGB(0, 0, 0));   /// 색상 버튼 2 미리보기
         colorButton3.drawEllipseButton(hdc, RGB(0, 0, 0));   /// 색상 버튼 3 미리보기
 

@@ -20,19 +20,18 @@ LRESULT CALLBACK DrowWindow::WndProcCV(HWND hWnd, UINT message, WPARAM wParam, L
 }
 
 /// 네임 바 메세지 처리 핸들 메서드
-LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
+{
     switch (message)
     {
     case WM_PAINT:
     {
         PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(WndFunc::canvasWnd, &ps);
+        HDC hdc = BeginPaint(hWnd, &ps);
 
-        EndPaint(WndFunc::canvasWnd, &ps);
+        EndPaint(hWnd, &ps);
         break;
     }
-
-
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }

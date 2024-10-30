@@ -1,8 +1,5 @@
 #include "DW_SideMenu.h"
 
-
-
-
 /// 네임 바 정적 메서드
 LRESULT CALLBACK DrowWindow::WndProcSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 
@@ -23,21 +20,22 @@ LRESULT CALLBACK DrowWindow::WndProcSB(HWND hWnd, UINT message, WPARAM wParam, L
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
+/// 사이드 메뉴 버튼 생성 및 초기 좌표 설정
 MakeButton sideNew(5, 5, 55, 55);
 MakeButton sideSave(5, 65, 55, 115);
 MakeButton sideLoad(5, 125, 55, 175);
 MakeButton sideFM(5, 185, 55, 235);
 MakeButton sideCredit(5, 245, 55, 295);
 
-/// 네임 바 메세지 처리 핸들 메서드
-LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+
+/// 사이드 바 메세지 처리 핸들 메서드
+LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
+{
     switch (message)
     {
     case WM_CREATE:
     {
-        //sideNew.setCoordinate(5, 5, 55, 55);
-        //sideSave.setCoordinate(5, 65, 55, 115);
-        //sideLoad.setCoordinate(5, 125, 55, 175);
+      
         break;
     }
     case WM_LBUTTONDOWN:
@@ -45,16 +43,17 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
       
         break;
     }
-
     case WM_PAINT:
     {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
+
         sideNew.drawRectButton(hdc, IDI_NEW_FILE_ICON);
         sideSave.drawRectButton(hdc, IDI_SAVE_ICON);
         sideLoad.drawRectButton(hdc, IDI_LOAD_ICON);
         sideFM.drawRectButton(hdc, IDI_FILEMANAGER_ICON);
         sideCredit.drawRectButton(hdc, IDI_CREDIT_ICON);
+
         EndPaint(hWnd, &ps);
         break;
     }

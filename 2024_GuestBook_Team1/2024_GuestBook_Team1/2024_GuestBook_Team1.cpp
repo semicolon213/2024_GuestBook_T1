@@ -149,12 +149,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_CREATE:
+        /// 최상위 윈도우 핸들 생성이 윈도우 사이즈 초기화
         GetClientRect(hWnd, &WndFunc::wndSize);
+
         drowWnd = std::make_unique<DrowWindow>(1, hInst);
+
         DrowBT = CreateWindowW(L"BUTTON", L"서명하기", WS_CHILD | WS_VISIBLE,
             (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 170, 240, 100, hWnd, (HMENU)DEF_DROW_BT, hInst, nullptr);
+
         LoadBT = CreateWindowW(L"BUTTON", L"불러오기", WS_CHILD | WS_VISIBLE,
             (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 50, 240, 100, hWnd, (HMENU)DEF_LOAD_BT, hInst, nullptr);
+
         CreditBT = CreateWindowW(L"BUTTON", L"CREDIT", WS_CHILD | WS_VISIBLE,
             (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) + 70, 240, 100, hWnd, (HMENU)DEF_CREDIT_BT, hInst, nullptr);
 
@@ -200,8 +205,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 MessageBox(NULL, L"창 생성 실패", L"에러", MB_OK);
             }
             
-           
-
             // 기존 버튼 숨김
             ShowWindow(DrowBT, SW_HIDE);
             ShowWindow(LoadBT, SW_HIDE);
@@ -246,22 +249,42 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
     }
+    case WM_SIZE:
+    {
+        /// 창 사이즈 조절시 현재 창 크기를 받아옴
+        GetClientRect(hWnd, &WndFunc::wndSize);
 
+        /// 하위 윈도우들 크기 및 위치 조정
+        MoveWindow(WndFunc::drowWnd, 0, 0, WndFunc::wndSize.right, WndFunc::wndSize.bottom, true);
+        MoveWindow(WndFunc::nameWnd, 0, 0, WndFunc::wndSize.right, 50, true);
+        MoveWindow(WndFunc::toolWnd, -1, 57, WndFunc::wndSize.right, 51, true);
+        MoveWindow(WndFunc::canvasWnd, (WndFunc::wndSize.right - 1300) / 2,(WndFunc::wndSize.bottom - 600) / 2, 1300, 700, true);
+
+        break;
+    }
+    case WM_GETMINMAXINFO:
+    {
+        /// 최소 창 크기 지정
+        MINMAXINFO* mmi = reinterpret_cast<MINMAXINFO*>(lParam);
+
+        mmi->ptMinTrackSize.x = 1350;  // 최소 너비 1350px
+        mmi->ptMinTrackSize.y = 900;  // 최소 높이 900px
+
+        break;
+    }
     case WM_PAINT:
     {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
-        HBRUSH hbr = (HBRUSH)SelectObject(hdc, CreateSolidBrush(RGB(249, 249, 249)));
         // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
-        GetClientRect(hWnd, &WndFunc::wndSize);
 
 
-        DeleteObject(hbr);
+
         EndPaint(hWnd, &ps);
+        break;
     }
-    break;
+    
     case WM_DESTROY:
-        
         PostQuitMessage(0);
         /// function->GDIPlusEnd();
         break;

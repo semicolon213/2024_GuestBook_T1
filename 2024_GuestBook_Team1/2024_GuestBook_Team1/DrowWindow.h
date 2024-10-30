@@ -35,6 +35,7 @@ public:
     /// 캔버스 영역 처리 메서드
     virtual LRESULT handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
     
+
     /// 사이드 메뉴 정적 윈도우
     static LRESULT CALLBACK WndProcSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
     /// 사이드 메뉴  처리 메서드
