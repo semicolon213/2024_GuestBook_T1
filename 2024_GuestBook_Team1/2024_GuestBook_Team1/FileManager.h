@@ -55,8 +55,7 @@ public:
     HWND hRightPanel;   /// 패널 핸들
     HINSTANCE hInst;    /// 인스턴스 핸들
 
-    void InitializePanels(HWND tWnd);  /// 패널과 UI 초기화
-    void ResizePanels(HWND tWnd, LPARAM lParam);  /// 윈도우 크기 조정 시 패널 크기 조정
+    void Panels(HWND tWnd);  /// 패널과 UI 초기화
 
     void SaveFileList(); ///파일리스트 저장
     void LoadFileList(); ///파일리스트 불러오기
