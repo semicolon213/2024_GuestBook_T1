@@ -211,6 +211,11 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
                     pCnt = false;
                     InvalidateRect(WndFunc::toolWnd, NULL, true);
                 }
+                else
+                {
+                    SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_PLAY_BT, 0);
+                    pCnt = false;
+                }
             }
             else {
                 SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_PLAY_BT, 1);
@@ -227,11 +232,11 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
             InvalidateRect(WndFunc::toolWnd, nullptr, true);
 
-            if (function->getIsReplay()) {
+            if (!function->getIsReplay()) {
                 SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_RESET_BT, 0);
             }
             else {
-                SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_RESET_BT, 1);
+                SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_RESET_BT, 0);
 
                 int midPoint = WndFunc::wndSize.right / 2;   /// 윈도우 중심 좌표 계산
 
@@ -246,7 +251,6 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             }
             replayStay = false;      /// 리플레이 상태 종료
             pCnt = true;
-            function->setIsReplay(false);
             InvalidateRect(WndFunc::toolWnd,NULL, true);
         }
         ///// 저장 버튼

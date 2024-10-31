@@ -63,7 +63,7 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		
 		if (wParam == TL_RESET_BT)
 		{
-			function->reDrawing(WndFunc::canvasWnd);
+			function->reDrawing(WndFunc::drowWnd);
 		}
 		break;
 	
@@ -101,7 +101,7 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 	{
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(WndFunc::canvasWnd, &ps);
-
+		function->paint(WndFunc::canvasWnd, WndFunc::wndSize);
 		EndPaint(WndFunc::canvasWnd, &ps);
 		break;
 	}

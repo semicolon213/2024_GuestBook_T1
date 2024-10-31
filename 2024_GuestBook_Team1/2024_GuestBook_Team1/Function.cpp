@@ -179,7 +179,7 @@ void Function::replay(HWND hWnd)
 
 			DeleteObject(nPen);
 		}
-		ReleaseDC(WndFunc::canvasWnd, hdc);
+		ReleaseDC(hWnd, hdc);
 		// 반복 간격 조절
 		Sleep(500);
 	}
@@ -197,10 +197,10 @@ void Function::reDrawing(HWND hWnd)
 		stopReplay(WndFunc::drowWnd);
 	}
 
-	InvalidateRect(WndFunc::drowWnd, NULL, TRUE);
-	UpdateWindow(WndFunc::drowWnd);
+	InvalidateRect(hWnd, NULL, TRUE);
+	UpdateWindow(hWnd);
 
-
+	//MessageBox(hWnd, L"reDrawing", L"dd", MB_OK);
 }
 
 void Function::clearDrawing(HWND hWnd)
@@ -439,6 +439,7 @@ void Function::suspendReplay()
 	SuspendThread(threadHandle);
 	px2 = px;
 	py2 = py;
+	//MessageBox(hWnd, L"suspend", L"dd", MB_OK);
 }
 
 void Function::resumeReplay()
@@ -449,6 +450,7 @@ void Function::resumeReplay()
 	isLeftClick = true;
 	x = px2;
 	y = py2;
+	//MessageBox(hWnd, L"resume", L"dd", MB_OK);
 }
 
 void Function::stopReplay(HWND hWnd)
@@ -460,6 +462,7 @@ void Function::stopReplay(HWND hWnd)
 	{
 		replayThreadHandle.join();
 	}
+	//MessageBox(hWnd, L"stop", L"dd", MB_OK);
 }
 
 void Function::setisLeftClick(bool click) {
