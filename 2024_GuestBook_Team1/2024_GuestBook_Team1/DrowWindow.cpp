@@ -114,6 +114,41 @@ void DrowWindow::createWindowCV(int left, int top, int right, int bottom, HWND p
     ShowWindow(WndFunc::canvasWnd, SW_SHOW);
 }
 
+/// 툴바 생성 메서드
+void DrowWindow::createWindowCP(int left, int top, int right, int bottom, HWND parent)
+{
+    WNDCLASS wc31 = {};
+    wc31.lpfnWndProc = WndProcCP;  // 네임바 메세지 처리하는 정적 메서드
+    wc31.lpszClassName = L"Tototo";
+    wc31.hInstance = hInst;
+    wc31.hbrBackground = CreateSolidBrush(RGB(0, 0, 0));
+
+
+    if (!RegisterClass(&wc31)) {
+        MessageBox(NULL, L"툴바 등록 실패", L"Error", MB_OK);
+        return;
+    }
+    WndFunc::colorWnd = CreateWindow(
+        L"Tototo",
+        L"Tototo",
+        WS_CHILD | WS_VISIBLE,
+        left, top,
+        right,
+        bottom,
+        parent,
+        nullptr,
+        hInst,
+        reinterpret_cast<LPVOID>(this)  // this 포인터 전달
+    );
+    if (!WndFunc::colorWnd) {
+        DWORD error = GetLastError();
+        wchar_t buf[256];
+        wsprintf(buf, L"툴바 생성 실패: 오류 코드 %d", error);
+        MessageBox(NULL, buf, L"Error", MB_OK);
+        return;
+    }
+    ShowWindow(WndFunc::colorWnd, SW_SHOW);
+}
 
 // 정적 윈도우 프로시저
 LRESULT CALLBACK DrowWindow::StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -154,6 +189,7 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
         
         break;
     }
+    
     case WM_SIZE:
     {
         RECT sizerect = WndFunc::wndSize;

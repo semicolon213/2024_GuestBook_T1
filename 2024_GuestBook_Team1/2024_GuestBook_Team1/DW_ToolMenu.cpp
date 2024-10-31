@@ -150,6 +150,7 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             if (Function::penNum == 0) { colorPalette->colorSelect(tWnd, 0); }
             else { Function::penNum = 0; }
             */
+            createWindowCP(0, 0,100, 100, WndFunc::canvasWnd);
             selectedColorButton = &colorButton1;   /// 선택한 컬러버튼의 객체 저장
         }
         /// 색상 버튼 2
@@ -158,6 +159,7 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             if (Function::penNum == 1) { colorPalette->colorSelect(tWnd, 1); }
             else { Function::penNum = 1; }
             */
+            ShowWindow(WndFunc::colorWnd, SW_HIDE);
             selectedColorButton = &colorButton2;
         }
         /// 색상 버튼 3
