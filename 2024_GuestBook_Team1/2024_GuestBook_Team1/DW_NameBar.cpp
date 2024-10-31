@@ -19,7 +19,7 @@ void DrowWindow::createWindowSB(int left, int top, int right, int bottom, HWND p
 
         isClassRegistered = true;  // 클래스가 등록됨을 표시
     }
-    
+
 
     WndFunc::sideWnd = CreateWindow(
         L"CustomNameWindowClass2",
@@ -46,7 +46,7 @@ void DrowWindow::createWindowSB(int left, int top, int right, int bottom, HWND p
 
 /// 네임 바 정적 메서드
 LRESULT CALLBACK DrowWindow::WndProcNB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-   
+
     DrowWindow* pThis = nullptr;
 
     if (message == WM_NCCREATE) {
@@ -74,8 +74,13 @@ RECT a1;
 
 /// 네임 바 메세지 처리 핸들 메서드
 LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-    switch (message) 
+    switch (message)
     {
+    case WM_SETTEXT:
+        /// WM_SETTEXT 메시지 처리
+        /// save나 로드시 namebar 텍스트 변경
+        SetWindowText(fileNameW, reinterpret_cast<LPCWSTR>(lParam));
+        break;
     case WM_CREATE:
     {
         backB = CreateWindow(L"BUTTON", L"<", WS_CHILD | WS_VISIBLE,
@@ -110,7 +115,7 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             sideMenu.toggleState = !sideMenu.toggleState;  // 토글 상태 반전
 
             if (WndFunc::sideWnd == nullptr) {  // 사이드바가 없을 때만 생성
-               
+
                 createWindowSB(WndFunc::wndSize.right - 60, 110, 60, 300, WndFunc::drowWnd);
             }
             else {  // 이미 열려 있으면 창 삭제
@@ -140,7 +145,7 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         EndPaint(WndFunc::nameWnd, &ps);
         break;
     }
-        
+
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }

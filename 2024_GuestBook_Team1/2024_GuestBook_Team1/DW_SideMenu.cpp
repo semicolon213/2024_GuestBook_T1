@@ -1,5 +1,4 @@
 #include "DW_SideMenu.h"
-#include "FileManager.h"
 
 /// 네임 바 정적 메서드
 LRESULT CALLBACK DrowWindow::WndProcSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -29,6 +28,8 @@ MakeButton sideLoad(5, 125, 55, 175);
 MakeButton sideFM(5, 185, 55, 235);
 MakeButton sideCredit(5, 245, 55, 295);
 
+std::vector<PINFO>* penMemory = new std::vector<PINFO>; /// 추가
+
 RECT mouseSide;     /// InterSect를 위한 마우스 좌표 받을 RECT
 RECT aSide;         /// InterSect로 반환되는 RECT
 
@@ -48,42 +49,31 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         mouseSide.right = mouseSide.left + 1;
         mouseSide.bottom = mouseSide.top + 1;
 
-        /// 파일 세이브
+        /// 파일 뉴파일
         if (IntersectRect(&aSide, &mouseSide, &sideNew.rectButton)) {
             /// 메세지 박스 없애고 if문(InTerSect)내부에 실행 코드 추가
             /// 메세지 박스는 이미지 버튼 활성화 여부 알아보기 위해 임시로 추가한 것
             MessageBox(hWnd, L"new file", L"new file", MB_OK);
         }
 
-        /// 파일 로드 
+        /// 파일 세이브
         else if (IntersectRect(&aSide, &mouseSide, &sideSave.rectButton)) {
             /// 메세지 박스 없애고 if문(InTerSect)내부에 실행 코드 추가
-            MessageBox(hWnd, L"file save", L"file save", MB_OK);
+            FileManager::fileManager.selectFileMode(SAVE, hWnd, penMemory); /// 추가
         }
 
         /// 파일 로드
         else if (IntersectRect(&aSide, &mouseSide, &sideLoad.rectButton)) {
             /// 메세지 박스 없애고 if문(InTerSect)내부에 실행 코드 추가
             MessageBox(hWnd, L"file load", L"file load", MB_OK);
+            FileManager::fileManager.selectFileMode(LOAD, hWnd, penMemory); /// 추가
+            SendMessage(WndFunc::toolWnd, WM_COMMAND, TL_PLAY_BT, 0); /// 추가
         }
 
         /// 파일 매니저
         else if (IntersectRect(&aSide, &mouseSide, &sideFM.rectButton)) {
-            bool isPanelOpen = false;
-            if (isPanelOpen) {
-               
-                //FileManager::fileManager.closePanel();
-                isPanelOpen = false;
-            }
-            else {
-       
-                FileManager::fileManager.selectFileMode(SD_FILEMANAGER_BT, WndFunc::drowWnd, NULL);
-                isPanelOpen = true;
-            }
-            
-            //MessageBox(hWnd, L"file Manager", L"file Manager", MB_OK);  
-            
-            InvalidateRect(WndFunc::canvasWnd, NULL, TRUE);
+            /// 메세지 박스 없애고 if문(InTerSect)내부에 실행 코드 추가
+            MessageBox(hWnd, L"file Manager", L"file Manager", MB_OK);
         }
 
         /// 크레딧

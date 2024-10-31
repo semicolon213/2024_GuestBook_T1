@@ -6,5 +6,18 @@
 
 class DW_ToolMenu
 {
+
+public:
+
+protected:
+
+    HINSTANCE tInst;
+    HWND tWnd;
+    RECT toolRT;
+
+    std::unique_ptr<Function> function;
+    //std::unique_ptr<ColorPalette> colorPalette;
+
+    HRGN roundRgn;
 };
 

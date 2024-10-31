@@ -1,19 +1,43 @@
+/**
+ * @file FileManager.cpp
+ * @brief 파일 매니저 관련 클래스 외부 정의 파일. 파일 저장, 불러오기, 리스트 관리 기능 제공.
+ * @author 김수길
+ * @date 2024.09.20
+ *
+ *
+ * @todo UI업데이트에 맞게 좌표 및 기능 재배치, 펜 메모리에 데이터가 들어가지 않는 오류 수정
+ *
+ */
 #include "FileManager.h"
 
 FileManager FileManager::fileManager;
 
-
+/**
+ * @fn FileManager::FileManager()
+ * @brief FileManager 기본 생성자.
+ */
 FileManager::FileManager() : hRightPanel(nullptr), hFileListBox(nullptr), hInst(nullptr), m_hWnd(nullptr), isPanelVisible(false)
-{}
+{
+    //LoadFileList();
+}
 
-
+/**
+ * @fn FileManager::FileManager(HWND hWnd)
+ * @brief HWND를 인자로 받는 생성자.
+ * @param hWnd 윈도우 핸들.
+ */
 FileManager::FileManager(HWND hWnd) : hRightPanel(nullptr), hFileListBox(nullptr), hInst(nullptr), m_hWnd(hWnd) {}
 
-std::wstring FileManager::baseName = L""; 
+std::wstring FileManager::baseName = L""; /// 초기화
 
-void FileManager::InitializePanels(HWND hWnd)
+/**
+ * @fn FileManager::InitializePanels(HWND hWnd)
+ * @brief 패널 초기화. 오른쪽 패널과 파일 리스트 박스를 생성.
+ * @param hWnd 윈도우 핸들.
+ */
+void FileManager::InitializePanels(HWND tWnd)
 {
-    hInst = (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE);
+    hInst = (HINSTANCE)GetWindowLongPtr(tWnd, GWLP_HINSTANCE);
 
     static const int fixedWidth = 300; /// 패널의 고정된 너비
     static const int fixedHeight = 600; /// 패널 높이
@@ -21,9 +45,9 @@ void FileManager::InitializePanels(HWND hWnd)
 
     /// 오른쪽 패널 좌표 (500, 50)
     hRightPanel = CreateWindowW(
-        L"STATIC", nullptr, WS_CHILD | WS_VISIBLE | WS_BORDER,
-        500, 50, 300, 600,
-        hWnd, nullptr, hInst, nullptr);
+        L"STATIC", nullptr, WS_CHILD | WS_VISIBLE | WS_BORDER | CS_DBLCLKS,
+        500, 50, fixedWidth, fixedHeight,
+        tWnd, (HMENU)ID_FILE_LIST, hInst, nullptr);
 
 
     /// 파일 매니저 글씨 라벨 
@@ -39,12 +63,12 @@ void FileManager::InitializePanels(HWND hWnd)
     int listBoxHeight = fixedHeight - listBoxY - 10;  /// 아래쪽 여백
 
     hFileListBox = CreateWindowW(
-        L"LISTBOX", nullptr, WS_CHILD | WS_VSCROLL | LBS_NOTIFY,
+        L"LISTBOX", nullptr, WS_CHILD | WS_VISIBLE | WS_VSCROLL | LBS_NOTIFY | CS_DBLCLKS,
         listBoxX, listBoxY, listBoxWidth, listBoxHeight,
-        hRightPanel, nullptr, hInst, nullptr);
+        hRightPanel, (HMENU)ID_FILE_LIST, hInst, nullptr);
 
-   //SetWindowPos(hRightPanel, HWND_TOP, 0, 0, 0, 0,
-        //SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);///패널을 맨 앞으로 가져옴(임시 방편)
+    SetWindowPos(hRightPanel, HWND_TOP, 0, 0, 0, 0,
+        SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);///패널을 맨 앞으로 가져옴(임시 방편)
 
 }
 
@@ -58,10 +82,10 @@ void FileManager::ResizePanels(HWND hWnd, LPARAM lParam)
 {
     int width = LOWORD(lParam);
     int height = HIWORD(lParam);
-    static const int panelWidth = 300;
+    static const int fixedWidth = 300;
 
-    // 패널을 부모 창의 오른쪽에 배치하고, 높이를 부모 창의 높이에 맞추어 조정합니다.
-    //MoveWindow(hRightPanel, width - panelWidth, 0, panelWidth, height, TRUE);
+    /// 패널 크기 조정
+    //MoveWindow(hRightPanel, width - fixedWidth, 0, fixedWidth, height, TRUE);
 }
 
 /**
@@ -168,36 +192,33 @@ bool FileManager::save(const wchar_t* path, std::vector<PINFO>* penMemory, HWND 
     }
 
     /// FileNameW에 파일 이름 표시
-    SendMessage(GetParent(hWnd), WM_SETTEXT, 0, (LPARAM)baseName.c_str()); /// 2024_GuestBook_Team1로 메시지 전달
+    SendMessage(WndFunc::nameWnd, WM_SETTEXT, 0, (LPARAM)baseName.c_str()); /// 2024_GuestBook_Team1로 메시지 전달 /// 추가
 
     this->fs.close();
     AddFileToList(path);
 
-    InvalidateRect(hWnd, NULL, TRUE); /// 화면 갱신
-    UpdateWindow(hWnd); /// 화면 업데이트
-
     return true;
 }
 
-void FileManager::selectFileMode(int wmId, HWND s_hWnd, std::vector<PINFO>* penMemory)
+void FileManager::selectFileMode(int wmId, HWND cWnd, std::vector<PINFO>* penMemory)
 {
     switch (wmId) {
     case SAVE:
     {
-       // *penMemory = Function::drawLInfo.pInfo;
+        *penMemory = Function::drawLInfo.pInfo;
 
-        HandleFileOperation(s_hWnd, penMemory, true);
+        HandleFileOperation(cWnd, penMemory, true);
 
     }
     break;
     case LOAD:
     {
-        HandleFileOperation(s_hWnd, penMemory, false);
-       // Function::drawLInfo.pInfo = *penMemory;
+        HandleFileOperation(cWnd, penMemory, false);
+        Function::drawLInfo.pInfo = *penMemory;
 
 
-        InvalidateRect(s_hWnd, NULL, TRUE);  // 화면 갱신
-        UpdateWindow(s_hWnd);  // 화면 업데이트
+        InvalidateRect(cWnd, NULL, TRUE);  // 화면 갱신
+        UpdateWindow(cWnd);  // 화면 업데이트
     }
     break;
 
@@ -209,13 +230,13 @@ void FileManager::selectFileMode(int wmId, HWND s_hWnd, std::vector<PINFO>* penM
 
             if (hRightPanel == nullptr)
             {
-                InitializePanels(s_hWnd);
+                InitializePanels(cWnd);
                 LoadFileList();
             }
 
             /// 부모 윈도우의 크기 가져오기
             RECT rect;
-            GetClientRect(s_hWnd, &rect);
+            GetClientRect(cWnd, &rect);
 
             int windowWidth = rect.right;
             int windowHeight = rect.bottom;
@@ -240,8 +261,8 @@ void FileManager::selectFileMode(int wmId, HWND s_hWnd, std::vector<PINFO>* penM
         }
 
         /// 화면 갱신
-        InvalidateRect(s_hWnd, NULL, TRUE);
-        UpdateWindow(s_hWnd);
+        InvalidateRect(cWnd, NULL, TRUE);
+        UpdateWindow(cWnd);
     }
     break;
     }
@@ -275,7 +296,7 @@ bool FileManager::load(const wchar_t* path, std::vector<PINFO>* penMemory, HWND 
     AddFileToList(path);  /// 파일 리스트에 추가
     UpdateFileListUI();
 
-   // Function::drawLInfo.pInfo = *penMemory;
+    Function::drawLInfo.pInfo = *penMemory;
 
     /// 파일 이름만 추출
     baseName = path;
@@ -285,7 +306,7 @@ bool FileManager::load(const wchar_t* path, std::vector<PINFO>* penMemory, HWND 
     }
 
     /// FileNameW에 파일 이름 표시
-    SendMessage(GetParent(hWnd), WM_SETTEXT, 0, (LPARAM)baseName.c_str()); /// 2024_GuestBook_Team1로 메시지 전달
+    SendMessage(WndFunc::nameWnd, WM_SETTEXT, 0, (LPARAM)baseName.c_str()); /// 2024_GuestBook_Team1로 메시지 전달 /// 추가
 
     InvalidateRect(hWnd, NULL, TRUE); /// 화면 갱신
     UpdateWindow(hWnd); /// 화면 업데이트

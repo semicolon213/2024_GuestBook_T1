@@ -10,20 +10,21 @@
 #include <cmath> // sqrt(제곱 근) 사용을 위한 추가
 #include <chrono> // 붓 브러쉬 사용을 위한 시간 관련 라이브 러리
 
-using namespace std;
-
 class Function
 {
 
 private:
 
-	HDC hdc;
+	HDC hdc, memDC = NULL;
 	HPEN nPen, oPen;
 	HBRUSH hPen;
+	RECT clientRect;
+	HBITMAP hBitmap = NULL;
 
 	int px, py;
 	int px2, py2;
-	int x, y;
+	int x, y, x2, y2;
+	int px3, py3;
 
 	// 붓 브러쉬 변수 
 	std::chrono::steady_clock::time_point DrawTime; // 좌클릭 한 시간
@@ -51,9 +52,11 @@ private:
 	HPEN CanvasPen = nullptr;
 	PAINTSTRUCT cPS = { 0 };
 
-public:
-	thread replayThreadHandle;
+	std::thread replayThreadHandle;
 	HANDLE threadHandle;
+public:
+	void setisLeftClick(bool);
+	bool getisLeftClick();
 
 	void draw(HWND, PINFO, bool);		//뒤에 브러쉬 추가
 	void mouseUD(PINFO, bool);
@@ -82,7 +85,7 @@ public:
 
 	void paint(HWND, RECT);
 
-
+	void re_draw(HWND hWnd, PINFO dInfo, bool isRecord);
 
 	LINFO getDrawLInfo();
 
