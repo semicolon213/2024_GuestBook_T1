@@ -153,7 +153,7 @@ void ConnExcel::listScroll(HWND hWnd, int clientWidth, RECT mainRT)
 
         InvalidateRect(hWnd, NULL, FALSE);
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     }
 }
@@ -262,12 +262,12 @@ LRESULT DrowWindow::handleMessageVL(HWND hWnd, UINT message, WPARAM wParam, LPAR
         wsprintf(text, ConnExcel::list.c_str());
         SetBkColor(hdc, RGB(249, 243, 240));
 
-        HFONT hFont = CreateFont(24, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+        HFONT hFont = CreateFont(17, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
             DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
             CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY,
             DEFAULT_PITCH | FF_SWISS, TEXT("³ª´®°íµñ"));
         HFONT holdFont = (HFONT)SelectObject(hdc, hFont);
-        TextOut(hdc, connExcel->getTextPosX(), 0, text, lstrlen(text));
+        TextOut(hdc, connExcel->getTextPosX(), 5, text, lstrlen(text));
         SelectObject(hdc, holdFont);
         DeleteObject(hFont);
         
