@@ -2,9 +2,8 @@
 
 #include <thread>
 #include "Struct.h"
-
+#include "WndFunc.h"
 #include "Resource.h"
-
 #include <gdiplus.h> //gdi+ 기능을 사용하기 위한 헤더파일.
 #pragma comment (lib, "gdiplus.lib") // GDI+ 라이브러리 링크
 #include <cmath> // sqrt(제곱 근) 사용을 위한 추가

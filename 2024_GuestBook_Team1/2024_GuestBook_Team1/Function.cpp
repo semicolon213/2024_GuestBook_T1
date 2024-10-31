@@ -114,7 +114,7 @@ void Function::replayThread(HWND hWnd)
 	setIsReset(false);
 
 	// std::thread를 사용하여 스레드 시작
-	replayThreadHandle = std::thread(&Function::replay, this, hWnd);
+	replayThreadHandle = std::thread(&Function::replay, this, WndFunc::drowWnd);
 
 	threadHandle = replayThreadHandle.native_handle();
 }
@@ -159,8 +159,8 @@ void Function::replay(HWND hWnd)
 				break;
 
 			case WM_MOUSEMOVE:
-				draw(hWnd, replayInfo, false);
-				re_draw(hWnd, replayInfo, false);
+				draw(WndFunc::canvasWnd, replayInfo, false);
+				re_draw(WndFunc::canvasWnd, replayInfo, false);
 				break;
 
 			case WM_LBUTTONUP:
@@ -179,7 +179,7 @@ void Function::replay(HWND hWnd)
 
 			DeleteObject(nPen);
 		}
-		ReleaseDC(hWnd, hdc);
+		ReleaseDC(WndFunc::canvasWnd, hdc);
 		// 반복 간격 조절
 		Sleep(500);
 	}
@@ -194,11 +194,11 @@ void Function::reDrawing(HWND hWnd)
 	{
 		isReplay = false;
 		ResumeThread(threadHandle);
-		stopReplay(hWnd);
+		stopReplay(WndFunc::drowWnd);
 	}
 
-	InvalidateRect(hWnd, NULL, TRUE);
-	UpdateWindow(hWnd);
+	InvalidateRect(WndFunc::drowWnd, NULL, TRUE);
+	UpdateWindow(WndFunc::drowWnd);
 
 
 }
@@ -209,7 +209,7 @@ void Function::clearDrawing(HWND hWnd)
 	{
 		isReplay = false;
 		ResumeThread(threadHandle);
-		stopReplay(hWnd);
+		stopReplay(WndFunc::drowWnd);
 	}
 
 	// 기록 삭제

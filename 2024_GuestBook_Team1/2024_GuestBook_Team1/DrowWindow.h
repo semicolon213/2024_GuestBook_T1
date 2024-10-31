@@ -56,5 +56,7 @@ private:
     RECT drowRT;
     COLORREF bkColor;
     std::unique_ptr<WndFunc> wndFunc;
+    bool pCnt =true;
+    bool* tCnt;
  
 };

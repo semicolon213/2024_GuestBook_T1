@@ -14,8 +14,6 @@ protected:
     //std::unique_ptr<ColorPalette> colorPalette;
     std::unique_ptr<PenThickness> penThickness;
 
-    HINSTANCE cInst;
-    HWND canWnd;
     RECT canvasRT;
 
     HDC hdc;
