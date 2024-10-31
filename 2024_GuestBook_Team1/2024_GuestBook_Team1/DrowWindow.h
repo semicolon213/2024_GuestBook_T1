@@ -4,6 +4,8 @@
 #include <memory>
 #include "Resource.h"
 #include "WndFunc.h"
+#include "Function.h"
+#include "PenThickness.h"
 
 class DrowWindow {
 public:
@@ -39,6 +41,12 @@ public:
     static LRESULT CALLBACK WndProcSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
     /// 사이드 메뉴  처리 메서드
     virtual LRESULT handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
+    
+    PINFO drawPInfo;
+
+protected:
+    std::unique_ptr<Function>function;
+    std::unique_ptr<PenThickness> penThickness;
 
 private:
     HWND hwnd;

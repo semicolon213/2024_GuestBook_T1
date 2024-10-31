@@ -55,6 +55,8 @@ private:
 	std::thread replayThreadHandle;
 	HANDLE threadHandle;
 public:
+	void setisLeftClick(bool);
+	bool getisLeftClick();
 
 	void draw(HWND, PINFO, bool);		//뒤에 브러쉬 추가
 	void mouseUD(PINFO, bool);

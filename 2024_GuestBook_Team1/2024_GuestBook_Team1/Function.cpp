@@ -462,7 +462,13 @@ void Function::stopReplay(HWND hWnd)
 	}
 }
 
+void Function::setisLeftClick(bool click) {
+	this->isLeftClick = click;
+}
 
+bool Function::getisLeftClick() {
+	return isLeftClick;
+}
 
 // 벡터가 비어있는지 검사
 bool Function::getDrawLInfoEmpty()
