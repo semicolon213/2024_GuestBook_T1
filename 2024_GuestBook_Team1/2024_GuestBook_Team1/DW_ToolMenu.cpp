@@ -67,25 +67,23 @@ MakeButton* selectedColorButton = nullptr;  // 현재 선택된 색상 버튼
 
 bool replayStay = false;   /// 리플레이 중지 시 화면 무효화 발생해도 현재 좌표 유지 위해 선언
 
-bool pCnt = false;
-
 
 /// 네임 바 메세지 처리 핸들 메서드
 LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message)
     {
-    case WM_COMMAND:
+    case WM_COMMAND: {
     case TL_PLAY_BT:
         if (function->getDrawLInfoEmpty()) { break; }
 
         replayStay = true;   /// replay시 true로 설정하여 WM_SIZE 조절을 멈춘다
         playButton.toggleState = !playButton.toggleState;   /// 버튼 누를때마다 이미지 교체 위해 값 반점
 
-        if (replayStay)
+        if (pCnt)
         {
             if (!function->getIsReplay())
             {
-                int midPoint = WndFunc::wndSize.right / 2;
+                int midPoint = WndFunc::wndSize.right / 2; //중심 좌표 계산
 
                 SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_PLAY_BT, 0);
 
@@ -100,16 +98,24 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 playButton.setCoordinate(midPoint - 50, 10, midPoint - 20, 40);
                 stopButton.setCoordinate(midPoint + 20, 10, midPoint + 50, 40);
 
-                InvalidateRect(WndFunc::menuWnd, NULL, true);
+                function->setIsReplay(true);
+                pCnt = false;
+                InvalidateRect(WndFunc::toolWnd, NULL, true);
+            }
+            else
+            {
+                SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_PLAY_BT, 0);
+                pCnt = false;
             }
         }
         else {
             SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_PLAY_BT, 1);
+            pCnt = true;
         }
 
-        InvalidateRect(WndFunc::menuWnd, NULL, true);
-        UpdateWindow(WndFunc::menuWnd);
-
+        InvalidateRect(WndFunc::toolWnd, NULL, true);
+        UpdateWindow(WndFunc::toolWnd);
+    }
         break;
     case WM_CREATE:
     {
@@ -227,11 +233,11 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             replayStay = true;   /// replay시 true로 설정하여 WM_SIZE 조절을 멈춘다
             playButton.toggleState = !playButton.toggleState;   /// 버튼 누를때마다 이미지 교체 위해 값 반점
 
-            if (replayStay)
+            if (pCnt)
             {
                 if (!function->getIsReplay())
                 {
-                    int midPoint = WndFunc::wndSize.right / 2;
+                    int midPoint = WndFunc::wndSize.right / 2; //중심 좌표 계산
 
                     SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_PLAY_BT, 0);
 
@@ -246,28 +252,36 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
                     playButton.setCoordinate(midPoint - 50, 10, midPoint - 20, 40);
                     stopButton.setCoordinate(midPoint + 20, 10, midPoint + 50, 40);
 
-                    InvalidateRect(WndFunc::menuWnd, NULL, true);
+                    function->setIsReplay(true);
+                    pCnt = false;
+                    InvalidateRect(WndFunc::toolWnd, NULL, true);
+                }
+                else
+                {
+                    SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_PLAY_BT, 0);
+                    pCnt = false;
                 }
             }
             else {
                 SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_PLAY_BT, 1);
+                pCnt = true;
             }
 
-            InvalidateRect(WndFunc::menuWnd, NULL, true);
-            UpdateWindow(WndFunc::menuWnd);
+            InvalidateRect(WndFunc::toolWnd, NULL, true);
+            UpdateWindow(WndFunc::toolWnd);
 
         }
 
         /// 중지 버튼
         else if (IntersectRect(&a, &mouse, &stopButton.rectButton)) {
 
-            InvalidateRect(WndFunc::menuWnd, nullptr, true);
+            InvalidateRect(WndFunc::toolWnd, nullptr, true);
 
-            if (function->getIsReplay()) {
+            if (!function->getIsReplay()) {
                 SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_RESET_BT, 0);
             }
             else {
-                SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_RESET_BT, 1);
+                SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_RESET_BT, 0);
 
                 int midPoint = WndFunc::wndSize.right / 2;   /// 윈도우 중심 좌표 계산
 
@@ -276,18 +290,23 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 playButton.setCoordinate(midPoint + 115, 10, midPoint + 145, 40);
                 stopButton.setCoordinate(midPoint + 160, 10, midPoint + 190, 40);
 
-                //saveButton.setCoordinate(toolRT.right - 50, 10, toolRT.right - 20, 40);
+                //saveButton.setCoordinate((WndFunc::wndSize.right - 50, 10, toolRT.right - 20, 40);
                 playButton.toggleState = false;      /// 재생 중 정지해도 초기 아이콘으로 설정
 
             }
             replayStay = false;      /// 리플레이 상태 종료
-
-            InvalidateRect(WndFunc::menuWnd, NULL, true);
+            pCnt = true;
+            InvalidateRect(WndFunc::toolWnd, NULL, true);
         }
         ///// 저장 버튼
-        ReleaseDC(hWnd, hdc);
-        break;
 
+        InvalidateRect(WndFunc::toolWnd, NULL, true); //화면 갱신
+        ReleaseDC(hWnd, hdc);
+
+
+
+
+        break;
     }
 
     case WM_PAINT:
@@ -327,6 +346,7 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         colorButton1.drawEllipseButton(hdc, RGB(0, 0, 0));   /// 색상 버튼 1 미리보기
         colorButton2.drawEllipseButton(hdc, RGB(0, 0, 0));   /// 색상 버튼 2 미리보기
         colorButton3.drawEllipseButton(hdc, RGB(0, 0, 0));   /// 색상 버튼 3 미리보기
+
 
         EndPaint(hWnd, &ps);
         break;

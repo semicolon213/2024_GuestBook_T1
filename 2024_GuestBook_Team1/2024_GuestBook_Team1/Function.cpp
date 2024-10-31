@@ -114,7 +114,7 @@ void Function::replayThread(HWND hWnd)
 	setIsReset(false);
 
 	// std::thread를 사용하여 스레드 시작
-	replayThreadHandle = std::thread(&Function::replay, this, hWnd);
+	replayThreadHandle = std::thread(&Function::replay, this, WndFunc::drowWnd);
 
 	threadHandle = replayThreadHandle.native_handle();
 }
@@ -159,8 +159,8 @@ void Function::replay(HWND hWnd)
 				break;
 
 			case WM_MOUSEMOVE:
-				draw(hWnd, replayInfo, false);
-				re_draw(hWnd, replayInfo, false);
+				draw(WndFunc::canvasWnd, replayInfo, false);
+				re_draw(WndFunc::canvasWnd, replayInfo, false);
 				break;
 
 			case WM_LBUTTONUP:
@@ -194,13 +194,13 @@ void Function::reDrawing(HWND hWnd)
 	{
 		isReplay = false;
 		ResumeThread(threadHandle);
-		stopReplay(hWnd);
+		stopReplay(WndFunc::drowWnd);
 	}
 
 	InvalidateRect(hWnd, NULL, TRUE);
 	UpdateWindow(hWnd);
 
-
+	//MessageBox(hWnd, L"reDrawing", L"dd", MB_OK);
 }
 
 void Function::clearDrawing(HWND hWnd)
@@ -209,7 +209,7 @@ void Function::clearDrawing(HWND hWnd)
 	{
 		isReplay = false;
 		ResumeThread(threadHandle);
-		stopReplay(hWnd);
+		stopReplay(WndFunc::drowWnd);
 	}
 
 	// 기록 삭제
@@ -439,6 +439,7 @@ void Function::suspendReplay()
 	SuspendThread(threadHandle);
 	px2 = px;
 	py2 = py;
+	//MessageBox(hWnd, L"suspend", L"dd", MB_OK);
 }
 
 void Function::resumeReplay()
@@ -449,6 +450,7 @@ void Function::resumeReplay()
 	isLeftClick = true;
 	x = px2;
 	y = py2;
+	//MessageBox(hWnd, L"resume", L"dd", MB_OK);
 }
 
 void Function::stopReplay(HWND hWnd)
@@ -460,6 +462,7 @@ void Function::stopReplay(HWND hWnd)
 	{
 		replayThreadHandle.join();
 	}
+	//MessageBox(hWnd, L"stop", L"dd", MB_OK);
 }
 
 void Function::setisLeftClick(bool click) {

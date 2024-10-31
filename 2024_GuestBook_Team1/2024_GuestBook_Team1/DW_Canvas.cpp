@@ -33,12 +33,12 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 	}
 
 	case WM_COMMAND:
-	{
-		if (wParam == TL_CLEAR_BT && lParam == 0)
+
+		if (wParam == TL_CLEAR_BT)
 		{
 			if (function->getIsReset())
 			{
-				function->clearDrawing(hWnd);
+				function->clearDrawing(WndFunc::canvasWnd);
 			}
 
 		}
@@ -47,7 +47,7 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		{
 			if (!function->getIsReplay())
 			{
-				function->replayThread(hWnd);
+				function->replayThread(WndFunc::canvasWnd);
 			}
 			else
 			{
@@ -63,11 +63,10 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
 		if (wParam == TL_RESET_BT)
 		{
-			function->reDrawing(hWnd);
+			function->reDrawing(WndFunc::drowWnd);
 		}
+		break;
 
-	}
-	break;
 
 	case WM_MOUSEMOVE:
 	{
@@ -82,7 +81,7 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		drawPInfo.pTime = (DWORD)GetTickCount64();
 		drawPInfo.pWidth = penThickness->getPenWidth(); /// 펜 굵기 설정
 		drawPInfo.state = message;
-		function->draw(hWnd, drawPInfo, TRUE); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
+		function->draw(WndFunc::canvasWnd, drawPInfo, TRUE); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
 
 		break;
 	case WM_LBUTTONDOWN:
@@ -102,7 +101,7 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 	{
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(WndFunc::canvasWnd, &ps);
-
+		function->paint(WndFunc::canvasWnd, WndFunc::wndSize);
 		EndPaint(WndFunc::canvasWnd, &ps);
 		break;
 	}

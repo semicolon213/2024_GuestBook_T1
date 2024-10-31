@@ -53,7 +53,8 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         if (IntersectRect(&aSide, &mouseSide, &sideNew.rectButton)) {
             /// 메세지 박스 없애고 if문(InTerSect)내부에 실행 코드 추가
             /// 메세지 박스는 이미지 버튼 활성화 여부 알아보기 위해 임시로 추가한 것
-            MessageBox(hWnd, L"new file", L"new file", MB_OK);
+            InvalidateRect(WndFunc::canvasWnd, NULL, TRUE);
+            SendMessage(WndFunc::nameWnd, WM_SETTEXT, 0, (LPARAM)L"이름 없음"); /// 2024_GuestBook_Team1로 메시지 전달 /// 추가
         }
 
         /// 파일 세이브
@@ -65,7 +66,6 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         /// 파일 로드
         else if (IntersectRect(&aSide, &mouseSide, &sideLoad.rectButton)) {
             /// 메세지 박스 없애고 if문(InTerSect)내부에 실행 코드 추가
-            MessageBox(hWnd, L"file load", L"file load", MB_OK);
             FileManager::fileManager.selectFileMode(LOAD, hWnd, penMemory); /// 추가
             SendMessage(WndFunc::toolWnd, WM_COMMAND, TL_PLAY_BT, 0); /// 추가
         }

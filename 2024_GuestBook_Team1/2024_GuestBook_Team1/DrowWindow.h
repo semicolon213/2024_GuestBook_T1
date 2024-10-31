@@ -42,10 +42,12 @@ public:
     /// 사이드 메뉴  처리 메서드
     virtual LRESULT handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
 
-    PINFO drawPInfo; /// 여기에 값이 담김
+    PINFO drawPInfo;
+
 protected:
     std::unique_ptr<Function>function;
     std::unique_ptr<PenThickness> penThickness;
+
 private:
     HWND hwnd;
     HINSTANCE hInst;
@@ -54,5 +56,7 @@ private:
     RECT drowRT;
     COLORREF bkColor;
     std::unique_ptr<WndFunc> wndFunc;
+    bool pCnt = true;
+    bool* tCnt;
 
 };
