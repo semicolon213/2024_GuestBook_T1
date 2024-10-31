@@ -4,7 +4,6 @@
 #include "DrowWindow.h"
 #include "WndFunc.h"
 
-
 class DW_Canvas
 {
 protected:
@@ -19,6 +18,6 @@ protected:
     HDC hdc;
 
 public:
-     
+
 
 };

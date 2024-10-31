@@ -160,7 +160,7 @@ void DrowWindow::createWindowVL(int left, int top, int right, int bottom, HWND p
 }
 
 // 정적 윈도우 프로시저
-LRESULT CALLBACK DrowWindow::StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
+LRESULT CALLBACK DrowWindow::StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     DrowWindow* pThis = nullptr;
 
@@ -179,21 +179,21 @@ LRESULT CALLBACK DrowWindow::StaticWndProc(HWND hWnd, UINT message, WPARAM wPara
 }
 
 /// 가상 함수로 메시지 처리
-LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
+LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message) 
+    switch (message)
     {
     case WM_CREATE:
     {
         /// 네임바 윈도우 생성
-        createWindowNB(0,0, WndFunc::wndSize.right, 57, hWnd);
+        createWindowNB(0, 0, WndFunc::wndSize.right, 57, hWnd);
 
         /// 툴바 윈도우 생성
         createWindowTB(-1, 57, WndFunc::wndSize.right, 51, hWnd);
 
         /// 캔버스 윈도우 생성
-        createWindowCV(( WndFunc::wndSize.right - 1300)/2, (WndFunc::wndSize.bottom - 600)/ 2, 1300,700, hWnd);
-    	
+        createWindowCV((WndFunc::wndSize.right - 1300) / 2, (WndFunc::wndSize.bottom - 600) / 2, 1300, 700, hWnd);
+
         /// 전광판 윈도우 생성
         createWindowVL(0, WndFunc::wndSize.bottom - 30, WndFunc::wndSize.right, WndFunc::wndSize.bottom, hWnd);
         break;

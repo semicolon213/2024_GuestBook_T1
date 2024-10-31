@@ -3,7 +3,7 @@
 #include "PenThickness.h"
 
 /// 네임 바 정적 메서드
-LRESULT CALLBACK DrowWindow::WndProcTB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
+LRESULT CALLBACK DrowWindow::WndProcTB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     DrowWindow* pThis = nullptr;
 
@@ -72,8 +72,61 @@ bool replayStay = false;   /// 리플레이 중지 시 화면 무효화 발생해도 현재 좌표 �
 LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message)
     {
+    case WM_COMMAND:
+    {
+        switch (wParam)
+        {
+        case TL_PLAY_BT:
+            if (function->getDrawLInfoEmpty())
+            {
+                break;
+            }
+
+            replayStay = true;   /// replay시 true로 설정하여 WM_SIZE 조절을 멈춘다
+            playButton.toggleState = !playButton.toggleState;   /// 버튼 누를때마다 이미지 교체 위해 값 반점
+
+            if (pCnt)
+            {
+                if (!function->getIsReplay())
+                {
+                    int midPoint = WndFunc::wndSize.right / 2; //중심 좌표 계산
+
+                    SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_PLAY_BT, 0);
+
+                    /// 리플레이 시 브러시 버튼 제외한 다른 버튼들 안보이게 설정
+                    //saveButton.setCoordinate(-50, -50, -50, -50);
+                    eraseButton.setCoordinate(-50, -50, -50, -50);
+                    colorButton1.setCoordinate(-50, -50, -50, -50);
+                    colorButton2.setCoordinate(-50, -50, -50, -50);
+                    colorButton3.setCoordinate(-50, -50, -50, -50);
+
+                    /// 재생, 중지 버튼 위치 조정
+                    playButton.setCoordinate(midPoint - 50, 10, midPoint - 20, 40);
+                    stopButton.setCoordinate(midPoint + 20, 10, midPoint + 50, 40);
+
+                    function->setIsReplay(true);
+                    pCnt = false;
+                    InvalidateRect(WndFunc::toolWnd, NULL, true);
+                }
+                else
+                {
+                    SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_PLAY_BT, 0);
+                    pCnt = false;
+                }
+            }
+            else
+            {
+                SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_PLAY_BT, 1);
+                pCnt = true;
+            }
+
+            InvalidateRect(WndFunc::toolWnd, NULL, true);
+            UpdateWindow(WndFunc::toolWnd);
+        }
+        break;
+    }
     case WM_CREATE:
-    {   
+    {
         function = std::make_unique<Function>();
 
         //colorPalette = make_unique<ColorPalette>();
@@ -178,12 +231,12 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
         /// 지우개 버튼 
         else if (IntersectRect(&a, &mouse, &eraseButton.rectButton)) {
-            
+
             if (function->getDrawLInfoEmpty()) { break; }
             if (!function->getIsReplay()) {
                 SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_CLEAR_BT, 0);
             }
-            
+
         }
 
         /// 리플레이 버튼
@@ -197,8 +250,8 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             if (pCnt)
             {
                 if (!function->getIsReplay())
-                {   
-                    int midPoint =WndFunc::wndSize.right / 2; //중심 좌표 계산
+                {
+                    int midPoint = WndFunc::wndSize.right / 2; //중심 좌표 계산
 
                     SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_PLAY_BT, 0);
 
@@ -257,7 +310,7 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             }
             replayStay = false;      /// 리플레이 상태 종료
             pCnt = true;
-            InvalidateRect(WndFunc::toolWnd,NULL, true);
+            InvalidateRect(WndFunc::toolWnd, NULL, true);
         }
         ///// 저장 버튼
 
@@ -265,7 +318,7 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         ReleaseDC(hWnd, hdc);
 
 
-        
+
 
         break;
     }
@@ -294,7 +347,7 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             rectpenButton.drawRectButton(hdc, IDI_RECTPEN_ICON);
             waterpenButton.drawRectButton(hdc, IDI_WATERPEN_ICON);
             eraseButton.drawRectButton(hdc, IDI_ERASE_ICON);
-            
+
 
 
             visitListButton.drawRectButton(hdc, IDI_PEN_ICON);
@@ -327,4 +380,4 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
-    }
+}

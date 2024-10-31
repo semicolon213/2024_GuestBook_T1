@@ -2,7 +2,7 @@
 
 /// 네임 바 정적 메서드
 LRESULT CALLBACK DrowWindow::WndProcCV(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-	
+
 	DrowWindow* pThis = nullptr;
 
 	if (message == WM_NCCREATE) {
@@ -27,7 +27,7 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 	switch (message)
 	{
 	case WM_CREATE:
-	{	
+	{
 		function = std::make_unique<Function>();
 		function->GDIPlusStart(); // 붓 gdi 라이브러리 활성화
 		break;
@@ -61,22 +61,22 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		{
 			function->suspendReplay();
 		}
-		
+
 		if (wParam == TL_RESET_BT)
 		{
 			function->reDrawing(WndFunc::drowWnd);
 		}
 		break;
-	
+
 
 	case WM_MOUSEMOVE:
-	{	
+	{
 
 		if (!function->getIsReset()) break;
 		//hdc = GetDC(canWnd);
 
 		////////////////////////////////////////////////
-		
+
 		drawPInfo.lParam = lParam;
 		drawPInfo.pColor = RGB(0, 0, 0);//ColorPalette::colorArr[Function::penNum];
 		drawPInfo.pTime = (DWORD)GetTickCount64();
@@ -118,5 +118,3 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 	}
 	return 0;
 }
-
-

@@ -86,8 +86,8 @@ void Function::re_draw(HWND hWnd, PINFO dInfo, bool isRecord) // 뒤에 브러쉬 추�
 void Function::mouseUD(PINFO dInfo, bool isRecord)
 {
 	if (dInfo.state == WM_LBUTTONDOWN)
-	{	
-		
+	{
+
 		x = LOWORD(dInfo.lParam); //좌클릭 한 좌표
 		y = HIWORD(dInfo.lParam);
 
@@ -247,12 +247,12 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 
 			// 속도가 빠를 때 두께 줄이기
 			if (speed > Threshold_Speed) {
-				targetThickness = pwidth - (int)((speed - Threshold_Speed) / (Threshold_Speed / (pwidth - Min_Thickness +1)));
+				targetThickness = pwidth - (int)((speed - Threshold_Speed) / (Threshold_Speed / (pwidth - Min_Thickness + 1)));
 				targetThickness = max(targetThickness, Min_Thickness);
 			}
 			// 속도가 느릴 때 두께 늘리기
 			else {
-				targetThickness = Min_Thickness + (int)((Threshold_Speed - speed) / (Threshold_Speed / (pwidth - Min_Thickness +1)));
+				targetThickness = Min_Thickness + (int)((Threshold_Speed - speed) / (Threshold_Speed / (pwidth - Min_Thickness + 1)));
 				targetThickness = min(targetThickness, pwidth);
 			}
 
@@ -385,7 +385,7 @@ void Function::paint(HWND hWnd, RECT canvasRT)
 					mouseUD(record, FALSE);
 					bShape = BRUSH;
 				}
-				
+
 				break;
 
 			case WM_MOUSEMOVE:

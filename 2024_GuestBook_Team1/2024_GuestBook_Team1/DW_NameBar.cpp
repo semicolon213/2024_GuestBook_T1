@@ -46,7 +46,7 @@ void DrowWindow::createWindowSB(int left, int top, int right, int bottom, HWND p
 
 /// 네임 바 정적 메서드
 LRESULT CALLBACK DrowWindow::WndProcNB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-   
+
     DrowWindow* pThis = nullptr;
 
     if (message == WM_NCCREATE) {
@@ -74,10 +74,15 @@ RECT mousePoint;
 RECT a1;
 
 /// 네임 바 메세지 처리 핸들 메서드
-LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
+LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message) 
+    switch (message)
     {
+    case WM_SETTEXT:
+        /// WM_SETTEXT 메시지 처리
+        /// save나 로드시 namebar 텍스트 변경
+        SetWindowText(fileNameW, reinterpret_cast<LPCWSTR>(lParam));
+        break;
     case WM_CREATE:
     {
         /*
@@ -115,14 +120,14 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         /// 사이드 윈도우 존재 시 창 삭제
         if (IntersectRect(&a1, &mousePoint, &sideMenu.rectButton)) {
             /// 토글 상태 반전(버튼 이미지 변경)
-            sideMenu.toggleState = !sideMenu.toggleState;  
+            sideMenu.toggleState = !sideMenu.toggleState;
 
             /// 현재 사이드바가 열려있지 않을때 실행
-            if (WndFunc::sideWnd == nullptr) {  
+            if (WndFunc::sideWnd == nullptr) {
                 createWindowSB(WndFunc::wndSize.right - 60, 110, 60, 300, WndFunc::drowWnd);
             }
             /// 사이드 윈도우가 이미 열려있으면 창 삭제
-            else { 
+            else {
                 /// 사이드 윈도우 DestroyWindow
                 DestroyWindow(WndFunc::sideWnd);
                 /// 사이드 윈도우 핸들값 초기화
