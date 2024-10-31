@@ -30,6 +30,7 @@ MakeButton brushButton(90, 10, 120, 40);
 MakeButton sprayButton(130, 10, 160, 40);
 MakeButton rectpenButton(170, 10, 200, 40);
 MakeButton waterpenButton(210, 10, 240, 40);
+MakeButton visitListButton(1200, 10, 1230, 40);
 
 /// 색상 종류 버튼 생성 (그리기는 WM_PAINT로 처리)
 MakeButton colorButton1;
@@ -98,6 +99,12 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         mouse.top = HIWORD(lParam);
         mouse.right = mouse.left + 1;
         mouse.bottom = mouse.top + 1;
+
+        /// 기본 펜
+        if (IntersectRect(&a, &mouse, &visitListButton.rectButton)) {
+            MessageBox(hWnd, L"방문자 버튼", L"방문자 버튼", MB_OK);
+        }
+
 
         /// 기본 펜
         if (IntersectRect(&a, &mouse, &basicPenButton.rectButton)) {
@@ -313,6 +320,9 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         eraseButton.drawRectButton(hdc, IDI_ERASE_ICON);
         playButton.doubleImgButton(hdc, IDI_PAUSE_ICON, IDI_PLAY_ICON);
         stopButton.drawRectButton(hdc, IDI_STOP_ICON);
+
+
+        visitListButton.drawRectButton(hdc, IDI_PEN_ICON);
         //saveButton.drawRectButton(memDC, IDI_SAVE_ICON);
 
         /// 선택된 브러시 버튼에 이펙트 적용
