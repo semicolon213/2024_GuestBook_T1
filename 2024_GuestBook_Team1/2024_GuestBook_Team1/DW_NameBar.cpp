@@ -69,6 +69,7 @@ HWND fileNameW = nullptr;
 HWND sideB = nullptr;
 
 MakeButton sideMenu;
+MakeButton exitButton(10, 10, 40, 40);
 RECT mousePoint;
 RECT a1;
 
@@ -79,9 +80,10 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
     {
     case WM_CREATE:
     {
+        /*
         backB = CreateWindow(L"BUTTON", L"<", WS_CHILD | WS_VISIBLE,
             10, 12, 30, 30, hWnd, (HMENU)NB_BACK_BT, nullptr, NULL);
-
+*/
         fileNameW = CreateWindow(L"STATIC", L"이름 없음", WS_CHILD | WS_VISIBLE,
             50, 12, 300, 30, hWnd, (HMENU)NB_FILE_NAME, nullptr, NULL);
 
@@ -127,7 +129,32 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 WndFunc::sideWnd = nullptr;
             }
         }
+
+        if (IntersectRect(&a1, &mousePoint, &exitButton.rectButton)) {
+            WndFunc::buttonOn = true;
+
+            ShowWindow(WndFunc::drowWnd, SW_HIDE);
+            ShowWindow(WndFunc::nameWnd, SW_HIDE);
+            ShowWindow(WndFunc::toolWnd, SW_HIDE);
+            ShowWindow(WndFunc::canvasWnd, SW_HIDE);
+            ShowWindow(WndFunc::sideWnd, SW_HIDE);
+            ShowWindow(WndFunc::visitListWnd, SW_HIDE);
+
+            ShowWindow(WndFunc::DrowBT, SW_SHOW);
+            ShowWindow(WndFunc::LoadBT, SW_SHOW);
+            ShowWindow(WndFunc::CreditBT, SW_SHOW);
+        }
         InvalidateRect(hWnd, NULL, TRUE);
+        break;
+    }
+    case WM_COMMAND:
+    {
+        int wmId = wParam;
+
+        switch (wmId)
+        {
+
+        }
         break;
     }
     case WM_PAINT:
@@ -137,7 +164,7 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
         /// 사이드 버튼의 이미지 버튼 두개 
         sideMenu.doubleImgButton(hdc, IDI_CLOSE_MENU_ICON, IDI_MENU_ICON);
-
+        exitButton.drawRectButton(hdc, IDI_EXIT_ICON);
         EndPaint(hWnd, &ps);
         break;
     }

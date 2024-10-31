@@ -180,7 +180,7 @@
 #define IDI_LOAD_ICON               572
 #define IDI_FILEMANAGER_ICON        573
 #define IDI_CREDIT_ICON             574
-
+#define IDI_EXIT_ICON               575
 
 #endif
 // 다음은 새 개체에 사용할 기본값입니다.

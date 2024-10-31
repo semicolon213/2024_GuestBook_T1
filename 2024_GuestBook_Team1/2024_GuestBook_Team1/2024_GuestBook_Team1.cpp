@@ -12,9 +12,6 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름�
 
 std::unique_ptr<DrowWindow> drowWnd = nullptr;
 
-HWND DrowBT = nullptr;
-HWND LoadBT = nullptr;
-HWND CreditBT = nullptr;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -149,21 +146,62 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_CREATE:
+    {
         /// 최상위 윈도우 핸들 생성이 윈도우 사이즈 초기화
         GetClientRect(hWnd, &WndFunc::wndSize);
 
         drowWnd = std::make_unique<DrowWindow>(1, hInst);
 
-        DrowBT = CreateWindowW(L"BUTTON", L"서명하기", WS_CHILD | WS_VISIBLE,
+        WndFunc::DrowBT = CreateWindowW(L"BUTTON", L"서명하기", WS_CHILD | WS_VISIBLE,
             (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 170, 240, 100, hWnd, (HMENU)DEF_DROW_BT, hInst, nullptr);
 
-        LoadBT = CreateWindowW(L"BUTTON", L"불러오기", WS_CHILD | WS_VISIBLE,
+        WndFunc::LoadBT = CreateWindowW(L"BUTTON", L"불러오기", WS_CHILD | WS_VISIBLE,
             (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 50, 240, 100, hWnd, (HMENU)DEF_LOAD_BT, hInst, nullptr);
 
-        CreditBT = CreateWindowW(L"BUTTON", L"CREDIT", WS_CHILD | WS_VISIBLE,
+        WndFunc::CreditBT = CreateWindowW(L"BUTTON", L"CREDIT", WS_CHILD | WS_VISIBLE,
             (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) + 70, 240, 100, hWnd, (HMENU)DEF_CREDIT_BT, hInst, nullptr);
 
+        // DrowWindow 인스턴스 생성
+        drowWnd = std::make_unique<DrowWindow>(1, hInst);
+
+        // WNDCLASS 구조체 초기화
+        WNDCLASS wc1 = {};
+        wc1.lpfnWndProc = DrowWindow::StaticWndProc;  // 정적 함수로 설정
+        wc1.hInstance = hInst;
+        wc1.hbrBackground = CreateSolidBrush(RGB(249, 243, 240));  // 노란색 브러시 설정
+        wc1.lpszClassName = DROW_CLASS;
+
+        // 클래스 등록
+        if (!RegisterClass(&wc1)) {
+            MessageBox(NULL, L"윈도우 클래스 등록 실패", L"에러", MB_OK);
+            return 1;
+        }
+
+        // 자식 창 생성
+        WndFunc::drowWnd = CreateWindow(
+            DROW_CLASS,                     // 클래스 이름
+            DROW_NAME,                      // 창 제목
+            WS_CHILD | WS_VISIBLE,          // 자식 창 스타일
+            0, 0, WndFunc::wndSize.right, WndFunc::wndSize.bottom,  // 위치와 크기 (X, Y, Width, Height)
+            hWnd,                           // 부모 창 핸들
+            NULL,                           // 메뉴 없음
+            hInst,                          // 인스턴스 핸들
+            drowWnd.get()                   // DrowWindow 객체 전달
+        );
+
+        if (WndFunc::drowWnd == nullptr) {
+            MessageBox(NULL, L"창 생성 실패", L"에러", MB_OK);
+        }
+
+        ShowWindow(WndFunc::drowWnd, SW_HIDE);
+        ShowWindow(WndFunc::nameWnd, SW_HIDE);
+        ShowWindow(WndFunc::toolWnd, SW_HIDE);
+        ShowWindow(WndFunc::canvasWnd, SW_HIDE);
+        ShowWindow(WndFunc::sideWnd, SW_HIDE);
+        ShowWindow(WndFunc::visitListWnd, SW_HIDE);
         break;
+    }
+        
 
     case WM_COMMAND:
     {
@@ -173,75 +211,44 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
         case DEF_DROW_BT:   // 서명하기
         {
-            // DrowWindow 인스턴스 생성
-            drowWnd = std::make_unique<DrowWindow>(1, hInst);
-
-            // WNDCLASS 구조체 초기화
-            WNDCLASS wc1 = {};
-            wc1.lpfnWndProc = DrowWindow::StaticWndProc;  // 정적 함수로 설정
-            wc1.hInstance = hInst;
-            wc1.hbrBackground = CreateSolidBrush(RGB(243, 243, 240));  // 노란색 브러시 설정
-            wc1.lpszClassName = DROW_CLASS;
-
-            // 클래스 등록
-            if (!RegisterClass(&wc1)) {
-                MessageBox(NULL, L"윈도우 클래스 등록 실패", L"에러", MB_OK);
-                return 1;
-            }
-
-            // 자식 창 생성
-            WndFunc::drowWnd = CreateWindow(
-                DROW_CLASS,                     // 클래스 이름
-                DROW_NAME,                      // 창 제목
-                WS_CHILD | WS_VISIBLE ,          // 자식 창 스타일
-                0, 0, WndFunc::wndSize.right, WndFunc::wndSize.bottom,  // 위치와 크기 (X, Y, Width, Height)
-                hWnd,                           // 부모 창 핸들
-                NULL,                           // 메뉴 없음
-                hInst,                          // 인스턴스 핸들
-                drowWnd.get()                   // DrowWindow 객체 전달
-            );
-
-            if (WndFunc::drowWnd == nullptr) {
-                MessageBox(NULL, L"창 생성 실패", L"에러", MB_OK);
-            }
-            
-            // 기존 버튼 숨김
-            ShowWindow(DrowBT, SW_HIDE);
-            ShowWindow(LoadBT, SW_HIDE);
-            ShowWindow(CreditBT, SW_HIDE);
 
             // 새 창 표시
             ShowWindow(WndFunc::drowWnd, SW_SHOW);
+            ShowWindow(WndFunc::nameWnd, SW_SHOW);
+            ShowWindow(WndFunc::toolWnd, SW_SHOW);
+            ShowWindow(WndFunc::canvasWnd, SW_SHOW);
+            ShowWindow(WndFunc::sideWnd, SW_SHOW);
+            ShowWindow(WndFunc::visitListWnd, SW_SHOW);
 
+            // 기존 버튼 숨김
+            ShowWindow(WndFunc::DrowBT, SW_HIDE);
+            ShowWindow(WndFunc::LoadBT, SW_HIDE);
+            ShowWindow(WndFunc::CreditBT, SW_HIDE);
             break;
         }
 
         case DEF_LOAD_BT:   // 불러오기
         {
-            /*
-            WndFunc::drowWnd = CreateWindow(
-                DROW_CLASS,                     // 클래스 이름
-                DROW_NAME,                     // 창 제목
-                WS_OVERLAPPEDWINDOW,            // 자식 창 스타일
-                0, 0, 2000, 100,                 // 위치와 크기 (X, Y, Width, Height)
-                hWnd,                             // 부모 창 핸들
-                NULL,                             // 메뉴 없음
-                hInst,                            // 인스턴스 핸들
-                NULL                              // 추가 데이터 없음
-            );
-
-            drowWnd = std::make_unique<DrowWindow>(2,hInst);
-            */
-            ShowWindow(DrowBT, SW_HIDE);
-            ShowWindow(LoadBT, SW_HIDE);
-            ShowWindow(CreditBT, SW_HIDE);
+         
+            /// 현재 버튼을 숨김
+            WndFunc::buttonOn = false;
 
             ShowWindow(WndFunc::drowWnd, SW_SHOW);
+            ShowWindow(WndFunc::nameWnd, SW_SHOW);
+            ShowWindow(WndFunc::toolWnd, SW_SHOW);
+            ShowWindow(WndFunc::canvasWnd, SW_SHOW);
+            ShowWindow(WndFunc::sideWnd, SW_SHOW);
+            ShowWindow(WndFunc::visitListWnd, SW_SHOW);
+
+            ShowWindow(WndFunc::DrowBT, SW_HIDE);
+            ShowWindow(WndFunc::LoadBT, SW_HIDE);
+            ShowWindow(WndFunc::CreditBT, SW_HIDE);
             break;
         }
         case DEF_CREDIT_BT: // CREDIT
         {
 
+          
             break;
         }
         default:
@@ -256,7 +263,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         /// 하위 윈도우들 크기 및 위치 조정
         MoveWindow(WndFunc::drowWnd, 0, 0, WndFunc::wndSize.right, WndFunc::wndSize.bottom, true);
-        MoveWindow(WndFunc::nameWnd, 0, 0, WndFunc::wndSize.right, 50, true);
+        MoveWindow(WndFunc::nameWnd, 0, 0, WndFunc::wndSize.right, 57, true);
         MoveWindow(WndFunc::toolWnd, -1, 57, WndFunc::wndSize.right, 51, true);
         MoveWindow(WndFunc::canvasWnd, (WndFunc::wndSize.right - 1300) / 2,(WndFunc::wndSize.bottom - 600) / 2, 1300, 700, true);
 

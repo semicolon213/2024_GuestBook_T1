@@ -189,5 +189,8 @@
     <Image Include="..\ImgResource\Save_Icon.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="..\ImgResource\Exit_Icon.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>

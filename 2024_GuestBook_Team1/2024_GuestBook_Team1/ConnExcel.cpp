@@ -160,7 +160,7 @@ void ConnExcel::listScroll(HWND hWnd, int clientWidth, RECT mainRT)
 
 void ConnExcel::listScrollThread(HWND hWnd, int clientWidth, RECT mainRT)
 {
-    
+    /*
     if (listScrollThreadHandle.joinable())
         return;
 
@@ -170,7 +170,7 @@ void ConnExcel::listScrollThread(HWND hWnd, int clientWidth, RECT mainRT)
 
     //스레드가 종료될 때 자동으로 자원이 반환되도록 함
     listScrollThreadHandle.detach();
-    
+    */
 }
 
 int ConnExcel::getTextSize(HWND hWnd, wstring list)
@@ -243,7 +243,7 @@ LRESULT DrowWindow::handleMessageVL(HWND hWnd, UINT message, WPARAM wParam, LPAR
     {
     case WM_CREATE:
     {
-
+        
         connExcel->listScrollThread(hWnd, WndFunc::wndSize.right, WndFunc::wndSize);
 
         ConnExcel::list = connExcel->getVisitList().c_str();

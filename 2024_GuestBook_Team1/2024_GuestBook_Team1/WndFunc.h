@@ -14,6 +14,12 @@ public:
     static HWND sideWnd;
     static HWND visitListWnd;
 
+    static HWND DrowBT;
+    static HWND LoadBT;
+    static HWND CreditBT;
+
+    static bool buttonOn;
+
     static HINSTANCE hInst;
 
     static RECT wndSize;

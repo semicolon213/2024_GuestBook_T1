@@ -191,6 +191,7 @@
   <ItemGroup>
     <Image Include="..\ImgResource\CloseMenu_Icon.ico" />
     <Image Include="..\ImgResource\Credit_Icon.ico" />
+    <Image Include="..\ImgResource\Exit_Icon.ico" />
     <Image Include="..\ImgResource\FileManager_Icon.ico" />
     <Image Include="..\ImgResource\File_Icon.ico" />
     <Image Include="..\ImgResource\Load_Icon.ico" />

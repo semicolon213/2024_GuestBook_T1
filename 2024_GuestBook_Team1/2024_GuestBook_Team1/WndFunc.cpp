@@ -5,9 +5,15 @@ HWND WndFunc::drowWnd = nullptr;
 HWND WndFunc::nameWnd = nullptr;
 HWND WndFunc::toolWnd = nullptr;
 HWND WndFunc::canvasWnd = nullptr;
-HWND WndFunc::menuWnd = nullptr;
+//HWND WndFunc::menuWnd = nullptr;
 HWND WndFunc::sideWnd = nullptr;
 HWND WndFunc::visitListWnd = nullptr;
+
+HWND WndFunc::DrowBT = nullptr;
+HWND WndFunc::LoadBT = nullptr;
+HWND WndFunc::CreditBT = nullptr;
+
+bool WndFunc::buttonOn = true;
 
 HINSTANCE WndFunc::hInst = nullptr;
 RECT WndFunc::wndSize = { 0, 0, 0, 0 };
