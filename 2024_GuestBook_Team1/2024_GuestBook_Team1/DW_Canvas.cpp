@@ -20,15 +20,16 @@ LRESULT CALLBACK DrowWindow::WndProcCV(HWND hWnd, UINT message, WPARAM wParam, L
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
+
+
 /// 네임 바 메세지 처리 핸들 메서드
 LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message)
 	{
 	case WM_CREATE:
-	{
+	{	
 		function = std::make_unique<Function>();
 		function->GDIPlusStart(); // 붓 gdi 라이브러리 활성화
-		
 		break;
 	}
 
@@ -69,7 +70,7 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 	
 
 	case WM_MOUSEMOVE:
-	{
+	{	
 
 		if (!function->getIsReset()) break;
 		//hdc = GetDC(canWnd);
@@ -86,6 +87,9 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		break;
 	case WM_LBUTTONDOWN:
 	case WM_LBUTTONUP:
+		if (GetCapture() == NULL) {
+			function->setisLeftClick(false);
+		}
 		if (!function->getIsReset()) break;
 		drawPInfo.lParam = lParam;
 		drawPInfo.pColor = RGB(0, 0, 0);//ColorPalette::colorArr[Function::penNum];
@@ -106,6 +110,8 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		break;
 	}
 
+	case WM_DESTROY:
+		break;
 
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);

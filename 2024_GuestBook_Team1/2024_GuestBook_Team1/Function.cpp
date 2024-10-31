@@ -86,7 +86,8 @@ void Function::re_draw(HWND hWnd, PINFO dInfo, bool isRecord) // 뒤에 브러쉬 추�
 void Function::mouseUD(PINFO dInfo, bool isRecord)
 {
 	if (dInfo.state == WM_LBUTTONDOWN)
-	{
+	{	
+		
 		x = LOWORD(dInfo.lParam); //좌클릭 한 좌표
 		y = HIWORD(dInfo.lParam);
 
