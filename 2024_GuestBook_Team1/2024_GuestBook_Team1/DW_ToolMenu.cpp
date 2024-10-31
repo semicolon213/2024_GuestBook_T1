@@ -1,6 +1,6 @@
 #include "DW_ToolMenu.h"
-
 #include "DW_NameBar.h"
+#include "PenThickness.h"
 
 /// 네임 바 정적 메서드
 LRESULT CALLBACK DrowWindow::WndProcTB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
@@ -73,8 +73,9 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
     switch (message)
     {
     case WM_CREATE:
-    {
-        //function = make_unique<Function>();
+    {   
+        function = std::make_unique<Function>();
+
         //colorPalette = make_unique<ColorPalette>();
 
         int midPoint = WndFunc::wndSize.right / 2;
@@ -108,35 +109,35 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
         /// 기본 펜
         if (IntersectRect(&a, &mouse, &basicPenButton.rectButton)) {
-            //function->setBShape(BASIC);
+            function->setBShape(BASIC);
 
             selectedBrushButton = &basicPenButton;   /// 선택된 버튼 기록용 변수에 현재 객체 저장
             selectedIcon = IDI_PEN_ICON;         /// 선택된 아이콘 값 저장
         }
         /// 펜슬
         else if (IntersectRect(&a, &mouse, &pencilButton.rectButton)) {
-            //function->setBShape(PENCIL);
+            function->setBShape(PENCIL);
 
             selectedBrushButton = &pencilButton;
             selectedIcon = IDI_PENCIL_ICON;
         }
         /// 브러시
         else if (IntersectRect(&a, &mouse, &brushButton.rectButton)) {
-            //function->setBShape(BRUSH);
+            function->setBShape(BRUSH);
 
             selectedBrushButton = &brushButton;
             selectedIcon = IDI_BRUSH_ICON;
         }
         /// 스프레이
         else if (IntersectRect(&a, &mouse, &sprayButton.rectButton)) {
-            //function->setBShape(SPRAY);
+            function->setBShape(SPRAY);
 
             selectedBrushButton = &sprayButton;
             selectedIcon = IDI_SPRAY_ICON;
         }
         /// 네모펜
         else if (IntersectRect(&a, &mouse, &rectpenButton.rectButton)) {
-            //function->setBShape(MARKER);
+            function->setBShape(MARKER);
 
             selectedBrushButton = &rectpenButton;
             selectedIcon = IDI_RECTPEN_ICON;
@@ -144,7 +145,7 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         }
         /// 물펜
         else if (IntersectRect(&a, &mouse, &waterpenButton.rectButton)) {
-            //function->setBShape(WATERCOLOR);
+            function->setBShape(WATERCOLOR);
 
             selectedBrushButton = &waterpenButton;
             selectedIcon = IDI_WATERPEN_ICON;
@@ -177,29 +178,29 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
         /// 지우개 버튼 
         else if (IntersectRect(&a, &mouse, &eraseButton.rectButton)) {
-            /*
+            
             if (function->getDrawLInfoEmpty()) { break; }
             if (!function->getIsReplay()) {
-                SendMessage(Function::hWnd, WM_COMMAND, TL_CLEAR_BT, 0);
+                SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_CLEAR_BT, 0);
             }
-            */
+            
         }
 
         /// 리플레이 버튼
         else if (IntersectRect(&a, &mouse, &playButton.rectButton)) {
-            
-            //if (function->getDrawLInfoEmpty()) { break; }
+
+            if (function->getDrawLInfoEmpty()) { break; }
 
             replayStay = true;   /// replay시 true로 설정하여 WM_SIZE 조절을 멈춘다
             playButton.toggleState = !playButton.toggleState;   /// 버튼 누를때마다 이미지 교체 위해 값 반점
-            /*
+
             if (pCnt)
             {
                 if (!function->getIsReplay())
-                {
-                    int midPoint = toolRT.right / 2;   /// 중심 좌표 계산
+                {   
+                    int midPoint =WndFunc::wndSize.right / 2; //중심 좌표 계산
 
-                    SendMessage(Function::hWnd, WM_COMMAND, TL_PLAY_BT, 0);
+                    SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_PLAY_BT, 0);
 
                     /// 리플레이 시 브러시 버튼 제외한 다른 버튼들 안보이게 설정
                     //saveButton.setCoordinate(-50, -50, -50, -50);
@@ -212,91 +213,60 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
                     playButton.setCoordinate(midPoint - 50, 10, midPoint - 20, 40);
                     stopButton.setCoordinate(midPoint + 20, 10, midPoint + 50, 40);
 
+                    function->setIsReplay(true);
                     pCnt = false;
-                    *tCnt = false;
-
-                    InvalidateRect(tWnd, NULL, true);
+                    InvalidateRect(WndFunc::toolWnd, NULL, true);
+                }
+                else
+                {
+                    SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_PLAY_BT, 0);
+                    pCnt = false;
                 }
             }
             else {
-                SendMessage(Function::hWnd, WM_COMMAND, TL_PLAY_BT, 1);
+                SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_PLAY_BT, 1);
                 pCnt = true;
             }
 
-            InvalidateRect(tWnd, NULL, true);
-            UpdateWindow(tWnd);
+            InvalidateRect(WndFunc::toolWnd, NULL, true);
+            UpdateWindow(WndFunc::toolWnd);
 
         }
+
         /// 중지 버튼
         else if (IntersectRect(&a, &mouse, &stopButton.rectButton)) {
 
-            InvalidateRect(tWnd, nullptr, true);
+            InvalidateRect(WndFunc::toolWnd, nullptr, true);
 
-            if (function->getIsReplay()) {
-                SendMessage(Function::hWnd, WM_COMMAND, TL_RESET_BT, 0);
+            if (!function->getIsReplay()) {
+                SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_RESET_BT, 0);
             }
             else {
-                SendMessage(Function::hWnd, WM_COMMAND, TL_RESET_BT, 1);
+                SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_RESET_BT, 0);
 
-                toolRT = ChildWindow::GetRT();      /// 창의 새로운 크기 가져오기
-                int midPoint = toolRT.right / 2;   /// 윈도우 중심 좌표 계산
+                int midPoint = WndFunc::wndSize.right / 2;   /// 윈도우 중심 좌표 계산
 
                 /// 정지버튼 클릭 즉, 리플레이 중지시 지우개, 저장 버튼 원래 자리로 복귀
                 eraseButton.setCoordinate(midPoint + 50, 10, midPoint + 80, 40);
                 playButton.setCoordinate(midPoint + 115, 10, midPoint + 145, 40);
                 stopButton.setCoordinate(midPoint + 160, 10, midPoint + 190, 40);
 
-                //saveButton.setCoordinate(toolRT.right - 50, 10, toolRT.right - 20, 40);
+                //saveButton.setCoordinate((WndFunc::wndSize.right - 50, 10, toolRT.right - 20, 40);
                 playButton.toggleState = false;      /// 재생 중 정지해도 초기 아이콘으로 설정
+
             }
             replayStay = false;      /// 리플레이 상태 종료
             pCnt = true;
-            *tCnt = true;
-
-            InvalidateRect(tWnd, NULL, true);
-            */
+            InvalidateRect(WndFunc::toolWnd,NULL, true);
         }
-        /// 중지 버튼
-        else if (IntersectRect(&a, &mouse, &stopButton.rectButton)) {
-            playButton.toggleState = false;      /// 재생 중 정지해도 초기 아이콘으로 설
-            /*
-            InvalidateRect(tWnd, nullptr, true);
+        ///// 저장 버튼
 
-            if (function->getIsReplay()) {
-                SendMessage(Function::hWnd, WM_COMMAND, TL_RESET_BT, 0);
-            }
-            else {
-                SendMessage(Function::hWnd, WM_COMMAND, TL_RESET_BT, 1);
-
-                toolRT = ChildWindow::GetRT();      /// 창의 새로운 크기 가져오기
-                int midPoint = toolRT.right / 2;   /// 윈도우 중심 좌표 계산
-
-                /// 정지버튼 클릭 즉, 리플레이 중지시 지우개, 저장 버튼 원래 자리로 복귀
-                eraseButton.setCoordinate(midPoint + 50, 10, midPoint + 80, 40);
-                playButton.setCoordinate(midPoint + 115, 10, midPoint + 145, 40);
-                stopButton.setCoordinate(midPoint + 160, 10, midPoint + 190, 40);
-
-                //saveButton.setCoordinate(toolRT.right - 50, 10, toolRT.right - 20, 40);
-                정
-            }
-            replayStay = false;      /// 리플레이 상태 종료
-            pCnt = true;
-            *tCnt = true;
-
-            InvalidateRect(tWnd, NULL, true);
-            */
-            }
-
-        /// 저장 버튼
-
-        /*
-        else if (IntersectRect(&a, &mouse, &saveButton.rectButton)) {
-           MessageBox(tWnd, L"저장 구현중", L"SOS", MB_OK);
-        }
-        */
-        InvalidateRect(hWnd, NULL, true);  // 화면 갱신
+        InvalidateRect(WndFunc::toolWnd, NULL, true); //화면 갱신
         ReleaseDC(hWnd, hdc);
+
+
         
+
         break;
     }
 
@@ -357,8 +327,4 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
-}
-
-
-
-
+    }

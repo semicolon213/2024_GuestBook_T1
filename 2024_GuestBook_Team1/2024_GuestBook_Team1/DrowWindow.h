@@ -6,6 +6,8 @@
 #include "ConnExcel.h"
 #include "Resource.h"
 #include "WndFunc.h"
+#include "Function.h"
+#include "PenThickness.h"
 
 class DrowWindow {
 public:
@@ -43,6 +45,13 @@ public:
     static LRESULT CALLBACK WndProcSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
     /// 사이드 메뉴  처리 메서드
     virtual LRESULT handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
+    
+    PINFO drawPInfo;
+
+protected:
+    std::unique_ptr<Function>function;
+    std::unique_ptr<PenThickness> penThickness;
+
 
     /// 전광판 윈도우 정적 윈도우
     static LRESULT CALLBACK WndProcVL(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
@@ -56,6 +65,9 @@ private:
     int mode;
     COLORREF bkColor;
     std::unique_ptr<WndFunc> wndFunc;
+    bool pCnt =true;
+    bool* tCnt;
+ 
 
 
     WCHAR text[10000];
