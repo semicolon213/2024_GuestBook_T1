@@ -1,3 +1,18 @@
 ﻿#pragma once
 
-#include "resource.h"
+#ifndef WINDOW_H
+#define WINDOW_H
+
+#include <Windows.h>
+#include <mutex>
+#include <memory>
+#include <thread>
+
+#include "BlueWindow.h"
+#include "framework.h"
+#include "Resource.h"
+
+#include "WndFunc.h"
+
+#include "DrowWindow.h"
+#endif
