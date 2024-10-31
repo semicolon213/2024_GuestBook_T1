@@ -29,9 +29,9 @@ private:
 	std::chrono::steady_clock::time_point DrawTime; // 좌클릭 한 시간
 	std::chrono::steady_clock::time_point currentTime; // 그리기 시작한 시간
 	std::chrono::steady_clock::time_point lastThicknessChangeTime; // 두께 변하는 시간
-	const int Min_Thickness = 4;  // 최소 두께
-	const int Threshold_Speed = 100; // 속도 임계값 (값 낮을 수록 느리게 그려도 짦아짐)
-	const int Smoothing_Factor = 2; // 두께 전환 시 부드러움 정도 (값 클수록 확 줄어듬)
+	const int Min_Thickness = 2;  // 최소 두께
+	const int Threshold_Speed = 450; // 속도 임계값 (값 낮을 수록 느리게 그려도 짦아짐)
+	const int Smoothing_Factor = 1; // 두께 전환 시 부드러움 정도 (값 클수록 확 줄어듬)
 	const int Update_Interval = 30; // 두께 업데이트 간격 (밀리초) (값 클수록 크기 변하는 주기가 줄어듬)
 	int currentThickness = 0; // 붓 브러쉬 크기가 바뀌는 변수 (초기화 할려고 0 집어넣음)
 	//여기까지 브러쉬 변수 추가

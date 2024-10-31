@@ -234,23 +234,25 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 	{
 		if (!isReplay || isReset)
 		{
+			int pwidth = dinfo.pWidth;
+			if (dinfo.pWidth < 8) { pwidth = 7; }
 			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - DrawTime).count(); //눌렀을 떄 시간부터 그렸을 때 시간 그 사이의 시간(밀리초)
 			duration = max(duration, 1); // 최소 duration 값을 설정하여 0으로 나누는 문제 방지
 
 			double distance = sqrt(pow(px - x, 2) + pow(py - y, 2)); // 선 거리
 			double speed = (distance / duration) * 1000; // 속도 계산
 
-			int targetThickness = dinfo.pWidth; // 속도가 변경될 때 같이 변경 되는 두께 변수
+			int targetThickness = pwidth; // 속도가 변경될 때 같이 변경 되는 두께 변수
 
 			// 속도가 빠를 때 두께 줄이기
 			if (speed > Threshold_Speed) {
-				targetThickness = dinfo.pWidth - (int)((speed - Threshold_Speed) / (Threshold_Speed / (dinfo.pWidth - Min_Thickness)));
+				targetThickness = pwidth - (int)((speed - Threshold_Speed) / (Threshold_Speed / (pwidth - Min_Thickness +1)));
 				targetThickness = max(targetThickness, Min_Thickness);
 			}
 			// 속도가 느릴 때 두께 늘리기
 			else {
-				targetThickness = Min_Thickness + (int)((Threshold_Speed - speed) / (Threshold_Speed / (dinfo.pWidth - Min_Thickness)));
-				targetThickness = min(targetThickness, dinfo.pWidth);
+				targetThickness = Min_Thickness + (int)((Threshold_Speed - speed) / (Threshold_Speed / (pwidth - Min_Thickness +1)));
+				targetThickness = min(targetThickness, pwidth);
 			}
 
 			// 두께 변화 간격이 지났는지 확인		
@@ -279,25 +281,31 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 	case PENCIL:
 	{
 		Gdiplus::Graphics graphics(hdc);
-		int alpha = 15; // 기본 투명도 설정    		
-		Gdiplus::PointF points[80]; // 도형 꼭짓점 갯수
-		for (int i = 0; i < 80; ++i)
+		int alpha = 35; // 기본 투명도 설정    		
+		Gdiplus::PointF points[60]; // 도형 꼭짓점 갯수
+		for (int i = 0; i < 60; ++i)
 		{
 			INT angle = rand() % 6 * 3.14159f * i / 80; // 꼭짓점 좌표 
-			points[i] = Gdiplus::PointF(x + dinfo.pWidth * cos(angle) / 2, y + dinfo.pWidth * sin(angle) / 2); // 꼭짓점 설정
+			points[i] = Gdiplus::PointF(x + dinfo.pWidth * cos(angle) / 1.2, y + dinfo.pWidth * sin(angle) / 1.2); // 꼭짓점 설정
 		}
 		Gdiplus::SolidBrush brush(Gdiplus::Color(alpha, GetRValue(col), GetGValue(col), GetBValue(col)));	// 색상 설정
-		graphics.FillPolygon(&brush, points, 80); // 정형화 되지 않는 도형 그리기	
+		graphics.FillPolygon(&brush, points, 60); // 정형화 되지 않는 도형 그리기	
 		ReleaseDC(hWnd, hdc);
 		break;
 	}
 
 	case SPRAY: // 스프레이 (점을 흩뿌림)
-		for (int i = 0; i < 500; ++i)
+		int spray_pixel;
+		if (dinfo.pWidth <= 3) { spray_pixel = 70; } // 팬 굵기에 따른 점 뿌리는 밀도
+		else if (dinfo.pWidth >= 4 && dinfo.pWidth <= 6) { spray_pixel = 180; }
+		else if (dinfo.pWidth >= 7 && dinfo.pWidth <= 10) { spray_pixel = 290; }
+		else if (dinfo.pWidth >= 11 && dinfo.pWidth <= 14) { spray_pixel = 400; }
+		else if (dinfo.pWidth >= 15 && dinfo.pWidth <= 20) { spray_pixel = 510; }
+		for (int i = 0; i < spray_pixel; ++i)
 		{
 			int offsetX = (rand() % (dinfo.pWidth * 8)) - (dinfo.pWidth * 4);
 			int offsetY = (rand() % (dinfo.pWidth * 8)) - (dinfo.pWidth * 4);
-			if (sqrt(offsetX * offsetX + offsetY * offsetY) <= dinfo.pWidth * 2)
+			if (sqrt(offsetX * offsetX + offsetY * offsetY) <= dinfo.pWidth * 4)
 			{
 				SetPixel(hdc, x + offsetX, y + offsetY, col);
 			}
@@ -305,7 +313,7 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 		ReleaseDC(hWnd, hdc);
 		break;
 
-	case MARKER:
+	case MARKER: //삭제 
 	{
 		Gdiplus::Graphics graphics(hdc);
 		Gdiplus::SolidBrush marker(Gdiplus::Color(40, GetRValue(col), GetGValue(col), GetBValue(col)));
@@ -369,8 +377,14 @@ void Function::paint(HWND hWnd, RECT canvasRT)
 			switch (record.state)
 			{
 			case WM_LBUTTONDOWN:
-			case WM_LBUTTONUP:
 				mouseUD(record, FALSE);
+				break;
+			case WM_LBUTTONUP:
+				if (record.bShape == BRUSH) {
+					mouseUD(record, FALSE);
+					bShape = BRUSH;
+				}
+				
 				break;
 
 			case WM_MOUSEMOVE:
