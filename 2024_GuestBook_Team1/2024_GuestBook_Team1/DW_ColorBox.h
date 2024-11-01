@@ -4,6 +4,12 @@
 class DW_ColorBox
 {
 public:
+    static int colorSelect;
 
+    static COLORREF colorP[3];
+
+    static COLORREF getColorNum();
+
+    static void setColorNum(int num, COLORREF color);
 };
 

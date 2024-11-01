@@ -158,14 +158,15 @@ void DrowWindow::createWindowVL(int left, int top, int right, int bottom, HWND p
 
     ShowWindow(WndFunc::visitListWnd, SW_SHOW);
 }
-    /// 툴바 생성 메서드
+    
+/// 툴바 생성 메서드
 void DrowWindow::createWindowCP(int left, int top, int right, int bottom, HWND parent)
 {
     WNDCLASS wc31 = {};
     wc31.lpfnWndProc = WndProcCP;  // 네임바 메세지 처리하는 정적 메서드
     wc31.lpszClassName = L"Tototo";
     wc31.hInstance = hInst;
-    wc31.hbrBackground = CreateSolidBrush(RGB(0, 0, 0));
+    wc31.hbrBackground = CreateSolidBrush(RGB(224, 232, 234));
 
 
     if (!RegisterClass(&wc31)) {
@@ -191,7 +192,7 @@ void DrowWindow::createWindowCP(int left, int top, int right, int bottom, HWND p
         MessageBox(NULL, buf, L"Error", MB_OK);
         return;
     }
-    ShowWindow(WndFunc::colorWnd, SW_SHOW);
+    ShowWindow(WndFunc::colorWnd, SW_HIDE);
 }
 
 // 정적 윈도우 프로시저
@@ -232,6 +233,7 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
         /// 전광판 윈도우 생성
         createWindowVL(0, WndFunc::wndSize.bottom - 30, WndFunc::wndSize.right, WndFunc::wndSize.bottom, hWnd);
 
+        createWindowCP(500, 10, 100, 100, WndFunc::canvasWnd);
         break;
     }
     case WM_PAINT:

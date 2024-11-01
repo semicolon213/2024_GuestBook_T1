@@ -82,7 +82,7 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		////////////////////////////////////////////////
 
 		drawPInfo.lParam = lParam;
-		drawPInfo.pColor = RGB(0, 0, 0);//ColorPalette::colorArr[Function::penNum];
+		drawPInfo.pColor = DW_ColorBox::getColorNum();//ColorPalette::colorArr[Function::penNum];
 		drawPInfo.pTime = (DWORD)GetTickCount64();
 		drawPInfo.pWidth = penThickness->getPenWidth(); /// Ææ ±½±â ¼³Á¤
 		drawPInfo.state = message;
@@ -96,7 +96,7 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		}
 		if (!function->getIsReset()) break;
 		drawPInfo.lParam = lParam;
-		drawPInfo.pColor = RGB(0, 0, 0);//ColorPalette::colorArr[Function::penNum];
+		drawPInfo.pColor = DW_ColorBox::getColorNum();//ColorPalette::colorArr[Function::penNum];
 		drawPInfo.pTime = (DWORD)GetTickCount64();
 		drawPInfo.pWidth = penThickness->getPenWidth(); /// Ææ ±½±â ¼³Á¤
 		drawPInfo.state = message;

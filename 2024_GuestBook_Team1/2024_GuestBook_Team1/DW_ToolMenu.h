@@ -3,6 +3,7 @@
 #include "DrowWindow.h"
 #include "MakeButton.h" 
 #include "WndFunc.h"
+#include "DW_ColorBox.h"
 
 class DW_ToolMenu
 {

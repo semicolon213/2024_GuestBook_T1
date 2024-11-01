@@ -205,29 +205,42 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         }
 
         /// 색상 버튼 1
-        else if (IntersectRect(&a, &mouse, &colorButton1.rectButton)) {
-            /*
-            if (Function::penNum == 0) { colorPalette->colorSelect(tWnd, 0); }
-            else { Function::penNum = 0; }
-            */
-            createWindowCP(0, 0,100, 100, WndFunc::canvasWnd);
+        else if (IntersectRect(&a, &mouse, &colorButton1.rectButton)) 
+        {
+            if (DW_ColorBox::colorSelect == 0) 
+            { 
+                ShowWindow(WndFunc::colorWnd, SW_SHOW);
+            }
+            else { 
+                DW_ColorBox::colorSelect = 0; 
+            }
+           
+
             selectedColorButton = &colorButton1;   /// 선택한 컬러버튼의 객체 저장
         }
         /// 색상 버튼 2
-        else if (IntersectRect(&a, &mouse, &colorButton2.rectButton)) {
-            /*
-            if (Function::penNum == 1) { colorPalette->colorSelect(tWnd, 1); }
-            else { Function::penNum = 1; }
-            */
-            ShowWindow(WndFunc::colorWnd, SW_HIDE);
+        else if (IntersectRect(&a, &mouse, &colorButton2.rectButton)) 
+        {
+            if (DW_ColorBox::colorSelect == 1)
+            {
+                ShowWindow(WndFunc::colorWnd, SW_SHOW);
+            }
+            else {
+                DW_ColorBox::colorSelect = 1; 
+            }
+
             selectedColorButton = &colorButton2;
         }
         /// 색상 버튼 3
         else if (IntersectRect(&a, &mouse, &colorButton3.rectButton)) {
-            /*
-            if (Function::penNum == 2) { colorPalette->colorSelect(tWnd, 2); }
-            else { Function::penNum = 2; }
-            */
+            if (DW_ColorBox::colorSelect == 2) 
+            { 
+                ShowWindow(WndFunc::colorWnd, SW_SHOW); 
+            }
+            else {
+                DW_ColorBox::colorSelect = 2; 
+            }
+
             selectedColorButton = &colorButton3;
         }
 
