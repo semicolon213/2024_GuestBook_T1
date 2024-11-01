@@ -1,7 +1,7 @@
 #pragma once
 
+
 #include "framework.h"
-#include <vector>
 #include "Resource.h"
 
 class MakeButton
@@ -13,33 +13,71 @@ public:
     RECT rectButton;
     bool toggleState;   /// doubleImgButton 전환 멤버 변수
 
-    /// 기본 생성자
+    /**
+    * @brief MakeButton 클래스의 생성자 위치 좌표를 나중에 지정할 때 사용
+    */
     MakeButton();
 
-    /// 좌표 지정 생성자
+    /**
+    * @brief MakeButton 클래스의 생성자 위치 좌표 초기화
+    * @param int left RECT 자료형의 left
+    * @param int top RECT 자료형의 top
+    * @param int right RECT 자료형의 right
+    * @param int bottom RECT 자료형의 bottom
+    */
     MakeButton(int left, int top, int right, int bottom);
 
-    /// 사각형 버튼 그리기 (일반 버튼)
+    /**
+    * @brief 일반 이미지 버튼 그리기 WM_PAINT에서 사용
+    * @param HDC tHdc WM_PAINT의 hdc
+    * @param int icon 버튼에 삽입할 이미지 (.rc, Resource에 정의)
+    */
     void drawRectButton(HDC tHdc, int icon);
 
-    /// 원형 버튼 그리기 (컬러 버튼)
+    /**
+    * @brief 색상 버튼 그리기  WM_PAINT에서 사용
+    * @param HDC tHdc WM_PAINT의 hdc
+    * @param COLORREF test 삽입할 색상 ColorBox의 static 변수 인자로 사용
+    */
     void drawEllipseButton(HDC tHdc, COLORREF test);
 
-    /// 클릭시 이미지가 바뀌는 버튼
+    /**
+    * @brief 클릭시 이미지가 바뀌는 버튼 사용 후 버튼 판정 코드에 토글값 변경 필수
+    * @param int icon1 클릭 후 변경될 이미지
+    * @param int icon2 먼저 출력되는 이미지
+    */
     void doubleImgButton(HDC tHdc, int icon1, int icon2);
 
-    /// 버튼들 생성 후 좌표 설정 메서드
+    /**
+    * @brief RECT 자료형 버튼들의 좌표 지정 메서드
+    * @param int left RECT 자료형의 left
+    * @param int top RECT 자료형의 top
+    * @param int right RECT 자료형의 right
+    * @param int bottom RECT 자료형의 bottom
+    */
     void setCoordinate(int left, int top, int right, int bottom);
 
-    /// 클릭시 일반 버튼에 이펙트 설정 메서드
+    /**
+    * @brief 클릭시 일반 RECT 버튼에 이펙트 적용하는 메서드
+    * @param int icon 이펙트 이미지
+    * @param int clickIcon 클릭하는 버튼의 아이콘 이미지 
+    * @param HDC tHdc 
+    */
     void clickEffectPen(int icon, int clickIcon, HDC tHdc);
 
-    /// 클릭시 컬러 버튼에 이펙트 설정 메서드
+    /**
+    * @brief 클릭시 컬러 버튼에 이펙트 적용하는 메서드
+    * @param int icon 이펙트 이미지
+    * @param HDC tHdc 
+    */
     void clickEffectPen(int icon, HDC tHdc);
 
-
 protected:
-    /// 버튼에 이미지 로드 메서드 
+    /**
+    * @brief 이미지를 로드하는 메서드
+    * @param int icon 아이콘 이미지
+    * @param HDC tHdc
+    */
     void buttonLoadImage(int icon, HDC tHdc);
 };
 

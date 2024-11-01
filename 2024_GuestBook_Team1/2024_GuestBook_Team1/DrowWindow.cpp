@@ -9,6 +9,7 @@ DrowWindow::DrowWindow(int mode, HINSTANCE hInst)
 /// 네임바 생성 메서드
 void DrowWindow::createWindowNB(int left, int top, int right, int bottom, HWND parent)
 {
+    /// 윈도우 등록
     WNDCLASS wc10 = {};
     wc10.lpfnWndProc = WndProcNB;  // 네임바 메세지 처리하는 정적 메서드
     wc10.lpszClassName = L"CustomNameWindowClass";
@@ -20,6 +21,8 @@ void DrowWindow::createWindowNB(int left, int top, int right, int bottom, HWND p
         MessageBox(NULL, L"네임 바 등록 실패", L"Error", MB_OK);
         return;
     }
+
+    /// 생성되는 해당 윈도우 핸들값 저장
     WndFunc::nameWnd = CreateWindow(
         L"CustomNameWindowClass",
         L"Name Window",
@@ -32,6 +35,7 @@ void DrowWindow::createWindowNB(int left, int top, int right, int bottom, HWND p
         hInst,
         reinterpret_cast<LPVOID>(this)  // this 포인터 전달
     );
+
     if (!WndFunc::nameWnd) {
         DWORD error = GetLastError();
         wchar_t buf[256];
@@ -57,6 +61,7 @@ void DrowWindow::createWindowTB(int left, int top, int right, int bottom, HWND p
         MessageBox(NULL, L"툴바 등록 실패", L"Error", MB_OK);
         return;
     }
+    /// 생성되는 해당 윈도우 핸들값 저장
     WndFunc::toolWnd = CreateWindow(
         L"Tool",
         L"Tool1",
@@ -93,6 +98,7 @@ void DrowWindow::createWindowCV(int left, int top, int right, int bottom, HWND p
         MessageBox(NULL, L"cavas 등록 실패", L"Error", MB_OK);
         return;
     }
+    /// 생성되는 해당 윈도우 핸들값 저장
     WndFunc::canvasWnd = CreateWindow(
         L"CustomNameWindowClass1",
         L"Name Window",
@@ -129,6 +135,7 @@ void DrowWindow::createWindowVL(int left, int top, int right, int bottom, HWND p
         MessageBox(NULL, L"방문자 리스트 등록 실패", L"Error", MB_OK);
         return;
     }
+    /// 생성되는 해당 윈도우 핸들값 저장
     WndFunc::visitListWnd = CreateWindow(
         L"CustomNameWindowClass3",
         L"Name Window",
@@ -158,7 +165,8 @@ void DrowWindow::createWindowVL(int left, int top, int right, int bottom, HWND p
 
     ShowWindow(WndFunc::visitListWnd, SW_SHOW);
 }
-    /// 툴바 생성 메서드
+
+/// 툴바 생성 메서드
 void DrowWindow::createWindowCP(int left, int top, int right, int bottom, HWND parent)
 {
     WNDCLASS wc31 = {};
@@ -172,6 +180,7 @@ void DrowWindow::createWindowCP(int left, int top, int right, int bottom, HWND p
         MessageBox(NULL, L"컬러박스 등록 실패", L"Error", MB_OK);
         return;
     }
+    /// 생성되는 해당 윈도우 핸들값 저장
     WndFunc::colorWnd = CreateWindow(
         L"Tototo",
         L"Tototo",
@@ -194,7 +203,7 @@ void DrowWindow::createWindowCP(int left, int top, int right, int bottom, HWND p
     ShowWindow(WndFunc::colorWnd, SW_SHOW);
 }
 
-// 정적 윈도우 프로시저
+/// 정적 윈도우 프로시저
 LRESULT CALLBACK DrowWindow::StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     DrowWindow* pThis = nullptr;
@@ -218,7 +227,7 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 {
     switch (message)
     {
-    case WM_CREATE:
+    case WM_CREATE: /// 초기 DrowWnd 생성도 다른 윈도우 생성
     {
         /// 네임바 윈도우 생성
         createWindowNB(0, 0, WndFunc::wndSize.right, 57, hWnd);
