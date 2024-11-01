@@ -75,7 +75,6 @@ public:
     RECT getPreviewRect() const;  // 미리보기 영역 반환
     void updateThickness();       // 슬라이더 위치에 따른 굵기 업데이트
 
-
     void setThickness(int thickness);
     int getThickness() const;
 };

@@ -233,8 +233,7 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
         /// 전광판 윈도우 생성
         createWindowVL(0, WndFunc::wndSize.bottom - 30, WndFunc::wndSize.right, WndFunc::wndSize.bottom, hWnd);
 
-        createWindowCP(600, 50, 400, 500, WndFunc::canvasWnd);
-
+        createWindowCP(WndFunc::wndSize.top + 450, 100, 450, 600, WndFunc::canvasWnd);
         break;
     }
     /// 캔버스에서 그리기 할때 버그 임시 수정

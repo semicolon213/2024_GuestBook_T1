@@ -7,6 +7,15 @@
 #include "DW_ToolMenu.h"
 #include "PenThickness.h"
 
+struct RoundRECT {
+    int left;
+    int top;
+    int right;
+    int bottom;
+    int radiusX;
+    int radiusY;
+};
+
 class DW_ColorBox
 {
 public:
@@ -27,8 +36,9 @@ public:
     void DrawColorWheel(HDC hdc, int centerX, int centerY, int radius);
     void DrawColorBar(HDC hdc, RECT rect);
     void DrawSelectedColor(HDC hdc);
+    void handleColorSelection(HWND hWnd, int x, int y);
     void DrawSlider(HDC hdc, RECT rect, int value, int max);
-    void DrawThicknessSlider(HDC hdc, RECT rect, int thicknessValue, int maxThickness);
+    void DrawThicknessSlider(HDC hdc, RECT rect, RoundRECT roundrect,int thicknessValue, int maxThickness);
     COLORREF HSVtoRGB(double h, double s, double v);
     void RGBtoHSV(COLORREF rgb, double& h, double& s, double& v);
 

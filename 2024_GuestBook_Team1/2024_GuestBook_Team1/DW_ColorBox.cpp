@@ -12,7 +12,8 @@ double hue = 0.0, saturation = 1.0, value = 1.0;
 int red = 255, green = 0, blue = 0;
 RECT wheelRect, barRect, selectedRect;
 RECT redSliderRect, greenSliderRect, blueSliderRect;
-RECT thicknessSliderRect;
+RECT thicknessSliderRect = { 100, 50, 300, 80 }; // 슬라이더 위치를 원하는 좌표로 설정합니다.
+RoundRECT thicknessSliderRoundRect = { 100, 50, 300, 80, 10, 10 }; // 둥근 직사각형 영역
 
 COLORREF DW_ColorBox::colorP[3] = { RGB(0,0,0),RGB(0,0,0),RGB(0,0,0) };
 int DW_ColorBox::thicknessP[3] = { 3, 3, 3 }; // 각 버튼의 초기 굵기를 3으로 설정
@@ -53,7 +54,7 @@ LRESULT CALLBACK DrowWindow::WndProcCP(HWND hWnd, UINT message, WPARAM wParam, L
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-RECT redB = { 5, 5, 40, 40 };
+RoundRECT redB = { 5, 5, 40, 40, 10, 10 };
 RECT blueB = { 45, 5, 80, 40 };
 RECT aaa;
 RECT m;
@@ -67,13 +68,14 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
     {
     case WM_CREATE:
     {
-        wheelRect = { 50, 50, 250, 250 };
-        barRect = { 280, 50, 310, 250 };
+        wheelRect = { 100, 50, 300, 250,  };
+        barRect = { 380, 50, 410, 250 };
         selectedRect = { 50, 280, 310, 330 };
         redSliderRect = { 50, 350, 310, 370 };
-        greenSliderRect = { 50, 390, 310, 410 };
-        blueSliderRect = { 50, 430, 310, 450 };
-        thicknessSliderRect = { 50, 470, 310, 490 };
+        greenSliderRect = { 50, 400, 310, 420 };
+        blueSliderRect = { 50, 450, 310, 470 };
+        thicknessSliderRect = { 50, 500, 310, 520 };
+        thicknessSliderRoundRect = { 50, 500, 310, 520, 20, 20 }; // 둥근 직사각형 영역
         break;
     }
     case WM_COMMAND:
@@ -112,8 +114,32 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
         colorbox->DrawSlider(memDC, greenSliderRect, green, 255);
         colorbox->DrawSlider(memDC, blueSliderRect, blue, 255);
 
+        const char* redText = "Red";
+        int textX = redSliderRect.left; 
+        int textY = redSliderRect.top - 20; 
+        SetBkMode(memDC, TRANSPARENT); 
+        SetTextColor(memDC, RGB(0, 0, 0));
+        TextOut(memDC, textX, textY, L"redText", strlen(redText)); 
+
+
+        const char* greenText = "Green";
+        textX = greenSliderRect.left; 
+        textY = greenSliderRect.top - 20; 
+        SetBkMode(memDC, TRANSPARENT);
+        SetTextColor(memDC, RGB(0, 0, 0)); 
+        TextOut(memDC, textX, textY, L"greenText", strlen(greenText)); 
+
+
+        const char* blueText = "Blue";
+        textX = blueSliderRect.left; 
+        textY = blueSliderRect.top - 20; 
+        SetBkMode(memDC, TRANSPARENT); 
+        SetTextColor(memDC, RGB(0, 0, 0));
+        TextOut(memDC, textX, textY, L"blueText", strlen(blueText));
+
+
         int thicknessValue = DW_ColorBox::getThicknessNum(DW_ColorBox::colorSelect);
-        colorbox->DrawThicknessSlider(memDC, thicknessSliderRect, thicknessValue, 20);
+        colorbox->DrawThicknessSlider(memDC,thicknessSliderRect, thicknessSliderRoundRect, thicknessValue, 20);
 
         // 메모리 DC의 내용을 화면 DC에 복사
         BitBlt(hdc, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right - ps.rcPaint.left, ps.rcPaint.bottom - ps.rcPaint.top, memDC, 0, 0, SRCCOPY);
@@ -126,10 +152,14 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
         EndPaint(hWnd, &ps);
         break;
     }
+    case WM_LBUTTONUP:
+        InvalidateRect(WndFunc::toolWnd, NULL, TRUE);
+        break;
 
     case WM_LBUTTONDOWN:
         InvalidateRect(WndFunc::toolWnd, NULL, TRUE);
     case WM_MOUSEMOVE:
+
         if (wParam & MK_LBUTTON)
         {
             int xPos = LOWORD(lParam);
@@ -200,6 +230,7 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
             DW_ColorBox::colorP[DW_ColorBox::colorSelect] = RGB(red, green, blue);
             break;
         }
+  
 
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
@@ -264,17 +295,16 @@ void DW_ColorBox::DrawColorBar(HDC hdc, RECT rect)
 
 void DW_ColorBox::DrawSelectedColor(HDC hdc)
 {
-   
-    COLORREF selectedColor = colorP[colorSelect]; 
+    COLORREF selectedColor = colorP[colorSelect];
 
-    // 선택된 영역을 흰색으로 채웁니다.
-    FillRect(hdc, &selectedRect, (HBRUSH)GetStockObject(WHITE_BRUSH));
+    // 선택된 영역을 RGB(243, 243, 243) 색상으로 채웁니다.
+    HBRUSH hBackgroundBrush = CreateSolidBrush(RGB(224, 232, 234));
+    FillRect(hdc, &selectedRect, hBackgroundBrush);
+    DeleteObject(hBackgroundBrush);
 
-    
     HPEN pen = CreatePen(PS_SOLID, thicknessP[colorSelect], selectedColor); // thicknessP에서 두께 가져오기
     HGDIOBJ oldPen = SelectObject(hdc, pen);
 
-    
     int centerY = (selectedRect.top + selectedRect.bottom) / 2;
     MoveToEx(hdc, selectedRect.left + 10, centerY, NULL);
     LineTo(hdc, selectedRect.right - 10, centerY);
@@ -283,6 +313,7 @@ void DW_ColorBox::DrawSelectedColor(HDC hdc)
     SelectObject(hdc, oldPen);
     DeleteObject(pen);
 }
+
 void DW_ColorBox::DrawSlider(HDC hdc, RECT rect, int value, int max)
 {
 
@@ -329,41 +360,48 @@ void DW_ColorBox::DrawSlider(HDC hdc, RECT rect, int value, int max)
             SetPixel(hdc, x, y, color); // 슬라이더 색상 채우기
         }
     }
+    // 원형 윤곽선과 내부 색 채우기
     int outlinePosition = rect.left + barWidth;
-    HPEN outlinePen = CreatePen(PS_SOLID, 0, RGB(0, 0, 0)); // 윤곽선 색상 및 두께
+    HBRUSH fillBrush = CreateSolidBrush(RGB(255, 255, 255));  // 원 내부 색상 지정 (예: 빨간색)
+    HPEN outlinePen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0)); // 윤곽선 색상 및 두께
     SelectObject(hdc, outlinePen);
+    SelectObject(hdc, fillBrush);
 
     Rectangle(hdc, outlinePosition - 2, rect.top - 2, outlinePosition + 2, rect.bottom + 2);
+
+    // 리소스 해제
     DeleteObject(outlinePen);
+    DeleteObject(fillBrush);
 }
 
-
-
-void DW_ColorBox::DrawThicknessSlider(HDC hdc, RECT rect, int thicknessValue, int maxThickness) {
-    // 슬라이더 배경
+void DW_ColorBox::DrawThicknessSlider(HDC hdc, RECT rect, RoundRECT roundrect, int thicknessValue, int maxThickness) {
+    // 슬라이더 배경 - 라운드 직사각형
     HBRUSH hBackgroundBrush = CreateSolidBrush(RGB(240, 240, 240));
-    FillRect(hdc, &rect, hBackgroundBrush);
+    SelectObject(hdc, hBackgroundBrush);
+    RoundRect(hdc, rect.left, rect.top, rect.right, rect.bottom, roundrect.radiusX, roundrect.radiusY);
     DeleteObject(hBackgroundBrush);
 
-    // 굵기 슬라이더 바 그리기
+    // 굵기 슬라이더 바 그리기 - 라운드 직사각형
     int barWidth = (rect.right - rect.left) * thicknessValue / maxThickness;
     RECT barRect = { rect.left, rect.top, rect.left + barWidth, rect.bottom };
     HBRUSH hBarBrush = CreateSolidBrush(RGB(255, 255, 255));
-    FillRect(hdc, &barRect, hBarBrush);
+    SelectObject(hdc, hBarBrush);
+    RoundRect(hdc, barRect.left, barRect.top, barRect.right, barRect.bottom, roundrect.radiusX, roundrect.radiusY);
     DeleteObject(hBarBrush);
 
-    // 슬라이더 테두리
+    // 슬라이더 테두리 - 라운드 직사각형 테두리
     HPEN hPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
     SelectObject(hdc, hPen);
-    Rectangle(hdc, rect.left, rect.top, rect.right, rect.bottom);
+    RoundRect(hdc, rect.left, rect.top, rect.right, rect.bottom, roundrect.radiusX, roundrect.radiusY);
     DeleteObject(hPen);
 
-    // 윤곽선 그리기
+    // 윤곽선 그리기 - 원형 윤곽선
     int outlinePosition = rect.left + barWidth;
     HPEN outlinePen = CreatePen(PS_SOLID, 2, RGB(0, 0, 0)); // 윤곽선 색상 및 두께
     SelectObject(hdc, outlinePen);
-    Rectangle(hdc, outlinePosition - 2, rect.top - 2, outlinePosition + 2, rect.bottom + 2);
+    Ellipse(hdc, outlinePosition - 10, rect.top , outlinePosition + 10, rect.bottom ); // 원의 크기 조절
     DeleteObject(outlinePen);
+
 }
 
 
