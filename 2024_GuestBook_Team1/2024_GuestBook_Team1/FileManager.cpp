@@ -336,28 +336,27 @@ void FileManager::selectFileMode(int wmId, HWND s_hWnd, std::vector<PINFO>* penM
 
     case SD_FILEMANAGER_BT:
     {
-        // 파일매니저 숨김 / 표시
-        if (!isPanelVisible)
-        {
-            if (hRightPanel == nullptr)
-            {
-                Panels(s_hWnd);
-                LoadFileList();
-            }
-            // 사이드 메뉴 표시
-            ShowWindow(hRightPanel, SW_SHOW);
-            isPanelVisible = true;
-        }
-        else
-        {
-            // 사이드 메뉴 숨김
-            ShowWindow(hRightPanel, SW_HIDE);
-            isPanelVisible = false;
-        }
+        MessageBox(nullptr, DW_SideMenu::filePath.c_str(), L"파일 경로", MB_OK); // 경로 출력
 
-        // 화면 갱신
-        InvalidateRect(s_hWnd, NULL, TRUE);
-        UpdateWindow(s_hWnd);
+        // filePath에 저장된 파일을 즉시 로드
+        if (load(DW_SideMenu::filePath.c_str(), penMemory, s_hWnd)) {
+            Function::drawLInfo.pInfo = *penMemory;
+
+            /// 파일 이름만 추출
+            baseName = DW_SideMenu::filePath;
+            size_t pos = baseName.find_last_of(L"\\/");
+            if (pos != std::wstring::npos) {
+                baseName = baseName.substr(pos + 1);
+            }
+
+            /// FileNameW에 파일 이름 표시
+            SendMessage(WndFunc::nameWnd, WM_SETTEXT, 0, (LPARAM)baseName.c_str()); /// 2024_GuestBook_Team1로 메시지 전달
+            SendMessage(WndFunc::toolWnd, WM_COMMAND, TL_PLAY_BT, 0); /// 추가
+
+            // 화면 갱신
+            InvalidateRect(s_hWnd, NULL, TRUE);
+            UpdateWindow(s_hWnd);
+        }
     }
     break;
     }

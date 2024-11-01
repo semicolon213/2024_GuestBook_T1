@@ -12,6 +12,8 @@ public:
     std::vector<PINFO>* penMemory; /// Ãß°¡
 
     static HWND hListBox;
+
+    static std::wstring filePath;
 protected:
     HINSTANCE sInst;
     HWND sWnd;

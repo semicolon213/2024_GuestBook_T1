@@ -38,14 +38,18 @@ HWND DW_SideMenu::hListBox = nullptr; // 초기값 설정
 // 파일 이름을 저장할 벡터 추가
 std::vector<std::wstring> fileList; // 파일 목록 벡터
 
+std::wstring filePath;
+std::wstring DW_SideMenu::filePath; // 정의
+
 std::wstring getFilePath() {
-    return L"..\\file\\"; // 프로젝트 루트에서 file 폴더로의 상대 경로
+    return L"C:\\2024_GuestBook_Team1\\file\\"; // 절대 경로로 변경
 }
 
 void populateFileList(HWND hListBox) {
     std::wstring filePath = getFilePath();
+    std::wcout << L"Searching in: " << filePath << std::endl; // 추가된 로그
     WIN32_FIND_DATAW findFileData;
-    HANDLE hFind = FindFirstFileW((filePath + L"*").c_str(), &findFileData);
+    HANDLE hFind = FindFirstFileW((filePath + L"*.txt").c_str(), &findFileData); // .txt 파일만 찾기
 
     if (hFind != INVALID_HANDLE_VALUE) {
         do {
@@ -58,6 +62,7 @@ void populateFileList(HWND hListBox) {
     }
 }
 
+
 /// 네임 바 메세지 처리 핸들 메서드
 LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message)
@@ -69,7 +74,7 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             10, 10, 200, 150, hWnd, (HMENU)101, GetModuleHandle(NULL), NULL);
 
         // 파일 목록을 리스트박스에 추가
-        populateFileList(DW_SideMenu::hListBox);
+        populateFileList(DW_SideMenu::hListBox); // .txt 파일 목록을 리스트박스에 추가합니다.
 
         break;
     }
@@ -80,7 +85,7 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             int selectedIndex = SendMessage(DW_SideMenu::hListBox, LB_GETCURSEL, 0, 0);
             if (selectedIndex != LB_ERR) {
                 // 선택한 항목의 텍스트 가져오기
-                wchar_t selectedFileName[256];
+                wchar_t selectedFileName[256] = {};
                 SendMessage(DW_SideMenu::hListBox, LB_GETTEXT, selectedIndex, (LPARAM)selectedFileName);
 
                 // 선택한 파일 이름
@@ -90,13 +95,12 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 std::wstring desktopPath = getFilePath();
 
                 // 전체 파일 경로 생성
-                std::wstring filePath = desktopPath + selectedFile;
+                DW_SideMenu::filePath = desktopPath + selectedFile;
 
                 // 파일 존재 여부 확인
-                DWORD fileAttr = GetFileAttributesW(filePath.c_str());
+                DWORD fileAttr = GetFileAttributesW(DW_SideMenu::filePath.c_str());
                 if (fileAttr != INVALID_FILE_ATTRIBUTES && !(fileAttr & FILE_ATTRIBUTE_DIRECTORY)) {
-                    FileManager::fileManager.selectFileMode(LOAD, hWnd, penMemory); /// 추가
-                    SendMessage(WndFunc::toolWnd, WM_COMMAND, TL_PLAY_BT, 0); /// 추가
+                    FileManager::fileManager.selectFileMode(SD_FILEMANAGER_BT, hWnd, penMemory); /// 추가
                 }
                 else {
                     // 파일이 존재하지 않음
