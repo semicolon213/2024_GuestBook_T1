@@ -10,6 +10,8 @@ class DW_SideMenu
 {
 public:
     std::vector<PINFO>* penMemory; /// Ãß°¡
+
+    static HWND hListBox;
 protected:
     HINSTANCE sInst;
     HWND sWnd;
@@ -22,4 +24,3 @@ protected:
     HWND FileManager;
     HWND Credit;
 };
-

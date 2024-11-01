@@ -33,11 +33,78 @@ std::vector<PINFO>* penMemory = new std::vector<PINFO>; /// 추가
 RECT mouseSide;     /// InterSect를 위한 마우스 좌표 받을 RECT
 RECT aSide;         /// InterSect로 반환되는 RECT
 
+HWND DW_SideMenu::hListBox = nullptr; // 초기값 설정
+
+// 파일 이름을 저장할 벡터 추가
+std::vector<std::wstring> fileList; // 파일 목록 벡터
+
+std::wstring getFilePath() {
+    return L"..\\file\\"; // 프로젝트 루트에서 file 폴더로의 상대 경로
+}
+
+void populateFileList(HWND hListBox) {
+    std::wstring filePath = getFilePath();
+    WIN32_FIND_DATAW findFileData;
+    HANDLE hFind = FindFirstFileW((filePath + L"*").c_str(), &findFileData);
+
+    if (hFind != INVALID_HANDLE_VALUE) {
+        do {
+            // 파일 이름을 리스트박스에 추가
+            if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) { // 디렉토리 제외
+                SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)findFileData.cFileName);
+            }
+        } while (FindNextFileW(hFind, &findFileData) != 0);
+        FindClose(hFind);
+    }
+}
 
 /// 네임 바 메세지 처리 핸들 메서드
 LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message)
     {
+    case WM_CREATE:
+    {
+        // 리스트박스 생성 예시
+        DW_SideMenu::hListBox = CreateWindowW(L"LISTBOX", NULL, WS_CHILD | WS_VISIBLE | LBS_NOTIFY | WS_VSCROLL,
+            10, 10, 200, 150, hWnd, (HMENU)101, GetModuleHandle(NULL), NULL);
+
+        // 파일 목록을 리스트박스에 추가
+        populateFileList(DW_SideMenu::hListBox);
+
+        break;
+    }
+    case WM_COMMAND:
+    {
+        // 리스트박스 더블 클릭 메시지 처리
+        if (LOWORD(wParam) == 101 && HIWORD(wParam) == LBN_DBLCLK) {
+            int selectedIndex = SendMessage(DW_SideMenu::hListBox, LB_GETCURSEL, 0, 0);
+            if (selectedIndex != LB_ERR) {
+                // 선택한 항목의 텍스트 가져오기
+                wchar_t selectedFileName[256];
+                SendMessage(DW_SideMenu::hListBox, LB_GETTEXT, selectedIndex, (LPARAM)selectedFileName);
+
+                // 선택한 파일 이름
+                std::wstring selectedFile(selectedFileName);
+
+                // 파일 경로 가져오기
+                std::wstring desktopPath = getFilePath();
+
+                // 전체 파일 경로 생성
+                std::wstring filePath = desktopPath + selectedFile;
+
+                // 파일 존재 여부 확인
+                DWORD fileAttr = GetFileAttributesW(filePath.c_str());
+                if (fileAttr != INVALID_FILE_ATTRIBUTES && !(fileAttr & FILE_ATTRIBUTE_DIRECTORY)) {
+                    
+                }
+                else {
+                    // 파일이 존재하지 않음
+                    MessageBox(hWnd, L"파일이 존재하지 않습니다.", L"알림", MB_OK);
+
+                }
+            }
+            break;
+        }
     case WM_LBUTTONDOWN:
     {
         /// 좌클릭시 현재 마우스 좌표(lParam)을 받아 마우스 RECT 생성
@@ -104,9 +171,5 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
+    }
 }
-
-
-
-
-

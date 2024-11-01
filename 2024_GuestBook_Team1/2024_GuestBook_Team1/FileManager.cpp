@@ -151,18 +151,18 @@ void FileManager::LoadFileList()
 //파일리스트 UI를 업데이트 함
 void FileManager::UpdateFileListUI()
 {
-    if (hFileListBox == nullptr)
+    if (DW_SideMenu::hListBox == nullptr)
     {
         return;
     }
     /// 기존 리스트 박스 초기화 
-    SendMessage(hFileListBox, LB_RESETCONTENT, 0, 0);
+    SendMessage(DW_SideMenu::hListBox, LB_RESETCONTENT, 0, 0);
 
     /// 파일 리스트에 파일명 추가
     for (const auto& file : savedFileList)
     {
         // LB_ADDSTRING API로 추가 
-        SendMessage(hFileListBox, LB_ADDSTRING, 0, (LPARAM)file.c_str());
+        SendMessage(DW_SideMenu::hListBox, LB_ADDSTRING, 0, (LPARAM)file.c_str());
     }
 }
 
