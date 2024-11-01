@@ -312,6 +312,7 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             }
             replayStay = false;      /// 리플레이 상태 종료
             pCnt = true;
+            function->setisLeftClick(false);
             InvalidateRect(WndFunc::toolWnd, NULL, true);
         }
         ///// 저장 버튼
