@@ -11,9 +11,11 @@
 
 class DrowWindow {
 public:
+    // 인스턴스를 초기화하는 역할
     DrowWindow(int mode, HINSTANCE hInst);
 
     //void createWindow(int width, int height, HWND parent); // 창 생성 메서드
+
     virtual LRESULT handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
     static LRESULT CALLBACK StaticWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
 
@@ -21,8 +23,8 @@ public:
     void createWindowTB(int left, int top, int right, int bottom, HWND parent);
     void createWindowCV(int left, int top, int right, int bottom, HWND parent);
     void createWindowSB(int left, int top, int right, int bottom, HWND parent);
+    void createWindowCP(int left, int top, int right, int bottom, HWND parent);
     void createWindowVL(int left, int top, int right, int bottom, HWND parent);
-
     /// 네임바 정적 윈도우
     static LRESULT CALLBACK WndProcNB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
     /// 네임바 메세지 처리 메서드
@@ -46,6 +48,11 @@ public:
     /// 사이드 메뉴  처리 메서드
     virtual LRESULT handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
 
+    /// 사이드 메뉴 정적 윈도우
+    static LRESULT CALLBACK WndProcCP(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
+    /// 사이드 메뉴  처리 메서드
+    virtual LRESULT handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
+
     PINFO drawPInfo;
 
 protected:
@@ -57,7 +64,6 @@ protected:
     static LRESULT CALLBACK WndProcVL(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
     /// 전광판 처리 메서드
     virtual LRESULT handleMessageVL(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
-
 private:
     HWND hwnd;
     HINSTANCE hInst;

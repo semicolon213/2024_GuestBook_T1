@@ -13,7 +13,7 @@ public:
     static HWND menuWnd;
     static HWND sideWnd;
     static HWND visitListWnd;
-
+    static HWND colorWnd;
     static HWND DrowBT;
     static HWND LoadBT;
     static HWND CreditBT;

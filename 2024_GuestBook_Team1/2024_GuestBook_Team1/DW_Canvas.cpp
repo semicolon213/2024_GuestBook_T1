@@ -1,5 +1,9 @@
 #include "DW_Canvas.h"
 
+// 멤버 변수 추가
+bool isDrawing = false;    // 드로잉 상태 플래그
+POINT lastPoint;           // 이전 점의 좌표
+
 /// 네임 바 정적 메서드
 LRESULT CALLBACK DrowWindow::WndProcCV(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 
