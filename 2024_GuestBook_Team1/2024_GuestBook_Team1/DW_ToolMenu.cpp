@@ -204,44 +204,77 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             selectedIcon = IDI_WATERPEN_ICON;
         }
 
-        /// 색상 버튼 1
-        else if (IntersectRect(&a, &mouse, &colorButton1.rectButton)) 
+        /// 색상버튼 1
+        else if (IntersectRect(&a, &mouse, &colorButton1.rectButton))
         {
-            if (DW_ColorBox::colorSelect == 0) 
-            { 
-                ShowWindow(WndFunc::colorWnd, SW_SHOW);
+            if (DW_ColorBox::colorSelect == 0)
+            {
+                // colorWnd가 열려 있는지 확인
+                if (IsWindowVisible(WndFunc::colorWnd))
+                {
+                    ShowWindow(WndFunc::colorWnd, SW_HIDE); // 열려 있으면 닫기
+                }
+                else
+                {
+                    ShowWindow(WndFunc::colorWnd, SW_SHOW); // 닫혀 있으면 열기
+                }
             }
-            else { 
-                DW_ColorBox::colorSelect = 0; 
+            else
+            {
+                DW_ColorBox::colorSelect = 0;
+                ShowWindow(WndFunc::colorWnd, SW_HIDE);
             }
-           
 
-            selectedColorButton = &colorButton1;   /// 선택한 컬러버튼의 객체 저장
+            selectedColorButton = &colorButton1; // 선택한 컬러 버튼의 객체 저장
         }
+
         /// 색상 버튼 2
-        else if (IntersectRect(&a, &mouse, &colorButton2.rectButton)) 
+        else if (IntersectRect(&a, &mouse, &colorButton2.rectButton))
         {
+            /// 기존에 색상버튼1 선택시 컬러 팔레트 띄움
             if (DW_ColorBox::colorSelect == 1)
             {
-                ShowWindow(WndFunc::colorWnd, SW_SHOW);
+                // colorWnd가 열려 있는지 확인
+                if (IsWindowVisible(WndFunc::colorWnd))
+                {
+                    ShowWindow(WndFunc::colorWnd, SW_HIDE); // 열려 있으면 닫기
+                }
+                else
+                {
+                    ShowWindow(WndFunc::colorWnd, SW_SHOW); // 닫혀 있으면 열기
+                }
             }
-            else {
-                DW_ColorBox::colorSelect = 1; 
+            else
+            {
+                /// 기존에 선택이 안되어있을시 이 컬러버튼 지정
+                DW_ColorBox::colorSelect = 1;
+                ShowWindow(WndFunc::colorWnd, SW_HIDE);
             }
 
-            selectedColorButton = &colorButton2;
+            selectedColorButton = &colorButton2; // 선택한 컬러 버튼의 객체 저장
         }
         /// 색상 버튼 3
-        else if (IntersectRect(&a, &mouse, &colorButton3.rectButton)) {
-            if (DW_ColorBox::colorSelect == 2) 
-            { 
-                ShowWindow(WndFunc::colorWnd, SW_SHOW); 
+        else if (IntersectRect(&a, &mouse, &colorButton3.rectButton))
+        {
+            if (DW_ColorBox::colorSelect == 2)
+            {
+                // colorWnd가 열려 있는지 확인
+                if (IsWindowVisible(WndFunc::colorWnd))
+                {
+                    ShowWindow(WndFunc::colorWnd, SW_HIDE); // 열려 있으면 닫기
+                }
+                else
+                {
+                    ShowWindow(WndFunc::colorWnd, SW_SHOW); // 닫혀 있으면 열기
+                }
             }
-            else {
-                DW_ColorBox::colorSelect = 2; 
+            else
+            {
+                DW_ColorBox::colorSelect = 2;
+                ShowWindow(WndFunc::colorWnd, SW_HIDE);
             }
 
-            selectedColorButton = &colorButton3;
+            selectedColorButton = &colorButton3; // 선택한 컬러 버튼의 객체 저장
         }
 
         /// 지우개 버튼 
@@ -384,9 +417,9 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 selectedColorButton->clickEffectPen(IDI_COLOREFFECT_ICON, hdc);
             }
 
-            colorButton1.drawEllipseButton(hdc, RGB(0, 0, 0));   /// 색상 버튼 1 미리보기
-            colorButton2.drawEllipseButton(hdc, RGB(0, 0, 0));   /// 색상 버튼 2 미리보기
-            colorButton3.drawEllipseButton(hdc, RGB(0, 0, 0));   /// 색상 버튼 3 미리보기
+            colorButton1.drawEllipseButton(hdc, DW_ColorBox::getColorNum(0));   /// 색상 버튼 1 미리보기
+            colorButton2.drawEllipseButton(hdc, DW_ColorBox::getColorNum(1));   /// 색상 버튼 2 미리보기
+            colorButton3.drawEllipseButton(hdc, DW_ColorBox::getColorNum(2));   /// 색상 버튼 3 미리보기
         }
         EndPaint(hWnd, &ps);
         break;

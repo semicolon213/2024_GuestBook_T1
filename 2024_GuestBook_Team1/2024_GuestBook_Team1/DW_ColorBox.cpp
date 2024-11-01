@@ -3,10 +3,10 @@
 
 int DW_ColorBox::colorSelect = 0;
 
-COLORREF DW_ColorBox::colorP[3] = { RGB(0,0,0),RGB(0,0,0),RGB(0,0,0) };
+COLORREF DW_ColorBox::colorP[3] = { RGB(0,0,0),RGB(255,0,0),RGB(0,0,255) };
 
-COLORREF DW_ColorBox::getColorNum() {
-    return DW_ColorBox::colorP[DW_ColorBox::colorSelect];
+COLORREF DW_ColorBox::getColorNum(int num) {
+    return DW_ColorBox::colorP[num];
 }
 
 void DW_ColorBox::setColorNum(int num, COLORREF color) {
@@ -60,17 +60,29 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
         m.right = m.left + 1;
         m.bottom = m.top + 1;
 
+        // 윈도우 밖에서 클릭된 경우
+        RECT windowRect;
+        GetWindowRect(hWnd, &windowRect);  // 윈도우 전체 영역 가져오기
+        POINT pt = { x, y };
+        ClientToScreen(hWnd, &pt);  // 클라이언트 좌표를 스크린 좌표로 변환
+
+        if (!PtInRect(&windowRect, pt)) { // 윈도우 밖에서 클릭됨
+            ReleaseCapture();  // 마우스 캡처 해제
+            ShowWindow(hWnd, SW_HIDE);  // 윈도우 숨기기
+        }
+
         if(IntersectRect(&aaa, &redB, &m)) {
-            MessageBox(hWnd, L"빨간버튼", L"빨간 버튼", MB_OK);
-            DW_ColorBox::setColorNum(0, RGB(255, 0, 0));
+            //MessageBox(hWnd, L"빨간버튼", L"빨간 버튼", MB_OK);
+            DW_ColorBox::setColorNum(DW_ColorBox::colorSelect, RGB(255, 0, 0));
         }
 
         if (IntersectRect(&aaa, &blueB, &m)) {
-            MessageBox(hWnd, L"파란 버튼", L"파란 버튼", MB_OK);
-            DW_ColorBox::setColorNum(0, RGB(0, 0, 255));
+            //MessageBox(hWnd, L"파란 버튼", L"파란 버튼", MB_OK);
+            DW_ColorBox::setColorNum(DW_ColorBox::colorSelect, RGB(0, 0, 255));
         }
+       
 
-
+        InvalidateRect(WndFunc::toolWnd, NULL, TRUE);
         break;
     }
     case WM_COMMAND:

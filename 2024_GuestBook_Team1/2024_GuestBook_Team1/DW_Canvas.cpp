@@ -79,10 +79,12 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		if (!function->getIsReset()) break;
 		//hdc = GetDC(canWnd);
 
+
+
 		////////////////////////////////////////////////
 
 		drawPInfo.lParam = lParam;
-		drawPInfo.pColor = DW_ColorBox::getColorNum();//ColorPalette::colorArr[Function::penNum];
+		drawPInfo.pColor = DW_ColorBox::getColorNum(DW_ColorBox::colorSelect);//ColorPalette::colorArr[Function::penNum];
 		drawPInfo.pTime = (DWORD)GetTickCount64();
 		drawPInfo.pWidth = penThickness->getPenWidth(); /// Ææ ±½±â ¼³Á¤
 		drawPInfo.state = message;
@@ -90,13 +92,19 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
 		break;
 	case WM_LBUTTONDOWN:
+		/// Äµ¹ö½º¿¡¼­ ±×¸± ¶§ »ö»ó Ã¢ ¿­·ÁÀÖÀ¸¸é ´ÝÀ½
+		if (IsWindowVisible(WndFunc::colorWnd))
+		{
+			ShowWindow(WndFunc::colorWnd, SW_HIDE); // ¿­·Á ÀÖÀ¸¸é ´Ý±â
+		}
+
 	case WM_LBUTTONUP:
 		if (GetCapture() == NULL) {
 			function->setisLeftClick(false);
 		}
 		if (!function->getIsReset()) break;
 		drawPInfo.lParam = lParam;
-		drawPInfo.pColor = DW_ColorBox::getColorNum();//ColorPalette::colorArr[Function::penNum];
+		drawPInfo.pColor = DW_ColorBox::getColorNum(DW_ColorBox::colorSelect);//ColorPalette::colorArr[Function::penNum];
 		drawPInfo.pTime = (DWORD)GetTickCount64();
 		drawPInfo.pWidth = penThickness->getPenWidth(); /// Ææ ±½±â ¼³Á¤
 		drawPInfo.state = message;

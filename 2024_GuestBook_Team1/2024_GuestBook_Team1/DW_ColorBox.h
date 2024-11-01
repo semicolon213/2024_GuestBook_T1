@@ -8,7 +8,7 @@ public:
 
     static COLORREF colorP[3];
 
-    static COLORREF getColorNum();
+    static COLORREF getColorNum(int num);
 
     static void setColorNum(int num, COLORREF color);
 };

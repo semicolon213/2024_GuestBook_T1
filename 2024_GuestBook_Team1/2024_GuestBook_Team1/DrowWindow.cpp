@@ -188,7 +188,7 @@ void DrowWindow::createWindowCP(int left, int top, int right, int bottom, HWND p
     if (!WndFunc::colorWnd) {
         DWORD error = GetLastError();
         wchar_t buf[256];
-        wsprintf(buf, L"툴바 생성 실패: 오류 코드 %d", error);
+        wsprintf(buf, L"컬러박스 생성 실패: 오류 코드 %d", error);
         MessageBox(NULL, buf, L"Error", MB_OK);
         return;
     }
