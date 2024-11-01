@@ -53,8 +53,11 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         if (IntersectRect(&aSide, &mouseSide, &sideNew.rectButton)) {
             /// 메세지 박스 없애고 if문(InTerSect)내부에 실행 코드 추가
             /// 메세지 박스는 이미지 버튼 활성화 여부 알아보기 위해 임시로 추가한 것
-            SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_CLEAR_BT, 0);
-            SendMessage(WndFunc::nameWnd, WM_SETTEXT, 0, (LPARAM)L"이름 없음"); /// 2024_GuestBook_Team1로 메시지 전달 /// 추가
+            if (function->getDrawLInfoEmpty()) { break; }
+            if (!function->getIsReplay()) {
+                SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_CLEAR_BT, 0);
+                SendMessage(WndFunc::nameWnd, WM_SETTEXT, 0, (LPARAM)L"이름 없음"); /// 2024_GuestBook_Team1로 메시지 전달 /// 추가
+            }
         }
 
         /// 파일 세이브
