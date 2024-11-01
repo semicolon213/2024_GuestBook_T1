@@ -31,7 +31,9 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 	switch (message)
 	{
 	case WM_CREATE:
-	{
+	{	
+		HDC memDC=NULL;
+		HBITMAP	hBitmap=NULL;
 		function = std::make_unique<Function>();
 		function->GDIPlusStart(); // 붓 gdi 라이브러리 활성화
 		break;
@@ -87,7 +89,6 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		drawPInfo.pWidth = penThickness->getPenWidth(); /// 펜 굵기 설정
 		drawPInfo.state = message;
 		function->draw(WndFunc::canvasWnd, drawPInfo, TRUE); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
-
 		break;
 	case WM_LBUTTONDOWN:
 	case WM_LBUTTONUP:
@@ -103,18 +104,19 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		function->mouseUD(drawPInfo, TRUE);
 
 		break;
-
+		
 	}
 	case WM_PAINT:
 	{
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(WndFunc::canvasWnd, &ps);
-		function->paint(WndFunc::canvasWnd, WndFunc::wndSize);
+		function->paint(hdc, WndFunc::wndSize ,ps);
 		EndPaint(WndFunc::canvasWnd, &ps);
 		break;
 	}
 
 	case WM_DESTROY:
+		
 		break;
 
 	default:

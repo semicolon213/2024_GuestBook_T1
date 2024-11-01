@@ -52,16 +52,13 @@ void Function::draw(HWND hWnd, PINFO dInfo, bool isRecord) // 뒤에 브러쉬 추가
 
 }
 
-void Function::re_draw(HWND hWnd, PINFO dInfo, bool isRecord) // 뒤에 브러쉬 추가
-{
-	hdc = memDC;
+void Function::re_draw(HDC phdc, PINFO dInfo) // 뒤에 브러쉬 추가
+{	
+	hdc = phdc;
 
-	if (isLeftClick)
-	{
-		x2 = LOWORD(dInfo.lParam); // 그리기 시작한 좌표
-		y2 = HIWORD(dInfo.lParam);
-
-		currentTime = std::chrono::steady_clock::now(); // 그리기 시간 저장
+	if (isLeftClick) {
+		px3 = LOWORD(dInfo.lParam); // 그리기 시작한 좌표
+		py3 = HIWORD(dInfo.lParam);
 
 		setPenStyle(dInfo, dInfo.pColor);
 		MoveToEx(hdc, x2, y2, NULL);
@@ -69,18 +66,16 @@ void Function::re_draw(HWND hWnd, PINFO dInfo, bool isRecord) // 뒤에 브러쉬 추�
 
 		DeleteObject(nPen);
 
-		px3 = x2;
-		py3 = y2;
+		x2 = px3;
+		y2 = py3;
+	}
 
-		DrawTime = currentTime; // 마지막 시간 업데이트
-
-		if (isRecord)
-			record(dInfo);
+	//// GDI 객체 해제
+	//DeleteObject(hBitmap);
+	//DeleteDC(memDC);
 
 	}
-	ReleaseDC(hWnd, hdc);
 
-}
 
 
 void Function::mouseUD(PINFO dInfo, bool isRecord)
@@ -136,8 +131,6 @@ void Function::replay(HWND hWnd)
 		// 화면 DC 가져오기
 		hdc = GetDC(hWnd);
 
-
-
 		// 그리기 작업 메모리 DC에서 수행
 		for (size_t i = 0; i < drawLInfo.pInfo.size(); i++)
 		{
@@ -161,7 +154,6 @@ void Function::replay(HWND hWnd)
 
 			case WM_MOUSEMOVE:
 				draw(WndFunc::canvasWnd, replayInfo, false);
-				re_draw(WndFunc::canvasWnd, replayInfo, false);
 				break;
 
 			case WM_LBUTTONUP:
@@ -350,24 +342,26 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 	}
 }
 
-void Function::paint(HWND hWnd, RECT canvasRT)
-{
-	cHdc = BeginPaint(hWnd, &cPS);
-
-	// 메모리 DC 생성 및 호환 비트맵 할당
-	memDC = CreateCompatibleDC(hdc);
-	hBitmap = CreateCompatibleBitmap(hdc, clientRect.right, clientRect.bottom);
-	SelectObject(memDC, hBitmap);
-	// 메모리 DC에서 배경 지우기
-	FillRect(memDC, &clientRect, (HBRUSH)(COLOR_WINDOW + 1));
-
+void Function::paint(HDC hdc, RECT canvasRT, PAINTSTRUCT ps)
+{	
+	cHdc = hdc;
 	CanvasPen = (HPEN)SelectObject(cHdc, CreatePen(PS_SOLID, 1, RGB(234, 234, 234)));
 	Rectangle(cHdc, canvasRT.left, canvasRT.top, canvasRT.right, canvasRT.bottom);
 	SelectObject(cHdc, CanvasPen);
 	DeleteObject(CanvasPen);
 
+	if (memDC == NULL) {
+		// 메모리 DC 생성 및 호환 비트맵 할당
+		memDC = CreateCompatibleDC(hdc);
+		hBitmap = CreateCompatibleBitmap(hdc, clientRect.right, clientRect.bottom);
+		SelectObject(memDC, hBitmap);
+		// 메모리 DC에서 배경 지우기
+		FillRect(memDC, &clientRect, (HBRUSH)(COLOR_WINDOW + 1));
+	}
+	
 	if (!getIsReplay())
 	{
+
 		for (const auto& record : getDrawLInfo().pInfo)
 		{
 			if (record.bShape != BRUSH)
@@ -389,7 +383,7 @@ void Function::paint(HWND hWnd, RECT canvasRT)
 				break;
 
 			case WM_MOUSEMOVE:
-				draw(hWnd, record, FALSE);
+				re_draw(cHdc, record);
 				break;
 
 
@@ -399,14 +393,14 @@ void Function::paint(HWND hWnd, RECT canvasRT)
 			}
 		}
 	}
+	
+	if(!getIsReplay()){
+		BitBlt(cHdc, 0, 0, canvasRT.right, canvasRT.bottom, memDC, 0, 0, SRCCOPY);
+		// 메모리 DC와 비트맵 삭제
+		DeleteObject(hBitmap);
+		DeleteDC(memDC);
+	}
 
-	// 메모리 DC의 내용을 실제 화면에 복사
-
-	BitBlt(cHdc, 0, 0, canvasRT.right, canvasRT.bottom, memDC, 0, 0, SRCCOPY);
-	// 메모리 DC와 비트맵 삭제
-	DeleteObject(hBitmap);
-	DeleteDC(memDC);
-	EndPaint(hWnd, &cPS);
 }
 
 
