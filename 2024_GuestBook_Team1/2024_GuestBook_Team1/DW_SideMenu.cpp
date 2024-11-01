@@ -154,8 +154,10 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         /// 파일 매니저
         else if (IntersectRect(&aSide, &mouseSide, &sideFM.rectButton)) {
             // 리스트박스 보이기/숨기기 처리
-            isListBoxVisible = !isListBoxVisible; // 현재 상태 반전
 
+            createWindowFM(0, 0, 300, 500, WndFunc::drowWnd); //파일매니저 윈도우 생성 
+            isListBoxVisible = !isListBoxVisible; // 현재 상태 반전
+            
             ShowWindow(DW_SideMenu::hListBox, isListBoxVisible ? SW_HIDE : SW_SHOW); // 리스트박스 보이기/숨기기
         }
 

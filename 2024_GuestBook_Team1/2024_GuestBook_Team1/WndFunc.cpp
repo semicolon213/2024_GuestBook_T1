@@ -8,6 +8,7 @@ HWND WndFunc::canvasWnd = nullptr;
 //HWND WndFunc::menuWnd = nullptr;
 HWND WndFunc::sideWnd = nullptr;
 HWND WndFunc::visitListWnd = nullptr;
+HWND WndFunc::fileManager = nullptr;
 HWND WndFunc::colorWnd = nullptr;
 
 HWND WndFunc::DrowBT = nullptr;
@@ -15,12 +16,13 @@ HWND WndFunc::LoadBT = nullptr;
 HWND WndFunc::CreditBT = nullptr;
 
 bool WndFunc::buttonOn = true;
+
 HINSTANCE WndFunc::hInst = nullptr;
 RECT WndFunc::wndSize = { 0, 0, 0, 0 };
 
 
 
-RECT WndFunc::GetRT(HWND hWnd) 
+RECT WndFunc::GetRT(HWND hWnd)
 {
     if (!IsWindow(hWnd)) {  // hWnd가 유효한지 확인
         //MessageBox(NULL, L"유효하지 않은 창 핸들입니다.", L"에러", MB_OK);

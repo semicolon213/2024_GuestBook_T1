@@ -158,7 +158,7 @@ void DrowWindow::createWindowVL(int left, int top, int right, int bottom, HWND p
 
     ShowWindow(WndFunc::visitListWnd, SW_SHOW);
 }
-    /// 툴바 생성 메서드
+/// 툴바 생성 메서드
 void DrowWindow::createWindowCP(int left, int top, int right, int bottom, HWND parent)
 {
     WNDCLASS wc31 = {};
@@ -192,6 +192,42 @@ void DrowWindow::createWindowCP(int left, int top, int right, int bottom, HWND p
         return;
     }
     ShowWindow(WndFunc::colorWnd, SW_SHOW);
+}
+
+void DrowWindow::createWindowFM(int left, int top, int right, int bottom, HWND parent)
+{
+    WNDCLASS wc111 = {};
+    wc111.lpfnWndProc = WndProcFM;  // 네임바 메세지 처리하는 정적 메서드
+    wc111.lpszClassName = L"CustomNameWindowClass111";
+    wc111.hInstance = hInst;
+    wc111.hbrBackground = CreateSolidBrush(RGB(240, 240, 240));
+    wc111.style = CS_DBLCLKS; // CS_DBLCLKS 스타일 추가
+
+    if (!RegisterClass(&wc111)) {
+
+        return;
+    }
+    WndFunc::fileManager = CreateWindow(
+        L"CustomNameWindowClass111",
+        L"Name Window",
+        WS_CHILD | WS_VISIBLE | CS_DBLCLKS,
+        left, top,
+        right,
+        bottom,
+        parent,
+        nullptr,
+        hInst,
+        reinterpret_cast<LPVOID>(this)  // this 포인터 전달
+    );
+    if (!WndFunc::fileManager) {
+        DWORD error = GetLastError();
+        wchar_t buf[256];
+        wsprintf(buf, L"파일 매니저 윈도우 생성 실패: 오류 코드 %d", error);
+        MessageBox(NULL, buf, L"Error", MB_OK);
+        return;
+    }
+
+    ShowWindow(WndFunc::fileManager, SW_SHOW);
 }
 
 // 정적 윈도우 프로시저

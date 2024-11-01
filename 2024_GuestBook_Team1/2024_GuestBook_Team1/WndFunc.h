@@ -17,6 +17,7 @@ public:
     static HWND DrowBT;
     static HWND LoadBT;
     static HWND CreditBT;
+    static HWND fileManager;
 
     static bool buttonOn;
 
@@ -25,8 +26,8 @@ public:
     static RECT wndSize;
 
     RECT GetRT(HWND);
-    void RegisterNewClass(HINSTANCE,LPCWSTR);
-    
+    void RegisterNewClass(HINSTANCE, LPCWSTR);
+
 
 
 private:
