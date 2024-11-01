@@ -45,7 +45,7 @@ std::wstring DW_SideMenu::filePath; // 정의
 bool isListBoxVisible = true; // 초기값: 리스트박스가 보이도록 설정
 
 std::wstring getFilePath() {
-    return L"C:\\2024_GuestBook_Team1\\file\\"; // 절대 경로로 변경
+    return L"C:\\2024_GuestBook_T1\\file\\"; // 절대 경로로 변경
 }
 
 void populateFileList(HWND hListBox) {
