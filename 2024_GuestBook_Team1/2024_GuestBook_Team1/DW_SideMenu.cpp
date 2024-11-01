@@ -41,6 +41,9 @@ std::vector<std::wstring> fileList; // 파일 목록 벡터
 std::wstring filePath;
 std::wstring DW_SideMenu::filePath; // 정의
 
+// 파일 매니저 버튼 클릭 여부를 체크하는 변수
+bool isListBoxVisible = true; // 초기값: 리스트박스가 보이도록 설정
+
 std::wstring getFilePath() {
     return L"C:\\2024_GuestBook_Team1\\file\\"; // 절대 경로로 변경
 }
@@ -71,7 +74,10 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
     {
         // 리스트박스 생성 예시
         DW_SideMenu::hListBox = CreateWindowW(L"LISTBOX", NULL, WS_CHILD | WS_VISIBLE | LBS_NOTIFY | WS_VSCROLL,
-            10, 10, 200, 150, hWnd, (HMENU)101, GetModuleHandle(NULL), NULL);
+            0, 0, 100, 100, hWnd, (HMENU)101, GetModuleHandle(NULL), NULL);
+
+        // 초기 상태에서 리스트박스를 숨김
+        ShowWindow(DW_SideMenu::hListBox, SW_HIDE);
 
         // 파일 목록을 리스트박스에 추가
         populateFileList(DW_SideMenu::hListBox); // .txt 파일 목록을 리스트박스에 추가합니다.
@@ -147,7 +153,10 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
         /// 파일 매니저
         else if (IntersectRect(&aSide, &mouseSide, &sideFM.rectButton)) {
-            FileManager::fileManager.selectFileMode(SD_FILEMANAGER_BT, WndFunc::canvasWnd, penMemory); /// 추가
+            // 리스트박스 보이기/숨기기 처리
+            isListBoxVisible = !isListBoxVisible; // 현재 상태 반전
+
+            ShowWindow(DW_SideMenu::hListBox, isListBoxVisible ? SW_HIDE : SW_SHOW); // 리스트박스 보이기/숨기기
         }
 
         /// 크레딧
