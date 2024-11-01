@@ -91,6 +91,7 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		function->draw(WndFunc::canvasWnd, drawPInfo, TRUE); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
 
 		break;
+
 	case WM_LBUTTONDOWN:
 		/// 캔버스에서 그릴 때 색상 창 열려있으면 닫음
 		if (IsWindowVisible(WndFunc::colorWnd))

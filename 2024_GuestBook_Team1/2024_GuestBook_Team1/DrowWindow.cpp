@@ -236,6 +236,12 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
         createWindowCP(500, 10, 100, 100, WndFunc::canvasWnd);
         break;
     }
+    /// 캔버스에서 그리기 할때 버그 임시 수정
+    case WM_MOUSEMOVE:
+    {
+        function->setisLeftClick(false);
+        break;
+    }
     case WM_PAINT:
     {
         PAINTSTRUCT ps;
