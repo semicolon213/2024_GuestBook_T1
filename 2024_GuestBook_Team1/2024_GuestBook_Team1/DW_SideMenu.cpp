@@ -95,7 +95,8 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 // 파일 존재 여부 확인
                 DWORD fileAttr = GetFileAttributesW(filePath.c_str());
                 if (fileAttr != INVALID_FILE_ATTRIBUTES && !(fileAttr & FILE_ATTRIBUTE_DIRECTORY)) {
-                    
+                    FileManager::fileManager.selectFileMode(LOAD, hWnd, penMemory); /// 추가
+                    SendMessage(WndFunc::toolWnd, WM_COMMAND, TL_PLAY_BT, 0); /// 추가
                 }
                 else {
                     // 파일이 존재하지 않음
