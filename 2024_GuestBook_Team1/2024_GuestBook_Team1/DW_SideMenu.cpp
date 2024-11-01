@@ -33,6 +33,8 @@ std::vector<PINFO>* penMemory = new std::vector<PINFO>; /// 추가
 RECT mouseSide;     /// InterSect를 위한 마우스 좌표 받을 RECT
 RECT aSide;         /// InterSect로 반환되는 RECT
 
+
+
 HWND DW_SideMenu::hListBox = nullptr; // 초기값 설정
 
 // 파일 이름을 저장할 벡터 추가
@@ -106,7 +108,7 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 // 파일 존재 여부 확인
                 DWORD fileAttr = GetFileAttributesW(DW_SideMenu::filePath.c_str());
                 if (fileAttr != INVALID_FILE_ATTRIBUTES && !(fileAttr & FILE_ATTRIBUTE_DIRECTORY)) {
-                    FileManager::fileManager.selectFileMode(SD_FILEMANAGER_BT, hWnd, penMemory); /// 추가
+                    FileManager::fileManager.selectFileMode(SD_FILEMANAGER_BT, hWnd, penMemory);
                 }
                 else {
                     // 파일이 존재하지 않음
@@ -134,7 +136,7 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             if (function->getDrawLInfoEmpty()) { break; }
             if (!function->getIsReplay()) {
                 SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_CLEAR_BT, 0);
-                SendMessage(WndFunc::nameWnd, WM_SETTEXT, 0, (LPARAM)L"이름 없음"); /// 2024_GuestBook_Team1로 메시지 전달 /// 추가
+                SendMessage(WndFunc::nameWnd, WM_SETTEXT, 0, (LPARAM)L"이름 없음");
             }
         }
 
