@@ -204,78 +204,94 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             selectedIcon = IDI_WATERPEN_ICON;
         }
 
-        /// 색상버튼 1
-        else if (IntersectRect(&a, &mouse, &colorButton1.rectButton))
+/// 색상 버튼 1
+else if (IntersectRect(&a, &mouse, &colorButton1.rectButton))
+{
+    if (DW_ColorBox::colorSelect == 0)
+    {
+        if (IsWindowVisible(WndFunc::colorWnd))
         {
-            if (DW_ColorBox::colorSelect == 0)
-            {
-                // colorWnd가 열려 있는지 확인
-                if (IsWindowVisible(WndFunc::colorWnd))
-                {
-                    ShowWindow(WndFunc::colorWnd, SW_HIDE); // 열려 있으면 닫기
-                }
-                else
-                {
-                    ShowWindow(WndFunc::colorWnd, SW_SHOW); // 닫혀 있으면 열기
-                }
-            }
-            else
-            {
-                DW_ColorBox::colorSelect = 0;
-                ShowWindow(WndFunc::colorWnd, SW_HIDE);
-            }
-
-            selectedColorButton = &colorButton1; // 선택한 컬러 버튼의 객체 저장
+            ShowWindow(WndFunc::colorWnd, SW_HIDE);
         }
-
-        /// 색상 버튼 2
-        else if (IntersectRect(&a, &mouse, &colorButton2.rectButton))
+        else
         {
-            /// 기존에 색상버튼1 선택시 컬러 팔레트 띄움
-            if (DW_ColorBox::colorSelect == 1)
-            {
-                // colorWnd가 열려 있는지 확인
-                if (IsWindowVisible(WndFunc::colorWnd))
-                {
-                    ShowWindow(WndFunc::colorWnd, SW_HIDE); // 열려 있으면 닫기
-                }
-                else
-                {
-                    ShowWindow(WndFunc::colorWnd, SW_SHOW); // 닫혀 있으면 열기
-                }
-            }
-            else
-            {
-                /// 기존에 선택이 안되어있을시 이 컬러버튼 지정
-                DW_ColorBox::colorSelect = 1;
-                ShowWindow(WndFunc::colorWnd, SW_HIDE);
-            }
-
-            selectedColorButton = &colorButton2; // 선택한 컬러 버튼의 객체 저장
+            ShowWindow(WndFunc::colorWnd, SW_SHOW);
         }
-        /// 색상 버튼 3
-        else if (IntersectRect(&a, &mouse, &colorButton3.rectButton))
+    }
+    else
+    {
+        DW_ColorBox::colorSelect = 0;
+        int thickness = DW_ColorBox::getThicknessNum(0);
+        PenThickness::setPenWidth(thickness);
+        SendDlgItemMessage(hWnd, 1, TBM_SETPOS, TRUE, thickness); // 슬라이더 위치 업데이트
+
+        // 버튼 색상 및 영역 업데이트
+        ShowWindow(WndFunc::colorWnd, SW_HIDE);
+        InvalidateRect(hWnd, &colorButton1.rectButton, TRUE); // 버튼 영역 무효화
+    }
+
+    selectedColorButton = &colorButton1;
+}
+
+/// 색상 버튼 2
+else if (IntersectRect(&a, &mouse, &colorButton2.rectButton))
+{
+    if (DW_ColorBox::colorSelect == 1)
+    {
+        if (IsWindowVisible(WndFunc::colorWnd))
         {
-            if (DW_ColorBox::colorSelect == 2)
-            {
-                // colorWnd가 열려 있는지 확인
-                if (IsWindowVisible(WndFunc::colorWnd))
-                {
-                    ShowWindow(WndFunc::colorWnd, SW_HIDE); // 열려 있으면 닫기
-                }
-                else
-                {
-                    ShowWindow(WndFunc::colorWnd, SW_SHOW); // 닫혀 있으면 열기
-                }
-            }
-            else
-            {
-                DW_ColorBox::colorSelect = 2;
-                ShowWindow(WndFunc::colorWnd, SW_HIDE);
-            }
-
-            selectedColorButton = &colorButton3; // 선택한 컬러 버튼의 객체 저장
+            ShowWindow(WndFunc::colorWnd, SW_HIDE);
         }
+        else
+        {
+            ShowWindow(WndFunc::colorWnd, SW_SHOW);
+        }
+    }
+    else
+    {
+        DW_ColorBox::colorSelect = 1;
+        int thickness = DW_ColorBox::getThicknessNum(1);
+        PenThickness::setPenWidth(thickness);
+        SendDlgItemMessage(hWnd, 1, TBM_SETPOS, TRUE, thickness); // 슬라이더 위치 업데이트
+
+        // 버튼 색상 및 영역 업데이트
+        ShowWindow(WndFunc::colorWnd, SW_HIDE);
+        InvalidateRect(hWnd, &colorButton2.rectButton, TRUE); // 버튼 영역 무효화
+    }
+
+    selectedColorButton = &colorButton2;
+}
+
+/// 색상 버튼 3
+else if (IntersectRect(&a, &mouse, &colorButton3.rectButton))
+{
+    if (DW_ColorBox::colorSelect == 2)
+    {
+        if (IsWindowVisible(WndFunc::colorWnd))
+        {
+            ShowWindow(WndFunc::colorWnd, SW_HIDE);
+        }
+        else
+        {
+            ShowWindow(WndFunc::colorWnd, SW_SHOW);
+        }
+    }
+    else
+    {
+        DW_ColorBox::colorSelect = 2;
+        int thickness = DW_ColorBox::getThicknessNum(2);
+        PenThickness::setPenWidth(thickness);
+        SendDlgItemMessage(hWnd, 1, TBM_SETPOS, TRUE, thickness); // 슬라이더 위치 업데이트
+
+        // 버튼 색상 및 영역 업데이트
+        ShowWindow(WndFunc::colorWnd, SW_HIDE);
+        InvalidateRect(hWnd, &colorButton3.rectButton, TRUE); // 버튼 영역 무효화
+    }
+
+    selectedColorButton = &colorButton3;
+}
+
+
 
         /// 지우개 버튼 
         else if (IntersectRect(&a, &mouse, &eraseButton.rectButton)) {

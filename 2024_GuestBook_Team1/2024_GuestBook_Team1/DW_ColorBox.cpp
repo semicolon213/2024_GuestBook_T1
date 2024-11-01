@@ -10,8 +10,10 @@ double hue = 0.0, saturation = 1.0, value = 1.0;
 int red = 255, green = 0, blue = 0;
 RECT wheelRect, barRect, selectedRect;
 RECT redSliderRect, greenSliderRect, blueSliderRect;
+RECT thicknessSliderRect;
 
-COLORREF DW_ColorBox::colorP[3] = { RGB(0,0,0),RGB(0,0,0),RGB(0,0,0) };
+COLORREF DW_ColorBox::colorP[3] = { RGB(255,0,0),RGB(0,255,0),RGB(0,0,255) };
+int DW_ColorBox::thicknessP[3] = { 3, 3, 3 }; // 각 버튼의 초기 굵기를 3으로 설정
 
 COLORREF DW_ColorBox::getColorNum(int colorSelect) {
     return DW_ColorBox::colorP[colorSelect];
@@ -19,6 +21,13 @@ COLORREF DW_ColorBox::getColorNum(int colorSelect) {
 
 void DW_ColorBox::setColorNum(int num, COLORREF color) {
     DW_ColorBox::colorP[num] = color;
+}
+void DW_ColorBox::setThicknessNum(int num, int thickness) {
+    DW_ColorBox::thicknessP[num] = thickness;
+}
+
+int DW_ColorBox::getThicknessNum(int colorSelect) {
+    return DW_ColorBox::thicknessP[colorSelect];
 }
 
 
@@ -62,14 +71,17 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
         redSliderRect = { 50, 350, 310, 370 };
         greenSliderRect = { 50, 390, 310, 410 };
         blueSliderRect = { 50, 430, 310, 450 };
+        thicknessSliderRect = { 50, 470, 310, 490 };
         break;
     }
     case WM_COMMAND:
     {
-        if (LOWORD(wParam) == IDC_CLOSE_BUTTON) {
-            ShowWindow(hWnd, SW_HIDE);
-            return 0;
-        }
+       
+
+        // 선택된 버튼의 굵기로 슬라이더 위치를 설정
+        int selectedThickness = DW_ColorBox::getThicknessNum(DW_ColorBox::colorSelect);
+        SendDlgItemMessage(hWnd, 1, TBM_SETPOS, TRUE, selectedThickness);
+        InvalidateRect(hWnd, &selectedRect, TRUE);  // 갱신 필요 시
         break;
     }
     case WM_PAINT:
@@ -77,6 +89,7 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
 
+        // 모든 슬라이더 및 현재 값을 표시하는 삼각형 그리기
         colorbox->DrawColorWheel(hdc, (wheelRect.left + wheelRect.right) / 2, (wheelRect.top + wheelRect.bottom) / 2, (wheelRect.right - wheelRect.left) / 2);
         colorbox->DrawColorBar(hdc, barRect);
         colorbox->DrawSelectedColor(hdc, selectedRect, RGB(red, green, blue));
@@ -85,69 +98,97 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
         colorbox->DrawSlider(hdc, greenSliderRect, green, 255);
         colorbox->DrawSlider(hdc, blueSliderRect, blue, 255);
 
+        int thicknessValue = DW_ColorBox::getThicknessNum(DW_ColorBox::colorSelect);
+        colorbox->DrawThicknessSlider(hdc, thicknessSliderRect, thicknessValue, 20);
 
         EndPaint(hWnd, &ps);
         break;
     }
+   
 
-    case WM_LBUTTONDOWN:
-    case WM_MOUSEMOVE:
-        if (wParam & MK_LBUTTON)
-        {
-            int xPos = LOWORD(lParam);
-            int yPos = HIWORD(lParam);
+   case WM_LBUTTONDOWN:
+{
+    int xPos = LOWORD(lParam);
+    int yPos = HIWORD(lParam);
 
-            if (PtInRect(&wheelRect, { xPos, yPos }))
-            {
-                int centerX = (wheelRect.left + wheelRect.right) / 2;
-                int centerY = (wheelRect.top + wheelRect.bottom) / 2;
-                int radius = (wheelRect.right - wheelRect.left) / 2;
+    // 색상 휠 내 클릭 확인
+    if (PtInRect(&wheelRect, { xPos, yPos })) {
+        DW_ColorBox::colorP[DW_ColorBox::colorSelect] = RGB(red, green, blue);
+        DW_ColorBox::setThicknessNum(DW_ColorBox::colorSelect, PenThickness::getPenWidth());
+        PenThickness::setPenWidth(DW_ColorBox::getThicknessNum(DW_ColorBox::colorSelect));
+        InvalidateRect(hWnd, &selectedRect, TRUE);
+    }
 
-                double dx = xPos - centerX;
-                double dy = yPos - centerY;
-                double distance = sqrt(dx * dx + dy * dy);
+    if (PtInRect(&thicknessSliderRect, { xPos, yPos })) {
+        int newThickness = max(1, min(20, (xPos - thicknessSliderRect.left) * 20 / (thicknessSliderRect.right - thicknessSliderRect.left)));
+        DW_ColorBox::setThicknessNum(DW_ColorBox::colorSelect, newThickness);
+        PenThickness::setPenWidth(newThickness);
 
-                if (distance <= radius)
-                {
-                    hue = atan2(dy, dx) * 180 / 3.14159265358979323846 + 180;
-                    saturation = min(distance / radius, 1.0);
-                    COLORREF color = colorbox->HSVtoRGB(hue, saturation, value);
-                    red = GetRValue(color);
-                    green = GetGValue(color);
-                    blue = GetBValue(color);
-                    InvalidateRect(hWnd, NULL, FALSE);
-                }
-            }
-            else if (PtInRect(&barRect, { xPos, yPos }))
-            {
-                value = 1.0 - (double)(yPos - barRect.top) / (barRect.bottom - barRect.top);
-                COLORREF color = colorbox->HSVtoRGB(hue, saturation, value);
-                red = GetRValue(color);
-                green = GetGValue(color);
-                blue = GetBValue(color);
-                InvalidateRect(hWnd, NULL, FALSE);
-            }
-            else if (PtInRect(&redSliderRect, { xPos, yPos }))
-            {
-                red = 255 * (xPos - redSliderRect.left) / (redSliderRect.right - redSliderRect.left);
-                colorbox->RGBtoHSV(RGB(red, green, blue), hue, saturation, value);
-                InvalidateRect(hWnd, NULL, FALSE);
-            }
-            else if (PtInRect(&greenSliderRect, { xPos, yPos }))
-            {
-                green = 255 * (xPos - greenSliderRect.left) / (greenSliderRect.right - greenSliderRect.left);
-                colorbox->RGBtoHSV(RGB(red, green, blue), hue, saturation, value);
-                InvalidateRect(hWnd, NULL, FALSE);
-            }
-            else if (PtInRect(&blueSliderRect, { xPos, yPos }))
-            {
-                blue = 255 * (xPos - blueSliderRect.left) / (blueSliderRect.right - blueSliderRect.left);
-                colorbox->RGBtoHSV(RGB(red, green, blue), hue, saturation, value);
-                InvalidateRect(hWnd, NULL, FALSE);
-            }
-            DW_ColorBox::colorP[0] = RGB(red, green, blue);
-            break;
-        }
+        // 굵기 슬라이더 갱신
+        colorbox->UpdateSliderMarker(hWnd, thicknessSliderRect, newThickness, 20);
+    }
+}
+   case WM_MOUSEMOVE:
+       if (wParam & MK_LBUTTON)
+       {
+           int xPos = LOWORD(lParam);
+           int yPos = HIWORD(lParam);
+
+           if (PtInRect(&wheelRect, { xPos, yPos }))
+           {
+               int centerX = (wheelRect.left + wheelRect.right) / 2;
+               int centerY = (wheelRect.top + wheelRect.bottom) / 2;
+               int radius = (wheelRect.right - wheelRect.left) / 2;
+
+               double dx = xPos - centerX;
+               double dy = yPos - centerY;
+               double distance = sqrt(dx * dx + dy * dy);
+
+               if (distance <= radius)
+               {
+                   hue = atan2(dy, dx) * 180 / 3.14159265358979323846 + 180;
+                   saturation = min(distance / radius, 1.0);
+                   COLORREF color = colorbox->HSVtoRGB(hue, saturation, value);
+                   red = GetRValue(color);
+                   green = GetGValue(color);
+                   blue = GetBValue(color);
+                   InvalidateRect(hWnd, &wheelRect, FALSE);  // 색상 휠 영역만 갱신
+               }
+           }
+           else if (PtInRect(&barRect, { xPos, yPos }))
+           {
+               value = 1.0 - (double)(yPos - barRect.top) / (barRect.bottom - barRect.top);
+               COLORREF color = colorbox->HSVtoRGB(hue, saturation, value);
+               red = GetRValue(color);
+               green = GetGValue(color);
+               blue = GetBValue(color);
+               InvalidateRect(hWnd, &barRect, FALSE);  // 색상 바 영역만 갱신
+           }
+           else if (PtInRect(&redSliderRect, { xPos, yPos }))
+           {
+               red = 255 * (xPos - redSliderRect.left) / (redSliderRect.right - redSliderRect.left);
+               colorbox->RGBtoHSV(RGB(red, green, blue), hue, saturation, value);
+               InvalidateRect(hWnd, &redSliderRect, FALSE);  // 빨간 슬라이더 영역만 갱신
+           }
+           else if (PtInRect(&greenSliderRect, { xPos, yPos }))
+           {
+               green = 255 * (xPos - greenSliderRect.left) / (greenSliderRect.right - greenSliderRect.left);
+               colorbox->RGBtoHSV(RGB(red, green, blue), hue, saturation, value);
+               InvalidateRect(hWnd, &greenSliderRect, FALSE);  // 초록 슬라이더 영역만 갱신
+           }
+           else if (PtInRect(&blueSliderRect, { xPos, yPos }))
+           {
+               blue = 255 * (xPos - blueSliderRect.left) / (blueSliderRect.right - blueSliderRect.left);
+               colorbox->RGBtoHSV(RGB(red, green, blue), hue, saturation, value);
+               InvalidateRect(hWnd, &blueSliderRect, FALSE);  // 파란 슬라이더 영역만 갱신
+           }
+
+           // 현재 선택된 색상 버튼에 색상 저장
+           DW_ColorBox::colorP[DW_ColorBox::colorSelect] = RGB(red, green, blue);
+
+           break;
+       }
+
 
 
     default:
@@ -198,9 +239,8 @@ void DW_ColorBox::DrawSelectedColor(HDC hdc, RECT rect, COLORREF color)
     DeleteObject(hBrush);
 }
 
-void DW_ColorBox::DrawSlider(HDC hdc, RECT rect, int value, int max)
-{
-    // 배경 그리기
+void DW_ColorBox::DrawSlider(HDC hdc, RECT rect, int value, int max) {
+    // 슬라이더 배경 그리기
     HBRUSH hBackgroundBrush = CreateSolidBrush(RGB(240, 240, 240));
     FillRect(hdc, &rect, hBackgroundBrush);
     DeleteObject(hBackgroundBrush);
@@ -212,13 +252,54 @@ void DW_ColorBox::DrawSlider(HDC hdc, RECT rect, int value, int max)
     FillRect(hdc, &barRect, hBarBrush);
     DeleteObject(hBarBrush);
 
-    // 테두리 그리기
+    // 슬라이더 테두리
     HPEN hPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
     SelectObject(hdc, hPen);
     Rectangle(hdc, rect.left, rect.top, rect.right, rect.bottom);
     DeleteObject(hPen);
+
+    // 현재 값 위치에 삼각형 그리기
+    DrawSliderMarker(hdc, rect, value, max);
 }
 
+void DW_ColorBox::DrawSliderMarker(HDC hdc, RECT rect, int value, int max) {
+    // 마커의 위치 계산
+    int markerPosition = rect.left + (rect.right - rect.left) * value / max;
+
+    POINT triangleUp[3] = { {markerPosition, rect.top - 5}, {markerPosition - 5, rect.top - 15}, {markerPosition + 5, rect.top - 15} };
+    POINT triangleDown[3] = { {markerPosition, rect.bottom + 5}, {markerPosition - 5, rect.bottom + 15}, {markerPosition + 5, rect.bottom + 15} };
+
+    HBRUSH hTriangleBrush = CreateSolidBrush(RGB(0, 0, 0));
+    SelectObject(hdc, hTriangleBrush);
+
+    Polygon(hdc, triangleUp, 3);
+    Polygon(hdc, triangleDown, 3);
+
+    DeleteObject(hTriangleBrush);
+}
+
+void DW_ColorBox::DrawThicknessSlider(HDC hdc, RECT rect, int thicknessValue, int maxThickness) {
+    // 슬라이더 배경
+    HBRUSH hBackgroundBrush = CreateSolidBrush(RGB(240, 240, 240));
+    FillRect(hdc, &rect, hBackgroundBrush);
+    DeleteObject(hBackgroundBrush);
+
+    // 굵기 슬라이더 바 그리기
+    int barWidth = (rect.right - rect.left) * thicknessValue / maxThickness;
+    RECT barRect = { rect.left, rect.top, rect.left + barWidth, rect.bottom };
+    HBRUSH hBarBrush = CreateSolidBrush(RGB(100, 100, 100));
+    FillRect(hdc, &barRect, hBarBrush);
+    DeleteObject(hBarBrush);
+
+    // 슬라이더 테두리
+    HPEN hPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
+    SelectObject(hdc, hPen);
+    Rectangle(hdc, rect.left, rect.top, rect.right, rect.bottom);
+    DeleteObject(hPen);
+
+    // 굵기 마커 그리기
+    DrawSliderMarker(hdc, rect, thicknessValue, maxThickness);
+}
 COLORREF DW_ColorBox::HSVtoRGB(double h, double s, double v)
 {
     double r, g, b;
@@ -285,3 +366,9 @@ void DW_ColorBox::RGBtoHSV(COLORREF rgb, double& h, double& s, double& v)
 }
 
 
+
+// 슬라이더 마커의 위치를 즉시 갱신하는 함수
+void DW_ColorBox::UpdateSliderMarker(HWND hWnd, RECT rect, int value, int max) {
+    InvalidateRect(hWnd, &rect, TRUE);   // 마커 영역 무효화
+    UpdateWindow(hWnd);                  // 즉시 WM_PAINT 호출
+}

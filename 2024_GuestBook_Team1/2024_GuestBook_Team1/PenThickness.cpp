@@ -54,7 +54,10 @@ INT_PTR CALLBACK PenThickness::dlgProc(HWND hDlg, UINT message, WPARAM wParam, L
     return FALSE;
 }
 
-// 펜 굵기를 반환하는 함수
 int PenThickness::getPenWidth() {
-    return penWidth;  // 현재 설정된 펜 굵기 값 반환
+    return penWidth;
+}
+
+void PenThickness::setPenWidth(int width) {
+    penWidth = width;
 }
