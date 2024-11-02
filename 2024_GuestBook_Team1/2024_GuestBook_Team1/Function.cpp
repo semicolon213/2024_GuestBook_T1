@@ -351,42 +351,40 @@ void Function::paint(HDC hdc, RECT canvasRT, PAINTSTRUCT ps)
 	FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1)); // ¹è°æ »öÄ¥
 	
 
-		if (!getIsReplay())
+	if (!getIsReplay())
+	{
+		for (const auto& record : getDrawLInfo().pInfo)
 		{
-			
-			for (const auto& record : getDrawLInfo().pInfo)
+			if (record.bShape != BRUSH)
+				setBShape(record.bShape);
+			else
+				setBShape(BASIC);
+
+			switch (record.state)
 			{
-				if (record.bShape != BRUSH)
-					setBShape(record.bShape);
-				else
-					setBShape(BASIC);
-
-				switch (record.state)
-				{
-				case WM_LBUTTONDOWN:
+			case WM_LBUTTONDOWN:
+				mouseUD(record, FALSE);
+				break;
+			case WM_LBUTTONUP:
+				if (record.bShape == BRUSH) {
 					mouseUD(record, FALSE);
-					break;
-				case WM_LBUTTONUP:
-					if (record.bShape == BRUSH) {
-						mouseUD(record, FALSE);
-						bShape = BRUSH;
-					}
-
-					break;
-
-				case WM_MOUSEMOVE:
-					re_draw(hdc, record, WndFunc::canvasWnd);
-					break;
-
-
-
-				default:
-					break;
+					bShape = BRUSH;
 				}
-			}
+				break;
 
-			DeleteObject(nPen);
+			case WM_MOUSEMOVE:
+				draw(WndFunc::canvasWnd, record, FALSE);
+				break;
+
+
+
+			default:
+				break;
+			}
 		}
+
+		DeleteObject(nPen);
+	}
 }
 
 
