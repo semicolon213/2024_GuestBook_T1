@@ -92,8 +92,8 @@ LRESULT DrowWindow::handleMessageFM(HWND hWnd, UINT message, WPARAM wParam, LPAR
         RECT rect;
         GetClientRect(WndFunc::drowWnd, &rect);
 
-        int width = rect.right - rect.left;
-        int height = rect.bottom - rect.top;
+        int width = rect.right - rect.left- 1400;
+        int height = rect.bottom - rect.top - 570;
 
         DW_FileManager::hListBox = CreateWindowW(L"LISTBOX", NULL, WS_CHILD | WS_VISIBLE | LBS_NOTIFY | WS_VSCROLL | WS_BORDER,
             rect.left + 8, rect.top + 8, width, height, hWnd, (HMENU)101, GetModuleHandle(NULL), NULL);
