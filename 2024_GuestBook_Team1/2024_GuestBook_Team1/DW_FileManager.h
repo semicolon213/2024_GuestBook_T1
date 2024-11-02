@@ -1,26 +1,23 @@
 #pragma once
 #include "DrowWindow.h"
 #include "FileManager.h"
+#include "DW_SideMenu.h"
+
 class DW_FileManager
 {
-public: //
-    std::vector<PINFO>* penMemory; /// Ãß°¡
-
-    static HWND hListBox2;//
+public:
+    static HWND hListBox;
     
 
-    static std::wstring filePath;//
-
-   
+    static std::wstring filePath;
 
 
-protected://
-   
+protected:
 
-    HWND NewFile; //
-    HWND SaveFile;// 
-    HWND LoadFile;//
-    HWND FileManager;//
+    HWND NewFile; 
+    HWND SaveFile;
+    HWND LoadFile;
+    HWND FileManager;
    
 };
 

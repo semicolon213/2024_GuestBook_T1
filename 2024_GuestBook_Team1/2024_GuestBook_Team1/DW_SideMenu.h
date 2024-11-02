@@ -9,11 +9,9 @@
 class DW_SideMenu
 {
 public:
-    std::vector<PINFO>* penMemory; /// 추가
+    static std::vector<PINFO>* penMemory; /// 추가
 
-    static HWND hListBox;
-
-    static std::wstring filePath;
+    bool isListBoxVisible;
 protected:
     HINSTANCE sInst;
     HWND sWnd;

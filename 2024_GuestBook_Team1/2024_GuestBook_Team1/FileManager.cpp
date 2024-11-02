@@ -151,18 +151,18 @@ void FileManager::LoadFileList()
 //파일리스트 UI를 업데이트 함
 void FileManager::UpdateFileListUI()
 {
-    if (DW_SideMenu::hListBox == nullptr)
+    if (DW_FileManager::hListBox == nullptr)
     {
         return;
     }
     /// 기존 리스트 박스 초기화 
-    SendMessage(DW_SideMenu::hListBox, LB_RESETCONTENT, 0, 0);
+    SendMessage(DW_FileManager::hListBox, LB_RESETCONTENT, 0, 0);
 
     /// 파일 리스트에 파일명 추가
     for (const auto& file : savedFileList)
     {
         // LB_ADDSTRING API로 추가 
-        SendMessage(DW_SideMenu::hListBox, LB_ADDSTRING, 0, (LPARAM)file.c_str());
+        SendMessage(DW_FileManager::hListBox, LB_ADDSTRING, 0, (LPARAM)file.c_str());
     }
 }
 
@@ -336,14 +336,14 @@ void FileManager::selectFileMode(int wmId, HWND s_hWnd, std::vector<PINFO>* penM
 
     case SD_FILEMANAGER_BT:
     {
-        MessageBox(nullptr, DW_SideMenu::filePath.c_str(), L"파일 경로", MB_OK); // 경로 출력
+        MessageBox(nullptr, DW_FileManager::filePath.c_str(), L"파일 경로", MB_OK); // 경로 출력
 
         // filePath에 저장된 파일을 즉시 로드
-        if (load(DW_SideMenu::filePath.c_str(), penMemory, s_hWnd)) {
+        if (load(DW_FileManager::filePath.c_str(), penMemory, s_hWnd)) {
             Function::drawLInfo.pInfo = *penMemory;
 
             /// 파일 이름만 추출
-            baseName = DW_SideMenu::filePath;
+            baseName = DW_FileManager::filePath;
             size_t pos = baseName.find_last_of(L"\\/");
             if (pos != std::wstring::npos) {
                 baseName = baseName.substr(pos + 1);

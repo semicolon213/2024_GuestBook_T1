@@ -1,6 +1,35 @@
 #include "DW_FileManager.h"
 
-HWND DW_FileManager::hListBox2 = nullptr;
+HWND DW_FileManager::hListBox = nullptr; // 초기값 설정
+
+// 파일 이름을 저장할 벡터 추가
+std::vector<std::wstring> fileList; // 파일 목록 벡터
+
+std::wstring filePath;
+std::wstring DW_FileManager::filePath; // 정의
+
+// 파일 매니저 버튼 클릭 여부를 체크하는 변수
+
+std::wstring getFilePath() {
+    return L"C:\\2024_GuestBook_T1\\file\\"; // 절대 경로로 변경
+}
+
+void populateFileList(HWND hListBox) {
+    std::wstring filePath = getFilePath();
+    std::wcout << L"Searching in: " << filePath << std::endl; // 추가된 로그
+    WIN32_FIND_DATAW findFileData;
+    HANDLE hFind = FindFirstFileW((filePath + L"*.txt").c_str(), &findFileData); // .txt 파일만 찾기
+
+    if (hFind != INVALID_HANDLE_VALUE) {
+        do {
+            // 파일 이름을 리스트박스에 추가
+            if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) { // 디렉토리 제외
+                SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)findFileData.cFileName);
+            }
+        } while (FindNextFileW(hFind, &findFileData) != 0);
+        FindClose(hFind);
+    }
+}
 
 /// 네임 바 정적 메서드
 LRESULT CALLBACK DrowWindow::WndProcFM(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -31,9 +60,15 @@ LRESULT DrowWindow::handleMessageFM(HWND hWnd, UINT message, WPARAM wParam, LPAR
     {
     case WM_CREATE:
     {
-        DW_FileManager::hListBox2 = CreateWindowW(L"LISTBOX", NULL, WS_CHILD | WS_VISIBLE | LBS_NOTIFY | WS_VSCROLL,
-            0, 0, 100, 100, WndFunc::fileManager, (HMENU)102, GetModuleHandle(NULL), NULL);
+        // 리스트박스 생성 예시
+        DW_FileManager::hListBox = CreateWindowW(L"LISTBOX", NULL, WS_CHILD | WS_VISIBLE | LBS_NOTIFY | WS_VSCROLL,
+            0, 0, 500, 500, hWnd, (HMENU)101, GetModuleHandle(NULL), NULL);
 
+        // 초기 상태에서 리스트박스를 숨김
+        ShowWindow(DW_FileManager::hListBox, SW_HIDE);
+
+        // 파일 목록을 리스트박스에 추가
+        populateFileList(DW_FileManager::hListBox); // .txt 파일 목록을 리스트박스에 추가합니다.
         break;
     }
     case WM_SIZE:
@@ -47,17 +82,40 @@ LRESULT DrowWindow::handleMessageFM(HWND hWnd, UINT message, WPARAM wParam, LPAR
     }
     case WM_LBUTTONDBLCLK:
     {
-        // 마우스 왼쪽 버튼 더블 클릭
-        MessageBox(hWnd, L"Left Button Double Clicked", L"Double Click", MB_OK);
+
 
         break;
     }
     case WM_COMMAND:
     {
-        int wmId = wParam;
+            // 리스트박스 더블 클릭 메시지 처리
+        if (LOWORD(wParam) == 101 && HIWORD(wParam) == LBN_DBLCLK) {
+            int selectedIndex = SendMessage(DW_FileManager::hListBox, LB_GETCURSEL, 0, 0);
+            if (selectedIndex != LB_ERR) {
+                // 선택한 항목의 텍스트 가져오기
+                wchar_t selectedFileName[256] = {};
+                SendMessage(DW_FileManager::hListBox, LB_GETTEXT, selectedIndex, (LPARAM)selectedFileName);
 
-        switch (wmId)
-        {
+                // 선택한 파일 이름
+                std::wstring selectedFile(selectedFileName);
+
+                // 파일 경로 가져오기
+                std::wstring desktopPath = getFilePath();
+
+                // 전체 파일 경로 생성
+                DW_FileManager::filePath = desktopPath + selectedFile;
+
+                // 파일 존재 여부 확인
+                DWORD fileAttr = GetFileAttributesW(DW_FileManager::filePath.c_str());
+                if (fileAttr != INVALID_FILE_ATTRIBUTES && !(fileAttr & FILE_ATTRIBUTE_DIRECTORY)) {
+                    FileManager::fileManager.selectFileMode(SD_FILEMANAGER_BT, hWnd, DW_SideMenu::penMemory);
+                }
+                else {
+                    // 파일이 존재하지 않음
+                    MessageBox(hWnd, L"파일이 존재하지 않습니다.", L"알림", MB_OK);
+
+                }
+            }
 
         }
         break;
