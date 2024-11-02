@@ -4,6 +4,7 @@
 #include "WndFunc.h"
 #include "MakeButton.h"
 #include "Resource.h"
+#include "DW_FileManager.h" // 
 
 class DW_NameBar
 {

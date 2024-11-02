@@ -126,8 +126,10 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             if (WndFunc::sideWnd == nullptr) {
                 createWindowSB(WndFunc::wndSize.right - 60, 110, 60, 300, WndFunc::drowWnd);
             }
-            /// 사이드 윈도우가 이미 열려있으면 창 삭제
             else {
+                /// 파일매니저와 리스트 박스 끄기
+                ShowWindow(DW_FileManager::hListBox, SW_HIDE); 
+                ShowWindow(WndFunc::fileManager, SW_HIDE);
                 /// 사이드 윈도우 DestroyWindow
                 DestroyWindow(WndFunc::sideWnd);
                 /// 사이드 윈도우 핸들값 초기화
@@ -144,7 +146,7 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             ShowWindow(WndFunc::canvasWnd, SW_HIDE);
             ShowWindow(WndFunc::sideWnd, SW_HIDE);
             ShowWindow(WndFunc::visitListWnd, SW_HIDE);
-
+            
             ShowWindow(WndFunc::DrowBT, SW_SHOW);
             ShowWindow(WndFunc::LoadBT, SW_SHOW);
             ShowWindow(WndFunc::CreditBT, SW_SHOW);

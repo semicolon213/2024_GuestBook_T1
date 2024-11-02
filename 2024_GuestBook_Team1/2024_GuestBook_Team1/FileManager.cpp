@@ -56,8 +56,8 @@ void FileManager::Panels(HWND hWnd) //파일리스트
     MoveWindow(hRightPanel, panelX, top, rect.right, rect.bottom, TRUE);
 
     // 파일 매니저를 맨 위로 가져옴 (임시방편)
-    SetWindowPos(hRightPanel, HWND_TOP, 0, 0, 0, 0,
-        SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+   /* SetWindowPos(hRightPanel, HWND_TOP, 0, 0, 0, 0,
+        SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);*/
 
 }
 

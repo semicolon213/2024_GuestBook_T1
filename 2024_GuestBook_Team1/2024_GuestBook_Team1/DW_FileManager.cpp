@@ -60,9 +60,20 @@ LRESULT DrowWindow::handleMessageFM(HWND hWnd, UINT message, WPARAM wParam, LPAR
     {
     case WM_CREATE:
     {
-        // 리스트박스 생성 예시
-        DW_FileManager::hListBox = CreateWindowW(L"LISTBOX", NULL, WS_CHILD | WS_VISIBLE | LBS_NOTIFY | WS_VSCROLL,
-            0, 0, 500, 500, hWnd, (HMENU)101, GetModuleHandle(NULL), NULL);
+        RECT rect;
+        GetClientRect(WndFunc::drowWnd, &rect);
+
+        int width = rect.right - rect.left; // -10을 하여 폭을 줄여 테두리가 잘 보이도록 함
+        int height = rect.bottom - rect.top; // -10을 하여 높이를 줄여 테두리가 잘 보이도록 함
+
+        // 리스트박스 생성
+        DW_FileManager::hListBox = CreateWindowW(L"LISTBOX", NULL, WS_CHILD | WS_VISIBLE | LBS_NOTIFY | WS_VSCROLL | WS_BORDER,
+            rect.left+8, rect.top+8, width, height, hWnd, (HMENU)101, GetModuleHandle(NULL), NULL);
+
+        SendMessage(DW_FileManager::hListBox, LB_SETHORIZONTALEXTENT, width, 0); //파일 선택 시 여백이 없도록 설정 
+
+        
+        
 
         // 초기 상태에서 리스트박스를 숨김
         ShowWindow(DW_FileManager::hListBox, SW_HIDE);

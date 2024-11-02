@@ -200,7 +200,7 @@ void DrowWindow::createWindowFM(int left, int top, int right, int bottom, HWND p
     wc111.lpfnWndProc = WndProcFM;  // 네임바 메세지 처리하는 정적 메서드
     wc111.lpszClassName = L"CustomNameWindowClass111";
     wc111.hInstance = hInst;
-    wc111.hbrBackground = CreateSolidBrush(RGB(240, 240, 240));
+    wc111.hbrBackground = CreateSolidBrush(RGB(230, 230, 230));
     wc111.style = CS_DBLCLKS; // CS_DBLCLKS 스타일 추가
 
     if (!RegisterClass(&wc111)) {
@@ -210,7 +210,7 @@ void DrowWindow::createWindowFM(int left, int top, int right, int bottom, HWND p
     WndFunc::fileManager = CreateWindow(
         L"CustomNameWindowClass111",
         L"Name Window",
-        WS_CHILD | WS_VISIBLE | CS_DBLCLKS,
+        WS_CHILD | WS_VISIBLE | CS_DBLCLKS, 
         left, top,
         right,
         bottom,
