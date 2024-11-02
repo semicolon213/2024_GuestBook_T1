@@ -84,7 +84,7 @@ public:
 
 	void paint(HDC, RECT, PAINTSTRUCT);
 
-	void re_draw(HDC, PINFO dInfo);
+	void re_draw(HDC phdc, PINFO pino, HWND hd);
 
 	LINFO getDrawLInfo();
 
@@ -93,7 +93,5 @@ public:
 
 	static int penNum;
 
-	HBITMAP hBitmap = NULL;
-	HDC memDC = NULL;
 
 };

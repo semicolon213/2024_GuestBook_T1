@@ -30,17 +30,23 @@ LRESULT CALLBACK DrowWindow::WndProcCV(HWND hWnd, UINT message, WPARAM wParam, L
 LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message)
 	{
+		static HDC memDC;
+		static HBITMAP hBitmap;
+
 	case WM_CREATE:
 	{	
-		HDC memDC=NULL;
-		HBITMAP	hBitmap=NULL;
+		HDC hdc = GetDC(WndFunc::canvasWnd);
+		memDC = CreateCompatibleDC(hdc);
+		hBitmap = CreateCompatibleBitmap(hdc,WndFunc::wndSize.right, WndFunc::wndSize.bottom);
+		SelectObject(memDC, hBitmap);
+		ReleaseDC(WndFunc::canvasWnd, hdc);
 		function = std::make_unique<Function>();
 		function->GDIPlusStart(); // 붓 gdi 라이브러리 활성화
-		break;
+		
 	}
-
+	break;
 	case WM_COMMAND:
-
+	{
 		if (wParam == TL_CLEAR_BT)
 		{
 			if (function->getIsReset())
@@ -70,11 +76,10 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
 		if (wParam == TL_RESET_BT)
 		{
-			function->reDrawing(WndFunc::drowWnd);
+			function->reDrawing(WndFunc::canvasWnd);
 		}
-		break;
-
-
+	}
+	break;
 	case WM_MOUSEMOVE:
 	{
 
@@ -89,38 +94,50 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		drawPInfo.pWidth = penThickness->getPenWidth(); /// 펜 굵기 설정
 		drawPInfo.state = message;
 		function->draw(WndFunc::canvasWnd, drawPInfo, TRUE); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
+	}
 		break;
 	case WM_LBUTTONDOWN:
+		{
 	case WM_LBUTTONUP:
-		if (GetCapture() == NULL) {
-			function->setisLeftClick(false);
+		if (!function->getIsReset())
+		{
+			break;
 		}
-		if (!function->getIsReset()) break;
 		drawPInfo.lParam = lParam;
 		drawPInfo.pColor = RGB(0, 0, 0);//ColorPalette::colorArr[Function::penNum];
 		drawPInfo.pTime = (DWORD)GetTickCount64();
 		drawPInfo.pWidth = penThickness->getPenWidth(); /// 펜 굵기 설정
 		drawPInfo.state = message;
 		function->mouseUD(drawPInfo, TRUE);
-
-		break;
-		
 	}
+		break;
 	case WM_PAINT:
 	{
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(WndFunc::canvasWnd, &ps);
-		function->paint(hdc, WndFunc::wndSize ,ps);
+
+		function->paint(memDC, WndFunc::wndSize, ps);
+
+		//memDC 를 hdc로 고속 복사
+		BitBlt(hdc, 0, 0, WndFunc::wndSize.right, WndFunc::wndSize.bottom, memDC, 0, 0, SRCCOPY);
+
+		ReleaseDC(hWnd, hdc);
 		EndPaint(WndFunc::canvasWnd, &ps);
 		break;
 	}
 
 	case WM_DESTROY:
-		
+	{
+		DeleteObject(memDC);
+		DeleteObject(hBitmap);
 		break;
-
+	}
 	default:
+	{
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
+	
+}
+
 	return 0;
 }

@@ -1,10 +1,10 @@
 #include "Function.h"
 
-
 int Function::penNum = 0;
 LINFO Function::drawLInfo = { };
 HWND Function::hWnd = nullptr;
 int Function::bShape = BASIC;
+
 
 void Function::record(PINFO inputPI)
 {
@@ -52,30 +52,29 @@ void Function::draw(HWND hWnd, PINFO dInfo, bool isRecord) // 뒤에 브러쉬 추가
 
 }
 
-void Function::re_draw(HDC phdc, PINFO dInfo) // 뒤에 브러쉬 추가
-{	
-	hdc = phdc;
+void Function::re_draw(HDC phdc, PINFO dInfo,HWND hd) // 뒤에 브러쉬 추가
+{
+		hdc = phdc;
 
-	if (isLeftClick) {
-		px3 = LOWORD(dInfo.lParam); // 그리기 시작한 좌표
-		py3 = HIWORD(dInfo.lParam);
+		if (isLeftClick)
+		{
+			px = LOWORD(dInfo.lParam); // 그리기 시작한 좌표
+			py = HIWORD(dInfo.lParam);
 
-		setPenStyle(dInfo, dInfo.pColor);
-		MoveToEx(hdc, x2, y2, NULL);
-		LineTo(hdc, px3, py3);
 
-		DeleteObject(nPen);
+			setPenStyle(dInfo, dInfo.pColor);
+			MoveToEx(hdc, x, y, NULL);
+			LineTo(hdc, px, py);
 
-		x2 = px3;
-		y2 = py3;
-	}
+			DeleteObject(nPen);
 
-	//// GDI 객체 해제
-	//DeleteObject(hBitmap);
-	//DeleteDC(memDC);
+			x = px;
+			y = py;
 
-	}
 
+		}
+
+}
 
 
 void Function::mouseUD(PINFO dInfo, bool isRecord)
@@ -110,7 +109,7 @@ void Function::replayThread(HWND hWnd)
 	setIsReset(false);
 
 	// std::thread를 사용하여 스레드 시작
-	replayThreadHandle = std::thread(&Function::replay, this, WndFunc::drowWnd);
+	replayThreadHandle = std::thread(&Function::replay, this, hWnd);
 
 	threadHandle = replayThreadHandle.native_handle();
 }
@@ -125,13 +124,12 @@ void Function::replay(HWND hWnd)
 	while (isReplay)
 	{
 		// 화면 초기화
-		InvalidateRect(hWnd, NULL, FALSE);
+		InvalidateRect(hWnd, NULL, TRUE);
 		UpdateWindow(hWnd);
 
 		// 화면 DC 가져오기
 		hdc = GetDC(hWnd);
 
-		// 그리기 작업 메모리 DC에서 수행
 		for (size_t i = 0; i < drawLInfo.pInfo.size(); i++)
 		{
 			if (!isReplay)
@@ -153,7 +151,7 @@ void Function::replay(HWND hWnd)
 				break;
 
 			case WM_MOUSEMOVE:
-				draw(WndFunc::canvasWnd, replayInfo, false);
+				draw(hWnd, replayInfo, false);
 				break;
 
 			case WM_LBUTTONUP:
@@ -187,11 +185,11 @@ void Function::reDrawing(HWND hWnd)
 	{
 		isReplay = false;
 		ResumeThread(threadHandle);
-		stopReplay(WndFunc::drowWnd);
+		stopReplay(WndFunc::canvasWnd);
 	}
 
-	InvalidateRect(hWnd, NULL, TRUE);
-	UpdateWindow(hWnd);
+	InvalidateRect(WndFunc::canvasWnd, NULL, TRUE);
+	UpdateWindow(WndFunc::canvasWnd);
 
 	//MessageBox(hWnd, L"reDrawing", L"dd", MB_OK);
 }
@@ -202,7 +200,7 @@ void Function::clearDrawing(HWND hWnd)
 	{
 		isReplay = false;
 		ResumeThread(threadHandle);
-		stopReplay(WndFunc::drowWnd);
+		stopReplay(WndFunc::canvasWnd);
 	}
 
 	// 기록 삭제
@@ -342,6 +340,7 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 	}
 }
 
+
 void Function::paint(HDC hdc, RECT canvasRT, PAINTSTRUCT ps)
 {	
 	cHdc = hdc;
@@ -349,58 +348,45 @@ void Function::paint(HDC hdc, RECT canvasRT, PAINTSTRUCT ps)
 	Rectangle(cHdc, canvasRT.left, canvasRT.top, canvasRT.right, canvasRT.bottom);
 	SelectObject(cHdc, CanvasPen);
 	DeleteObject(CanvasPen);
-
-	if (memDC == NULL) {
-		// 메모리 DC 생성 및 호환 비트맵 할당
-		memDC = CreateCompatibleDC(hdc);
-		hBitmap = CreateCompatibleBitmap(hdc, clientRect.right, clientRect.bottom);
-		SelectObject(memDC, hBitmap);
-		// 메모리 DC에서 배경 지우기
-		FillRect(memDC, &clientRect, (HBRUSH)(COLOR_WINDOW + 1));
-	}
+	FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1)); // 배경 색칠
 	
-	if (!getIsReplay())
-	{
 
-		for (const auto& record : getDrawLInfo().pInfo)
+		if (!getIsReplay())
 		{
-			if (record.bShape != BRUSH)
-				setBShape(record.bShape);
-			else
-				setBShape(BASIC);
-
-			switch (record.state)
+			
+			for (const auto& record : getDrawLInfo().pInfo)
 			{
-			case WM_LBUTTONDOWN:
-				mouseUD(record, FALSE);
-				break;
-			case WM_LBUTTONUP:
-				if (record.bShape == BRUSH) {
+				if (record.bShape != BRUSH)
+					setBShape(record.bShape);
+				else
+					setBShape(BASIC);
+
+				switch (record.state)
+				{
+				case WM_LBUTTONDOWN:
 					mouseUD(record, FALSE);
-					bShape = BRUSH;
+					break;
+				case WM_LBUTTONUP:
+					if (record.bShape == BRUSH) {
+						mouseUD(record, FALSE);
+						bShape = BRUSH;
+					}
+
+					break;
+
+				case WM_MOUSEMOVE:
+					re_draw(hdc, record, WndFunc::canvasWnd);
+					break;
+
+
+
+				default:
+					break;
 				}
-
-				break;
-
-			case WM_MOUSEMOVE:
-				re_draw(cHdc, record);
-				break;
-
-
-
-			default:
-				break;
 			}
-		}
-	}
-	
-	if(!getIsReplay()){
-		BitBlt(cHdc, 0, 0, canvasRT.right, canvasRT.bottom, memDC, 0, 0, SRCCOPY);
-		// 메모리 DC와 비트맵 삭제
-		DeleteObject(hBitmap);
-		DeleteDC(memDC);
-	}
 
+			DeleteObject(nPen);
+		}
 }
 
 

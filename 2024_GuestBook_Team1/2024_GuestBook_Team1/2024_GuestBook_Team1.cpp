@@ -200,6 +200,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         ShowWindow(WndFunc::sideWnd, SW_HIDE);
         ShowWindow(WndFunc::visitListWnd, SW_HIDE);
         break;
+      
     }
         
 
