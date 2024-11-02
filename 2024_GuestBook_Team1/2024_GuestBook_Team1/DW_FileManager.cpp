@@ -8,32 +8,67 @@ std::vector<std::wstring> fileList; // 파일 목록 벡터
 std::wstring filePath;
 std::wstring DW_FileManager::filePath; // 정의
 
-// 파일 매니저 버튼 클릭 여부를 체크하는 변수
-
 std::wstring getFilePath() {
-    return L"..\\..\\file\\"; // 상대 경로로 변경
+    return L"C:\\Users\\tnrlf\\2024_GuestBook_T1\\file\\"; // 파일 폴더 경로 반환
+}
+
+void DW_FileManager::saveFileList(const std::vector<std::wstring>& fileList) {
+    std::wofstream outFile(L"C:\\Users\\tnrlf\\2024_GuestBook_T1\\file\\FileList.txt");
+    if (outFile.is_open()) {
+        for (const auto& fileName : fileList) {
+            outFile << fileName << std::endl;
+        }
+        outFile.close();
+    }
+}
+
+std::vector<std::wstring> DW_FileManager::loadFileList() {
+    std::vector<std::wstring> fileList;
+    std::wifstream inFile(L"C:\\Users\\tnrlf\\2024_GuestBook_T1\\file\\FileList.txt");
+    std::wstring line;
+
+    while (std::getline(inFile, line)) {
+        fileList.push_back(line);
+    }
+    return fileList;
 }
 
 void populateFileList(HWND hListBox) {
+    // 리스트박스를 초기화하지 않음으로써 기존 항목을 유지
+    std::vector<std::wstring> savedFileList = DW_FileManager::loadFileList();
+
+    // 기존 파일 목록을 리스트박스에 추가
+    SendMessage(hListBox, LB_RESETCONTENT, 0, 0);
+
+    for (const auto& fileName : savedFileList) {
+        SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)fileName.c_str());
+    }
+
+    // 새로운 파일을 검색 및 추가
     std::wstring filePath = getFilePath();
-    std::wcout << L"Searching in: " << filePath << std::endl; // 추가된 로그
     WIN32_FIND_DATAW findFileData;
     HANDLE hFind = FindFirstFileW((filePath + L"*.txt").c_str(), &findFileData); // .txt 파일만 찾기
 
     if (hFind != INVALID_HANDLE_VALUE) {
         do {
-            // 파일 이름을 리스트박스에 추가
-            if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) { // 디렉토리 제외
-                SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)findFileData.cFileName);
+            if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+                // 파일이 목록에 이미 있는지 확인
+                auto it = std::find(savedFileList.begin(), savedFileList.end(), findFileData.cFileName);
+                if (it == savedFileList.end()) {
+                    // 중복이 아닌 경우에만 추가
+                    SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)findFileData.cFileName);
+                    savedFileList.push_back(findFileData.cFileName);
+                }
             }
         } while (FindNextFileW(hFind, &findFileData) != 0);
         FindClose(hFind);
     }
+
+    // 업데이트된 파일 목록 저장
+    DW_FileManager::saveFileList(savedFileList);
 }
 
-/// 네임 바 정적 메서드
 LRESULT CALLBACK DrowWindow::WndProcFM(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-
     DrowWindow* pThis = nullptr;
 
     if (message == WM_NCCREATE) {
@@ -46,96 +81,57 @@ LRESULT CALLBACK DrowWindow::WndProcFM(HWND hWnd, UINT message, WPARAM wParam, L
     }
 
     if (pThis) {
-        return pThis->handleMessageFM(hWnd, message, wParam, lParam); // 인스턴스의 가상 함수 호출
+        return pThis->handleMessageFM(hWnd, message, wParam, lParam);
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-
-
-/// 네임 바 메세지 처리 핸들 메서드
-LRESULT DrowWindow::handleMessageFM(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    switch (message)
-    {
-    case WM_CREATE:
-    {
+LRESULT DrowWindow::handleMessageFM(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+    switch (message) {
+    case WM_CREATE: {
         RECT rect;
         GetClientRect(WndFunc::drowWnd, &rect);
 
-        int width = rect.right - rect.left; // -10을 하여 폭을 줄여 테두리가 잘 보이도록 함
-        int height = rect.bottom - rect.top; // -10을 하여 높이를 줄여 테두리가 잘 보이도록 함
+        int width = rect.right - rect.left;
+        int height = rect.bottom - rect.top;
 
-        // 리스트박스 생성
         DW_FileManager::hListBox = CreateWindowW(L"LISTBOX", NULL, WS_CHILD | WS_VISIBLE | LBS_NOTIFY | WS_VSCROLL | WS_BORDER,
-            rect.left+8, rect.top+8, width, height, hWnd, (HMENU)101, GetModuleHandle(NULL), NULL);
+            rect.left + 8, rect.top + 8, width, height, hWnd, (HMENU)101, GetModuleHandle(NULL), NULL);
 
-        SendMessage(DW_FileManager::hListBox, LB_SETHORIZONTALEXTENT, width, 0); //파일 선택 시 여백이 없도록 설정 
+        SendMessage(DW_FileManager::hListBox, LB_SETHORIZONTALEXTENT, width, 0);
 
-        
-        
-
-        // 초기 상태에서 리스트박스를 숨김
         ShowWindow(DW_FileManager::hListBox, SW_HIDE);
 
-        // 파일 목록을 리스트박스에 추가
-        populateFileList(DW_FileManager::hListBox); // .txt 파일 목록을 리스트박스에 추가합니다.
+        populateFileList(DW_FileManager::hListBox);
         break;
     }
-    case WM_SIZE:
-    {
-        break;
-    }
-    case WM_LBUTTONDOWN:
-    {
-        //MessageBox(hWnd, L"dd", L"dd", MB_OK);
-        break;
-    }
-    case WM_LBUTTONDBLCLK:
-    {
-
-
-        break;
-    }
-    case WM_COMMAND:
-    {
-            // 리스트박스 더블 클릭 메시지 처리
+    case WM_COMMAND: {
         if (LOWORD(wParam) == 101 && HIWORD(wParam) == LBN_DBLCLK) {
             int selectedIndex = SendMessage(DW_FileManager::hListBox, LB_GETCURSEL, 0, 0);
             if (selectedIndex != LB_ERR) {
-                // 선택한 항목의 텍스트 가져오기
                 wchar_t selectedFileName[256] = {};
                 SendMessage(DW_FileManager::hListBox, LB_GETTEXT, selectedIndex, (LPARAM)selectedFileName);
 
-                // 선택한 파일 이름
                 std::wstring selectedFile(selectedFileName);
 
-                // 파일 경로 가져오기
                 std::wstring desktopPath = getFilePath();
 
-                // 전체 파일 경로 생성
                 DW_FileManager::filePath = desktopPath + selectedFile;
 
-                // 파일 존재 여부 확인
                 DWORD fileAttr = GetFileAttributesW(DW_FileManager::filePath.c_str());
                 if (fileAttr != INVALID_FILE_ATTRIBUTES && !(fileAttr & FILE_ATTRIBUTE_DIRECTORY)) {
                     FileManager::fileManager.selectFileMode(SD_FILEMANAGER_BT, hWnd, DW_SideMenu::penMemory);
                 }
                 else {
-                    // 파일이 존재하지 않음
                     MessageBox(hWnd, L"파일이 존재하지 않습니다.", L"알림", MB_OK);
-
                 }
             }
-
         }
         break;
     }
-    case WM_PAINT:
-    {
+    case WM_PAINT: {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
-
         EndPaint(hWnd, &ps);
         break;
     }
@@ -144,6 +140,3 @@ LRESULT DrowWindow::handleMessageFM(HWND hWnd, UINT message, WPARAM wParam, LPAR
     }
     return 0;
 }
-
-    
-
