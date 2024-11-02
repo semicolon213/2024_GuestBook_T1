@@ -11,7 +11,7 @@ std::wstring DW_FileManager::filePath; // 정의
 // 파일 매니저 버튼 클릭 여부를 체크하는 변수
 
 std::wstring getFilePath() {
-    return L"C:\\2024_GuestBook_T1\\file\\"; // 절대 경로로 변경
+    return L"..\\..\\file\\"; // 상대 경로로 변경
 }
 
 void populateFileList(HWND hListBox) {
