@@ -155,14 +155,14 @@ void FileManager::UpdateFileListUI()
     {
         return;
     }
-    /// 기존 리스트 박스 초기화 
-    SendMessage(DW_FileManager::hListBox, LB_RESETCONTENT, 0, 0);
 
     /// 파일 리스트에 파일명 추가
     for (const auto& file : savedFileList)
     {
-        // LB_ADDSTRING API로 추가 
-        SendMessage(DW_FileManager::hListBox, LB_ADDSTRING, 0, (LPARAM)file.c_str());
+        if (SendMessage(DW_FileManager::hListBox, LB_FINDSTRINGEXACT, -1, (LPARAM)file.c_str()) == LB_ERR) {
+            // LB_ADDSTRING API로 추가 
+            SendMessage(DW_FileManager::hListBox, LB_ADDSTRING, 0, (LPARAM)file.c_str());
+        }
     }
 }
 

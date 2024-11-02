@@ -9,11 +9,11 @@ std::wstring filePath;
 std::wstring DW_FileManager::filePath; // 정의
 
 std::wstring getFilePath() {
-    return L"C:\\Users\\tnrlf\\2024_GuestBook_T1\\file\\"; // 파일 폴더 경로 반환
+    return L"..\\..\\file\\"; // 파일 폴더 경로 반환
 }
 
 void DW_FileManager::saveFileList(const std::vector<std::wstring>& fileList) {
-    std::wofstream outFile(L"C:\\Users\\tnrlf\\2024_GuestBook_T1\\file\\FileList.txt");
+    std::wofstream outFile(L"..\\..\\file\\FileList.txt");
     if (outFile.is_open()) {
         for (const auto& fileName : fileList) {
             outFile << fileName << std::endl;
@@ -24,7 +24,7 @@ void DW_FileManager::saveFileList(const std::vector<std::wstring>& fileList) {
 
 std::vector<std::wstring> DW_FileManager::loadFileList() {
     std::vector<std::wstring> fileList;
-    std::wifstream inFile(L"C:\\Users\\tnrlf\\2024_GuestBook_T1\\file\\FileList.txt");
+    std::wifstream inFile(L"..\\..\\file\\FileList.txt");
     std::wstring line;
 
     while (std::getline(inFile, line)) {
