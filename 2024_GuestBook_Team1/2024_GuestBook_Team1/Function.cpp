@@ -54,25 +54,32 @@ void Function::draw(HWND hWnd, PINFO dInfo, bool isRecord) // 뒤에 브러쉬 추가
 
 void Function::re_draw(HDC phdc, PINFO dInfo,HWND hd) // 뒤에 브러쉬 추가
 {
-		hdc = phdc;
+	hdc = phdc;
 
-		if (isLeftClick)
+	if (isLeftClick)
+	{
+		px = LOWORD(dInfo.lParam); // 그리기 시작한 좌표
+		py = HIWORD(dInfo.lParam);
+
+		setPenStyle(dInfo, dInfo.pColor);
+
+		if (dInfo.bShape == SPRAY || dInfo.bShape == WATERCOLOR || dInfo.bShape == PENCIL)
 		{
-			px = LOWORD(dInfo.lParam); // 그리기 시작한 좌표
-			py = HIWORD(dInfo.lParam);
-
-
-			setPenStyle(dInfo, dInfo.pColor);
+			//SetPixel(hdc, px, py, RGB(255, 255, 255));
+		}
+		else
+		{
 			MoveToEx(hdc, x, y, NULL);
 			LineTo(hdc, px, py);
-
-			DeleteObject(nPen);
-
-			x = px;
-			y = py;
-
-
 		}
+
+		DeleteObject(nPen);
+
+		x = px;
+		y = py;
+
+
+	}
 
 }
 
@@ -373,7 +380,7 @@ void Function::paint(HDC hdc, RECT canvasRT, PAINTSTRUCT ps)
 				break;
 
 			case WM_MOUSEMOVE:
-				draw(WndFunc::canvasWnd, record, FALSE);
+				re_draw(cHdc, record, WndFunc::canvasWnd);
 				break;
 
 
