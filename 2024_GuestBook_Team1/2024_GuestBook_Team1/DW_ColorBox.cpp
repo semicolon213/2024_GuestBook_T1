@@ -105,6 +105,9 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
         FillRect(memDC, &ps.rcPaint, bgBrush);
         DeleteObject(bgBrush);
 
+
+
+        // 메모리 DC에 그림 그리기
         // 메모리 DC에 그림 그리기
         colorbox->DrawColorWheel(memDC, (wheelRect.left + wheelRect.right) / 2, (wheelRect.top + wheelRect.bottom) / 2, (wheelRect.right - wheelRect.left) / 2);
         colorbox->DrawColorBar(memDC, barRect);
@@ -114,32 +117,56 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
         colorbox->DrawSlider(memDC, greenSliderRect, green, 255);
         colorbox->DrawSlider(memDC, blueSliderRect, blue, 255);
 
-        const char* redText = "Red";
-        int textX = redSliderRect.left; 
-        int textY = redSliderRect.top - 20; 
-        SetBkMode(memDC, TRANSPARENT); 
-        SetTextColor(memDC, RGB(0, 0, 0));
-        TextOut(memDC, textX, textY, L"redText", strlen(redText)); 
-
-
-        const char* greenText = "Green";
-        textX = greenSliderRect.left; 
-        textY = greenSliderRect.top - 20; 
+        // RGB 텍스트와 값 표시
         SetBkMode(memDC, TRANSPARENT);
-        SetTextColor(memDC, RGB(0, 0, 0)); 
-        TextOut(memDC, textX, textY, L"greenText", strlen(greenText)); 
-
-
-        const char* blueText = "Blue";
-        textX = blueSliderRect.left; 
-        textY = blueSliderRect.top - 20; 
-        SetBkMode(memDC, TRANSPARENT); 
         SetTextColor(memDC, RGB(0, 0, 0));
-        TextOut(memDC, textX, textY, L"blueText", strlen(blueText));
 
+        // Red 텍스트와 값
+        const char* redText = "Red";
+        int textX = redSliderRect.left;
+        int textY = redSliderRect.top - 20;
+        TextOutA(memDC, textX, textY, redText, strlen(redText));
 
+        // Red 값 표시
+        std::string redValue = std::to_string(red);
+        TextOutA(memDC, redSliderRect.right + 10, redSliderRect.top, redValue.c_str(), redValue.length());
+
+        // Green 텍스트와 값
+        const char* greenText = "Green";
+        textX = greenSliderRect.left;
+        textY = greenSliderRect.top - 20;
+        TextOutA(memDC, textX, textY, greenText, strlen(greenText));
+
+        // Green 값 표시
+        std::string greenValue = std::to_string(green);
+        TextOutA(memDC, greenSliderRect.right + 10, greenSliderRect.top, greenValue.c_str(), greenValue.length());
+
+        // Blue 텍스트와 값
+        const char* blueText = "Blue";
+        textX = blueSliderRect.left;
+        textY = blueSliderRect.top - 20;
+        TextOutA(memDC, textX, textY, blueText, strlen(blueText));
+
+        // Blue 값 표시
+        std::string blueValue = std::to_string(blue);
+        TextOutA(memDC, blueSliderRect.right + 10, blueSliderRect.top, blueValue.c_str(), blueValue.length());
+
+        // 펜 굵기 텍스트와 값 표시
         int thicknessValue = DW_ColorBox::getThicknessNum(DW_ColorBox::colorSelect);
-        colorbox->DrawThicknessSlider(memDC,thicknessSliderRect, thicknessSliderRoundRect, thicknessValue, 20);
+        colorbox->DrawThicknessSlider(memDC, thicknessSliderRect, thicknessSliderRoundRect, thicknessValue, 20);
+
+        const char* thicknessText = "Thickness";
+        textX = thicknessSliderRect.left;
+        textY = thicknessSliderRect.top - 20;
+        TextOutA(memDC, textX, textY, thicknessText, strlen(thicknessText));
+
+        // Thickness 값 표시
+        std::string thicknessStr = std::to_string(thicknessValue);
+        TextOutA(memDC, thicknessSliderRect.right + 10, thicknessSliderRect.top, thicknessStr.c_str(), thicknessStr.length());
+
+        char hexColor[8]; // 7 characters for #RRGGBB + 1 for null terminator
+        sprintf_s(hexColor, "#%02X%02X%02X", red, green, blue); // RGB 값을 16진수 문자열로 변환
+        TextOutA(memDC, 50, 270, hexColor, strlen(hexColor)); // 화면에 16진수 값 출력
 
         // 메모리 DC의 내용을 화면 DC에 복사
         BitBlt(hdc, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right - ps.rcPaint.left, ps.rcPaint.bottom - ps.rcPaint.top, memDC, 0, 0, SRCCOPY);
