@@ -163,7 +163,7 @@ void DrowWindow::createWindowVL(int left, int top, int right, int bottom, HWND p
 void DrowWindow::createWindowCP(int left, int top, int right, int bottom, HWND parent)
 {
     WNDCLASS wc31 = {};
-    wc31.lpfnWndProc = WndProcCP;  // 네임바 메세지 처리하는 정적 메서드
+    wc31.lpfnWndProc = WndProcCP;  
     wc31.lpszClassName = L"Tototo";
     wc31.hInstance = hInst;
     wc31.hbrBackground = CreateSolidBrush(RGB(224, 232, 234));

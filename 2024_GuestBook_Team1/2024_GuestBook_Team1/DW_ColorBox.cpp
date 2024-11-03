@@ -108,7 +108,6 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
 
         // 메모리 DC에 그림 그리기
-        // 메모리 DC에 그림 그리기
         colorbox->DrawColorWheel(memDC, (wheelRect.left + wheelRect.right) / 2, (wheelRect.top + wheelRect.bottom) / 2, (wheelRect.right - wheelRect.left) / 2);
         colorbox->DrawColorBar(memDC, barRect);
         colorbox->DrawSelectedColor(memDC);
@@ -184,9 +183,10 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
         break;
 
     case WM_LBUTTONDOWN:
+        SetCapture(hwnd);
         InvalidateRect(WndFunc::toolWnd, NULL, TRUE);
     case WM_MOUSEMOVE:
-
+        
         if (wParam & MK_LBUTTON)
         {
             int xPos = LOWORD(lParam);

@@ -22,6 +22,8 @@ LRESULT CALLBACK DrowWindow::WndProcTB(HWND hWnd, UINT message, WPARAM wParam, L
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
+const int xOffset = 400; // 컬러창 x 좌표
+const int yOffset = 100; // 컬러창 y 좌표
 
 /// 펜 종류 버튼 생성 (창 크기 변경이나 리플레이시에도 위치 변경 없어 생성자로 좌표 초기화)
 MakeButton basicPenButton(10, 10, 40, 40);
@@ -197,88 +199,88 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
         }
         /// 물펜
-        else if (IntersectRect(&a, &mouse, &waterpenButton.rectButton)) {
-            function->setBShape(WATERCOLOR);
 
-            selectedBrushButton = &waterpenButton;
-            selectedIcon = IDI_WATERPEN_ICON;
-        }
-
-        /// 색상버튼 1
         else if (IntersectRect(&a, &mouse, &colorButton1.rectButton))
         {
-            InvalidateRect(WndFunc::colorWnd, NULL, TRUE);
-            if (DW_ColorBox::colorSelect == 0)
-            {
-                // colorWnd가 열려 있는지 확인
-                if (IsWindowVisible(WndFunc::colorWnd))
-                {
-                    ShowWindow(WndFunc::colorWnd, SW_HIDE); // 열려 있으면 닫기
-                }
-                else
-                {
-                    ShowWindow(WndFunc::colorWnd, SW_SHOW); // 닫혀 있으면 열기
-                }
-            }
-            else
-            {
-                DW_ColorBox::colorSelect = 0;
+
+            // 색상 선택 박스의 고정 위치 설정
+            int fixedX = 320; // 고정 x 좌표
+            int fixedY = 10;  // 고정 y 좌표
+
+            // 색상 선택 박스의 위치를 화면 좌표 기준으로 설정
+            RECT screenRect = colorButton1.rectButton;
+            ClientToScreen(hWnd, reinterpret_cast<POINT*>(&screenRect.left));
+            ClientToScreen(hWnd, reinterpret_cast<POINT*>(&screenRect.right));
+
+
+            // 이전 버튼의 선택 박스 숨기기
+            if (selectedColorButton != &colorButton1) {
                 ShowWindow(WndFunc::colorWnd, SW_HIDE);
             }
 
-            selectedColorButton = &colorButton1; // 선택한 컬러 버튼의 객체 저장
+            // 색상 선택 박스의 위치를 고정된 위치로 설정
+            SetWindowPos(WndFunc::colorWnd, HWND_TOP, fixedX, fixedY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+            InvalidateRect(WndFunc::colorWnd, NULL, TRUE);
+
+            DW_ColorBox::colorSelect = 0;
+            // 색상 선택 박스 표시
+            ShowWindow(WndFunc::colorWnd, SW_SHOW);
+            selectedColorButton = &colorButton1; // 선택한 버튼 저장
         }
 
-        /// 색상 버튼 2
         else if (IntersectRect(&a, &mouse, &colorButton2.rectButton))
         {
-            InvalidateRect(WndFunc::colorWnd, NULL, TRUE);
-            /// 기존에 색상버튼1 선택시 컬러 팔레트 띄움
-            if (DW_ColorBox::colorSelect == 1)
-            {
-                // colorWnd가 열려 있는지 확인
-                if (IsWindowVisible(WndFunc::colorWnd))
-                {
-                    ShowWindow(WndFunc::colorWnd, SW_HIDE); // 열려 있으면 닫기
-                }
-                else
-                {
-                    ShowWindow(WndFunc::colorWnd, SW_SHOW); // 닫혀 있으면 열기
-                }
-            }
-            else
-            {
-                /// 기존에 선택이 안되어있을시 이 컬러버튼 지정
-                DW_ColorBox::colorSelect = 1;
+
+            // 색상 선택 박스의 고정 위치 설정
+            int fixedX = 370; // 고정 x 좌표
+            int fixedY = 10;  // 고정 y 좌표
+
+            // 색상 선택 박스의 위치를 화면 좌표 기준으로 설정
+            RECT screenRect = colorButton2.rectButton;
+            ClientToScreen(hWnd, reinterpret_cast<POINT*>(&screenRect.left));
+            ClientToScreen(hWnd, reinterpret_cast<POINT*>(&screenRect.right));
+
+            // 이전 버튼의 선택 박스 숨기기
+            if (selectedColorButton != &colorButton2) {
                 ShowWindow(WndFunc::colorWnd, SW_HIDE);
             }
 
-            selectedColorButton = &colorButton2; // 선택한 컬러 버튼의 객체 저장
+            // 색상 선택 박스의 위치를 고정된 위치로 설정
+            SetWindowPos(WndFunc::colorWnd, HWND_TOP, fixedX, fixedY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+            InvalidateRect(WndFunc::colorWnd, NULL, TRUE);
+            DW_ColorBox::colorSelect = 1;
+            // 색상 선택 박스 표시
+            ShowWindow(WndFunc::colorWnd, SW_SHOW);
+            selectedColorButton = &colorButton2; // 선택한 버튼 저장
         }
-        /// 색상 버튼 3
+
         else if (IntersectRect(&a, &mouse, &colorButton3.rectButton))
         {
-            InvalidateRect(WndFunc::colorWnd, NULL, TRUE);
-            if (DW_ColorBox::colorSelect == 2)
-            {
-                // colorWnd가 열려 있는지 확인
-                if (IsWindowVisible(WndFunc::colorWnd))
-                {
-                    ShowWindow(WndFunc::colorWnd, SW_HIDE); // 열려 있으면 닫기
-                }
-                else
-                {
-                    ShowWindow(WndFunc::colorWnd, SW_SHOW); // 닫혀 있으면 열기
-                }
-            }
-            else
-            {
-                DW_ColorBox::colorSelect = 2;
+
+            // 색상 선택 박스의 고정 위치 설정
+            int fixedX = 420; // 고정 x 좌표
+            int fixedY = 10;  // 고정 y 좌표
+
+            // 색상 선택 박스의 위치를 화면 좌표 기준으로 설정
+            RECT screenRect = colorButton3.rectButton;
+            ClientToScreen(hWnd, reinterpret_cast<POINT*>(&screenRect.left));
+            ClientToScreen(hWnd, reinterpret_cast<POINT*>(&screenRect.right));
+
+            // 이전 버튼의 선택 박스 숨기기
+            if (selectedColorButton != &colorButton3) {
                 ShowWindow(WndFunc::colorWnd, SW_HIDE);
             }
 
-            selectedColorButton = &colorButton3; // 선택한 컬러 버튼의 객체 저장
+            // 색상 선택 박스의 위치를 고정된 위치로 설정
+            SetWindowPos(WndFunc::colorWnd, HWND_TOP, fixedX, fixedY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+            InvalidateRect(WndFunc::colorWnd, NULL, TRUE);
+
+            // 색상 선택 박스 표시
+            DW_ColorBox::colorSelect = 2;
+            ShowWindow(WndFunc::colorWnd, SW_SHOW);
+            selectedColorButton = &colorButton3; // 선택한 버튼 저장
         }
+
 
         /// 지우개 버튼 
         else if (IntersectRect(&a, &mouse, &eraseButton.rectButton)) {
