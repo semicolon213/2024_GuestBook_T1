@@ -137,6 +137,7 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
         if (IntersectRect(&a1, &mousePoint, &exitButton.rectButton)) {
             WndFunc::buttonOn = true;
+            WndFunc::creditOn = false;
 
             ShowWindow(WndFunc::drowWnd, SW_HIDE);
             ShowWindow(WndFunc::nameWnd, SW_HIDE);

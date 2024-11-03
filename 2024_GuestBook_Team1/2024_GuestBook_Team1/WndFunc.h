@@ -19,6 +19,7 @@ public:
     static HWND CreditBT;
 
     static bool buttonOn;
+    static bool creditOn;
 
     static HINSTANCE hInst;
 

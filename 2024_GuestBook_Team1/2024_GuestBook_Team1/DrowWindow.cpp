@@ -166,7 +166,7 @@ void DrowWindow::createWindowVL(int left, int top, int right, int bottom, HWND p
     ShowWindow(WndFunc::visitListWnd, SW_SHOW);
 }
 
-/// 툴바 생성 메서드
+/// 컬러 팔레트 생성 메서드
 void DrowWindow::createWindowCP(int left, int top, int right, int bottom, HWND parent)
 {
     WNDCLASS wc31 = {};
@@ -247,6 +247,84 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
     {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
+
+        if (WndFunc::creditOn)
+        {
+            // 텍스트를 출력할 위치(x, y 좌표)
+            int x = WndFunc::wndSize.right / 2 - 200;
+            int y = 270;
+
+            Rectangle(hdc, x - 50, 100, x + 420, 800);
+
+            // 큰 텍스트를 위한 폰트 생성
+            HFONT hFontLarge = CreateFont(
+                30,                        // 글꼴 높이 (크기를 조정하려면 이 값을 변경)
+                0, 0, 0, FW_BOLD,          // 폭, 기울기, 굵기
+                FALSE, FALSE, FALSE,       // 이탤릭체, 밑줄, 취소선
+                DEFAULT_CHARSET,           // 문자셋
+                OUT_DEFAULT_PRECIS,
+                CLIP_DEFAULT_PRECIS,
+                DEFAULT_QUALITY,
+                DEFAULT_PITCH | FF_SWISS,
+                L"Arial");                 // 글꼴 이름
+
+            // 기본 텍스트 폰트 생성
+            HFONT hFontDefault = CreateFont(
+                20,                        // 기본 글꼴 높이
+                0, 0, 0, FW_NORMAL,        // 폭, 기울기, 굵기
+                FALSE, FALSE, FALSE,
+                DEFAULT_CHARSET,
+                OUT_DEFAULT_PRECIS,
+                CLIP_DEFAULT_PRECIS,
+                DEFAULT_QUALITY,
+                DEFAULT_PITCH | FF_SWISS,
+                L"Arial");
+
+            // 큰 텍스트 출력
+            SelectObject(hdc, hFontLarge);
+            LPCWSTR text = L"유한대학교 컴퓨터 소프트웨어 공학과";
+            TextOut(hdc, x, y- 100, text, wcslen(text));
+
+            text = L"Reference 4기";
+            TextOut(hdc, x+100, y - 60, text, wcslen(text));
+
+            // 기본 폰트로 전환
+            SelectObject(hdc, hFontDefault);
+
+            text = L"프로젝트 팀원";
+            TextOut(hdc, x, y + 40, text, wcslen(text));
+
+            text = L"김형균 : PM, 방문자 스레드, 코드 구조 개선";
+            TextOut(hdc, x, y + 70, text, wcslen(text));
+
+            text = L"오승호 : CTO, 메인 윈도우, 코드 구조 개선";
+            TextOut(hdc, x, y + 100, text, wcslen(text));
+
+            text = L"용지순 : 스탬프 기능";
+            TextOut(hdc, x, y + 130, text, wcslen(text));
+
+            text = L"김수길, 김용빈 : 파일 관리자";
+            TextOut(hdc, x, y + 160, text, wcslen(text));
+
+            text = L"최가은, 임지섭 : 리플레이 스레드, WM_PAINT 구성";
+            TextOut(hdc, x, y + 190, text, wcslen(text));
+
+            text = L"윤찬솔 : 버튼 구성";
+            TextOut(hdc, x, y + 220, text, wcslen(text));
+
+            text = L"김주환, 장환희, 전성호 : 펜 스타일";
+            TextOut(hdc, x, y + 250, text, wcslen(text));
+
+            text = L"조재현 : 펜 종류 구성";
+            TextOut(hdc, x, y + 280, text, wcslen(text));
+
+
+            text = L"레포지토리 주소";
+            TextOut(hdc, x, y + 350, text, wcslen(text));
+
+            text = L"https://github.com/semicolon213/2024_GuestBook_T1";
+            TextOut(hdc, x, y + 370, text, wcslen(text));
+        }
 
         EndPaint(hWnd, &ps);
         break;

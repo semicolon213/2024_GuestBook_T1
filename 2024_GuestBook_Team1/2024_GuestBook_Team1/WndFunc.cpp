@@ -15,6 +15,8 @@ HWND WndFunc::LoadBT = nullptr;
 HWND WndFunc::CreditBT = nullptr;
 
 bool WndFunc::buttonOn = true;
+bool WndFunc::creditOn = false;
+
 HINSTANCE WndFunc::hInst = nullptr;
 RECT WndFunc::wndSize = { 0, 0, 0, 0 };
 

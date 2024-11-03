@@ -152,14 +152,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         drowWnd = std::make_unique<DrowWindow>(1, hInst);
 
-        WndFunc::DrowBT = CreateWindowW(L"BUTTON", L"서명하기", WS_CHILD | WS_VISIBLE,
-            (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 170, 240, 100, hWnd, (HMENU)DEF_DROW_BT, hInst, nullptr);
+        // 버튼 스타일
+        DWORD buttonStyle = WS_CHILD | WS_VISIBLE | BS_CENTER | BS_VCENTER | BS_PUSHBUTTON;
 
-        WndFunc::LoadBT = CreateWindowW(L"BUTTON", L"불러오기", WS_CHILD | WS_VISIBLE,
-            (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 50, 240, 100, hWnd, (HMENU)DEF_LOAD_BT, hInst, nullptr);
+        WndFunc::DrowBT = CreateWindowW(L"BUTTON", L"서명하기", buttonStyle,
+            (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 170 + 100, 240, 100, hWnd, (HMENU)DEF_DROW_BT, hInst, nullptr);
 
-        WndFunc::CreditBT = CreateWindowW(L"BUTTON", L"CREDIT", WS_CHILD | WS_VISIBLE,
-            (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) + 70, 240, 100, hWnd, (HMENU)DEF_CREDIT_BT, hInst, nullptr);
+        WndFunc::LoadBT = CreateWindowW(L"BUTTON", L"불러오기", buttonStyle,
+            (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 50 + 100, 240, 100, hWnd, (HMENU)DEF_LOAD_BT, hInst, nullptr);
+
+        WndFunc::CreditBT = CreateWindowW(L"BUTTON", L"CREDIT", buttonStyle,
+            (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) + 70 + 100, 240, 100, hWnd, (HMENU)DEF_CREDIT_BT, hInst, nullptr);
+
 
         // DrowWindow 인스턴스 생성
         drowWnd = std::make_unique<DrowWindow>(1, hInst);
@@ -248,7 +252,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         case DEF_CREDIT_BT: // CREDIT
         {
 
-          
+            WndFunc::creditOn = true;
+
+            ShowWindow(WndFunc::drowWnd, SW_SHOW);
+            ShowWindow(WndFunc::nameWnd, SW_SHOW);
+
+            ShowWindow(WndFunc::DrowBT, SW_HIDE);
+            ShowWindow(WndFunc::LoadBT, SW_HIDE);
+            ShowWindow(WndFunc::CreditBT, SW_HIDE);
             break;
         }
         default:
@@ -283,13 +294,66 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
-        // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
 
+        // "GUEST BOOK" 텍스트를 화면에 그리기
+        const wchar_t* title = L"GUEST BOOK";
+        HFONT hFont = CreateFont(
+            175,                  // 글꼴 크기
+            0, 0, 0,             // 너비와 각도 (0은 자동 설정)
+            FW_BOLD,             // 굵게 설정
+            FALSE, FALSE, FALSE, // 기울임, 밑줄, 취소선 여부
+            DEFAULT_CHARSET,     // 문자 집합
+            OUT_DEFAULT_PRECIS,
+            CLIP_DEFAULT_PRECIS,
+            DEFAULT_QUALITY,
+            DEFAULT_PITCH | FF_SWISS,
+            L"Arial");           // 글꼴 이름
+
+        HFONT hOldFont = (HFONT)SelectObject(hdc, hFont);
+        SetBkMode(hdc, TRANSPARENT); // 배경을 투명하게 설정
+        SetTextColor(hdc, RGB(0, 0, 0)); // 검은색 텍스트
+
+        // 화면 중앙 상단에 텍스트를 출력
+        int x = (WndFunc::wndSize.right - 1000) / 2;  // 텍스트의 가로 위치 조정
+        int y = 50;  // 텍스트의 세로 위치 조정
+        TextOut(hdc, x, y, title, wcslen(title));
+
+        // 이전 글꼴과 자원 해제
+        SelectObject(hdc, hOldFont);
+        DeleteObject(hFont);
+
+        // "Ver.2024" 작은 글씨 추가
+        const wchar_t* versionText = L"Ver.2024";
+        HFONT hFontVersion = CreateFont(
+            20,                   // 작은 글씨 크기
+            0, 0, 0,             // 너비와 각도 (0은 자동 설정)
+            FW_LIGHT,            // 얇게 설정
+            FALSE, FALSE, FALSE, // 기울임, 밑줄, 취소선 여부
+            DEFAULT_CHARSET,     // 문자 집합
+            OUT_DEFAULT_PRECIS,
+            CLIP_DEFAULT_PRECIS,
+            DEFAULT_QUALITY,
+            DEFAULT_PITCH | FF_SWISS,
+            L"Arial");           // 글꼴 이름
+
+        hOldFont = (HFONT)SelectObject(hdc, hFontVersion);
+
+        // "GUEST BOOK" 아래에 "Ver.2024" 텍스트 출력
+        int versionX = x + 970;  // 큰 글씨 오른쪽 하단에 배치
+        int versionY = y + 150;  // 큰 글씨 아래 위치
+        TextOut(hdc, versionX, versionY, versionText, wcslen(versionText));
+
+        // 작은 글씨 자원 해제
+        SelectObject(hdc, hOldFont);
+        DeleteObject(hFontVersion);
+
+        
 
 
         EndPaint(hWnd, &ps);
         break;
     }
+
     
     case WM_DESTROY:
         PostQuitMessage(0);
