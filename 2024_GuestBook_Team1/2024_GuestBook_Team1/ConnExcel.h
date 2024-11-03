@@ -34,6 +34,17 @@ public:
     int getTextPosX();
     void setTextPosX(int);
 
+    bool getIsScroll();
+    void setIsScroll(bool);
+
+    bool getIsStart();
+    void setIsStart(bool);
+
+    void resumeScroll();
+    void suspendScroll();
+
+    void stopThread();
+
 
     static std::wstring list;
 
@@ -49,8 +60,9 @@ private:
     WCHAR text[10000];
     int textPosX;
     int textWidth = 0;
+    bool isScroll = false;
+    bool isStart = false;
 
-
-    bool isListRunning = true;
+    HANDLE listHandle;
 
 };

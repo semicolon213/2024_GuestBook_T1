@@ -77,7 +77,7 @@ public:
     PINFO drawPInfo;
 
 protected:
-    std::unique_ptr<Function>function;
+    std::unique_ptr<Function> function;
     std::unique_ptr<PenThickness> penThickness;
 
 
@@ -94,6 +94,8 @@ private:
     std::unique_ptr<WndFunc> wndFunc;
     bool pCnt = true;
     bool* tCnt;
+
+    bool lCnt = true;
 
     WCHAR text[10000];
 
