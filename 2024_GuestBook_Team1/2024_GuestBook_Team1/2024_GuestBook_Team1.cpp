@@ -278,6 +278,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         MoveWindow(WndFunc::toolWnd, -1, 57, WndFunc::wndSize.right, 51, true);
         MoveWindow(WndFunc::canvasWnd, (WndFunc::wndSize.right - 1300) / 2,(WndFunc::wndSize.bottom - 600) / 2, 1300, 700, true);
         MoveWindow(WndFunc::visitListWnd, 0, WndFunc::wndSize.bottom - 30, WndFunc::wndSize.right, WndFunc::wndSize.bottom, true);
+
+        MoveWindow(WndFunc::DrowBT, (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 170 + 100, 240, 100, true);
+        MoveWindow(WndFunc::LoadBT, (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 50 + 100, 240, 100, true);
+        MoveWindow(WndFunc::CreditBT, (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) + 70 + 100, 240, 100, true);
         break;
     }
     case WM_GETMINMAXINFO:
