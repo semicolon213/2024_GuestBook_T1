@@ -6,6 +6,9 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <shlobj.h>  // SHGetKnownFolderPath
+#include <knownfolders.h>  // FOLDERID_Desktop
+
 class DW_FileManager
 {
 public:

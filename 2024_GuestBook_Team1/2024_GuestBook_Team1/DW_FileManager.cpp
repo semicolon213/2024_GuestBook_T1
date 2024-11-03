@@ -9,11 +9,22 @@ std::wstring filePath;
 std::wstring DW_FileManager::filePath; // 정의
 
 std::wstring getFilePath() {
-    return L"..\\..\\file\\"; // 파일 폴더 경로 반환
+    PWSTR desktopPath = NULL;
+    HRESULT result = SHGetKnownFolderPath(FOLDERID_Desktop, 0, NULL, &desktopPath);
+
+    if (SUCCEEDED(result)) {
+        std::wstring path(desktopPath);
+        CoTaskMemFree(desktopPath);  // 메모리 해제
+        return path + L"\\file\\";
+    }
+    else {
+        return L"";  // 경로를 가져오지 못했을 경우 빈 문자열 반환
+    }
 }
 
 void DW_FileManager::saveFileList(const std::vector<std::wstring>& fileList) {
-    std::wofstream outFile(L"..\\..\\file\\FileList.txt");
+    std::wstring filePath = getFilePath() + L"\\file\\FileList.txt";  // 바탕화면 경로에 저장
+    std::wofstream outFile(filePath);
     if (outFile.is_open()) {
         for (const auto& fileName : fileList) {
             outFile << fileName << std::endl;
@@ -24,7 +35,8 @@ void DW_FileManager::saveFileList(const std::vector<std::wstring>& fileList) {
 
 std::vector<std::wstring> DW_FileManager::loadFileList() {
     std::vector<std::wstring> fileList;
-    std::wifstream inFile(L"..\\..\\file\\FileList.txt");
+    std::wstring filePath = getFilePath() + L"\\file\\FileList.txt";  // 바탕화면 경로에서 로드
+    std::wifstream inFile(filePath);
     std::wstring line;
 
     while (std::getline(inFile, line)) {

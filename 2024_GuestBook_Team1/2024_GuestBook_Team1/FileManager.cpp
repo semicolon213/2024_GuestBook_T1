@@ -85,16 +85,16 @@ void FileManager::AddFileToList(const std::wstring& fileName)
 }
 void FileManager::SaveFileList()
 {
-    // 사용자 프로필 경로를 가져옴
-    wchar_t userProfilePath[MAX_PATH];
-    if (FAILED(SHGetFolderPathW(NULL, CSIDL_PROFILE, NULL, 0, userProfilePath))) {
+    // 바탕화면 경로를 가져옴
+    wchar_t desktopPath[MAX_PATH];
+    if (FAILED(SHGetFolderPathW(NULL, CSIDL_DESKTOPDIRECTORY, NULL, 0, desktopPath))) {
         // 만약 경로를 얻지 못했다면 그냥 종료
         MessageBox(nullptr, L"경로 설정에 실패했습니다.", L"오류", MB_OK);
         return;
     }
 
-    // 기본 프로필 경로에 저장할 파일 경로를 추가
-    std::wstring filePath = std::wstring(userProfilePath) + L"\\2024_GuestBook_T1\\file\\FileList.txt";
+    // 바탕화면 경로에 저장할 파일 경로를 추가
+    std::wstring filePath = std::wstring(desktopPath) + L"\\file\\FileList.txt";
 
     // 파일 열기 (경로에 파일이 없으면 새로 생성됨)
     std::wofstream ofs(filePath, std::ios::out | std::ios::trunc);
@@ -116,15 +116,15 @@ void FileManager::SaveFileList()
 
 void FileManager::LoadFileList()
 {
-    // 사용자 프로필 경로를 가져옴
-    wchar_t userProfilePath[MAX_PATH];
-    if (FAILED(SHGetFolderPathW(NULL, CSIDL_PROFILE, NULL, 0, userProfilePath))) {
+    // 바탕화면 경로를 가져옴
+    wchar_t desktopPath[MAX_PATH];
+    if (FAILED(SHGetFolderPathW(NULL, CSIDL_DESKTOPDIRECTORY, NULL, 0, desktopPath))) {
         // 만약 경로를 얻지 못했다면 그냥 종료
         return;
     }
 
-    // 기본 프로필 경로에 파일 경로를 추가
-    std::wstring filePath = std::wstring(userProfilePath) + L"\\2024_GuestBook_T1\\file\\FileList.txt";
+    // 바탕화면 경로에 파일 경로를 추가
+    std::wstring filePath = std::wstring(desktopPath) + L"\\file\\FileList.txt";
 
     // 파일 열기
     std::wifstream ifs(filePath);
@@ -146,6 +146,7 @@ void FileManager::LoadFileList()
 
     UpdateFileListUI();
 }
+
 
 
 //파일리스트 UI를 업데이트 함
