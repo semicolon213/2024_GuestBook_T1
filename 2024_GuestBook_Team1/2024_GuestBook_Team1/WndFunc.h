@@ -17,8 +17,10 @@ public:
     static HWND DrowBT;
     static HWND LoadBT;
     static HWND CreditBT;
+    static HWND fileNameW;
 
     static bool buttonOn;
+    static bool creditOn;
 
     static HINSTANCE hInst;
 

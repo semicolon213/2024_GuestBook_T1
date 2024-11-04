@@ -2,6 +2,8 @@
 #include "DW_NameBar.h"
 #include "PenThickness.h"
 
+std::unique_ptr<ConnExcel> connExcel = std::make_unique<ConnExcel>();
+
 /// 네임 바 정적 메서드
 LRESULT CALLBACK DrowWindow::WndProcTB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -154,9 +156,28 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         mouse.right = mouse.left + 1;
         mouse.bottom = mouse.top + 1;
 
-        /// 기본 펜
+        /// 방문자 스레드 on/off
         if (IntersectRect(&a, &mouse, &visitListButton.rectButton)) {
-            MessageBox(hWnd, L"방문자 버튼", L"방문자 버튼", MB_OK);
+            visitListButton.toggleState = !visitListButton.toggleState;   /// 버튼 누를때마다 이미지 교체 위해 값 반전
+            
+            if (lCnt)
+            {
+                if (!connExcel->getIsStart())
+                {
+                    SendMessage(WndFunc::visitListWnd, WM_COMMAND, TL_PLAY_BT, 0);
+
+                    connExcel->setIsStart(true);
+                    lCnt = false;
+                }
+                else
+                {
+                    SendMessage(WndFunc::visitListWnd, WM_COMMAND, TL_PLAY_BT, 0);
+                    lCnt = false;
+                }
+            } else {
+                SendMessage(WndFunc::visitListWnd, WM_COMMAND, TL_PLAY_BT, 1);
+                lCnt = true;
+            }
         }
 
 
@@ -319,9 +340,6 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         InvalidateRect(WndFunc::toolWnd, NULL, true); //화면 갱신
         ReleaseDC(hWnd, hdc);
 
-
-
-
         break;
     }
 
@@ -336,6 +354,7 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
         playButton.doubleImgButton(hdc, IDI_PAUSE_ICON, IDI_PLAY_ICON);
         stopButton.drawRectButton(hdc, IDI_STOP_ICON);
+        visitListButton.doubleImgButton(hdc, IDI_PAUSE_ICON, IDI_PLAY_ICON);
 
         if (WndFunc::buttonOn)
         {
@@ -352,7 +371,6 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
 
 
-            visitListButton.drawRectButton(hdc, IDI_PEN_ICON);
             //saveButton.drawRectButton(memDC, IDI_SAVE_ICON);
 
             /// 선택된 브러시 버튼에 이펙트 적용
@@ -378,6 +396,81 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         EndPaint(hWnd, &ps);
         break;
     }
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+    return 0;
+}
+
+
+
+/// 네임 바 메세지 처리 핸들 메서드
+LRESULT DrowWindow::handleMessageVL(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+    switch (message)
+    {
+    case WM_COMMAND:
+    {
+        if (wParam == TL_PLAY_BT && lParam == 0)
+        {
+            if (!connExcel->getIsStart())
+            {
+                connExcel->listScrollThread(hWnd, WndFunc::wndSize.right, WndFunc::wndSize);
+
+                ConnExcel::list = connExcel->getVisitList().c_str();
+
+                connExcel->setTextPosX(WndFunc::wndSize.right);
+            }
+            else
+            {
+                connExcel->resumeScroll();
+            }
+        }
+
+
+        if (wParam == TL_PLAY_BT && lParam == 1)
+        {
+            connExcel->suspendScroll();
+        }
+        break;
+    }
+    case WM_CREATE:
+    {
+        
+
+        break;
+    }
+    case WM_DESTROY:
+    {
+        connExcel->stopThread();
+        break;
+    }
+    case WM_PAINT:
+    {
+
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(WndFunc::visitListWnd, &ps);
+
+        SIZE textSize = { 0 };
+        wsprintf(text, ConnExcel::list.c_str());
+        SetBkColor(hdc, RGB(249, 243, 240));
+
+        HFONT hFont = CreateFont(17, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+            DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+            CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY,
+            DEFAULT_PITCH | FF_SWISS, TEXT("나눔고딕"));
+        HFONT holdFont = (HFONT)SelectObject(hdc, hFont);
+        TextOut(hdc, connExcel->getTextPosX(), 5, text, lstrlen(text));
+        SelectObject(hdc, holdFont);
+        DeleteObject(hFont);
+
+
+        EndPaint(hWnd, &ps);
+
+       // EndPaint(WndFunc::visitListWnd, &ps);
+        break;
+    }
+
+
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
