@@ -278,11 +278,22 @@ bool FileManager::openForRead(const wchar_t* path) {
 
 // 파일 대화상자를 여는 함수 
 bool FileManager::ConfigureDialog(HWND hWnd, DWORD flags, WCHAR* fileBuffer, DWORD bufferSize) {
+    // 바탕화면 경로 가져오기
+    wchar_t desktopPath[MAX_PATH];
+    if (FAILED(SHGetFolderPathW(NULL, CSIDL_DESKTOPDIRECTORY, NULL, 0, desktopPath))) {
+        MessageBox(nullptr, L"경로 설정에 실패했습니다.", L"오류", MB_OK);
+        return false;
+    }
+
+    // "file" 폴더 경로 생성
+    std::wstring initialDir = std::wstring(desktopPath) + L"\\file\\";
+
     OFN.lStructSize = sizeof(OPENFILENAME);
     OFN.hwndOwner = hWnd;
-    OFN.lpstrFilter = L"txt 파일(*.txt)\0*.txt\0모든 파일(*.*)\0*.*\0"; ///txt로 확장자 설정 (임시) 
+    OFN.lpstrFilter = L"txt 파일(*.txt)\0*.txt\0모든 파일(*.*)\0*.*\0"; // txt로 확장자 설정 (임시)
     OFN.lpstrFile = fileBuffer;
     OFN.nMaxFile = bufferSize;
+    OFN.lpstrInitialDir = initialDir.c_str(); // 초기 디렉토리 설정
     OFN.Flags = flags;
 
     return (flags & OFN_OVERWRITEPROMPT) ? GetSaveFileName(&OFN) : GetOpenFileName(&OFN);
