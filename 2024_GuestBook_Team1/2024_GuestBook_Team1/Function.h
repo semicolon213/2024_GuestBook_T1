@@ -14,11 +14,11 @@ class Function
 
 private:
 
-	HDC hdc, memDC = NULL;
+	HDC hdc;
 	HPEN nPen, oPen;
 	HBRUSH hPen;
 	RECT clientRect;
-	HBITMAP hBitmap = NULL;
+	
 
 	int px, py;
 	int px2, py2;
@@ -82,9 +82,9 @@ public:
 	void GDIPlusStart(); // gdi+ 시작 함수 
 	void GDIPlusEnd(); // gdi+ 종료 함수
 
-	void paint(HWND, RECT);
+	void paint(HDC, RECT, PAINTSTRUCT);
 
-	void re_draw(HWND hWnd, PINFO dInfo, bool isRecord);
+	void re_draw(HDC phdc, PINFO pino, HWND hd);
 
 	LINFO getDrawLInfo();
 
@@ -92,4 +92,6 @@ public:
 	static LINFO drawLInfo;
 
 	static int penNum;
+
+
 };

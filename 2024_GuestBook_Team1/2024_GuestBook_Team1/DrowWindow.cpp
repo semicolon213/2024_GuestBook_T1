@@ -1,5 +1,6 @@
 #include "DrowWindow.h"
 
+
 DrowWindow::DrowWindow(int mode, HINSTANCE hInst)
     : mode(mode), hInst(hInst), hwnd(nullptr), bkColor(RGB(249, 243, 240)) {
     wndFunc = std::make_unique<WndFunc>();

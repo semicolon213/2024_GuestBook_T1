@@ -1,10 +1,10 @@
 #include "Function.h"
 
-
 int Function::penNum = 0;
 LINFO Function::drawLInfo = { };
 HWND Function::hWnd = nullptr;
 int Function::bShape = BASIC;
+
 
 void Function::record(PINFO inputPI)
 {
@@ -52,33 +52,34 @@ void Function::draw(HWND hWnd, PINFO dInfo, bool isRecord) // 뒤에 브러쉬 추가
 
 }
 
-void Function::re_draw(HWND hWnd, PINFO dInfo, bool isRecord) // 뒤에 브러쉬 추가
+void Function::re_draw(HDC phdc, PINFO dInfo,HWND hd) // 뒤에 브러쉬 추가
 {
-	hdc = memDC;
+	hdc = phdc;
 
 	if (isLeftClick)
 	{
-		x2 = LOWORD(dInfo.lParam); // 그리기 시작한 좌표
-		y2 = HIWORD(dInfo.lParam);
-
-		currentTime = std::chrono::steady_clock::now(); // 그리기 시간 저장
+		px = LOWORD(dInfo.lParam); // 그리기 시작한 좌표
+		py = HIWORD(dInfo.lParam);
 
 		setPenStyle(dInfo, dInfo.pColor);
-		MoveToEx(hdc, x2, y2, NULL);
-		LineTo(hdc, px3, py3);
+
+		if (dInfo.bShape == SPRAY || dInfo.bShape == WATERCOLOR || dInfo.bShape == PENCIL)
+		{
+			//SetPixel(hdc, px, py, RGB(255, 255, 255));
+		}
+		else
+		{
+			MoveToEx(hdc, x, y, NULL);
+			LineTo(hdc, px, py);
+		}
 
 		DeleteObject(nPen);
 
-		px3 = x2;
-		py3 = y2;
+		x = px;
+		y = py;
 
-		DrawTime = currentTime; // 마지막 시간 업데이트
-
-		if (isRecord)
-			record(dInfo);
 
 	}
-	ReleaseDC(hWnd, hdc);
 
 }
 
@@ -115,7 +116,7 @@ void Function::replayThread(HWND hWnd)
 	setIsReset(false);
 
 	// std::thread를 사용하여 스레드 시작
-	replayThreadHandle = std::thread(&Function::replay, this, WndFunc::drowWnd);
+	replayThreadHandle = std::thread(&Function::replay, this, hWnd);
 
 	threadHandle = replayThreadHandle.native_handle();
 }
@@ -130,15 +131,12 @@ void Function::replay(HWND hWnd)
 	while (isReplay)
 	{
 		// 화면 초기화
-		InvalidateRect(hWnd, NULL, FALSE);
+		InvalidateRect(hWnd, NULL, TRUE);
 		UpdateWindow(hWnd);
 
 		// 화면 DC 가져오기
 		hdc = GetDC(hWnd);
 
-
-
-		// 그리기 작업 메모리 DC에서 수행
 		for (size_t i = 0; i < drawLInfo.pInfo.size(); i++)
 		{
 			if (!isReplay)
@@ -160,8 +158,7 @@ void Function::replay(HWND hWnd)
 				break;
 
 			case WM_MOUSEMOVE:
-				draw(WndFunc::canvasWnd, replayInfo, false);
-				re_draw(WndFunc::canvasWnd, replayInfo, false);
+				draw(hWnd, replayInfo, false);
 				break;
 
 			case WM_LBUTTONUP:
@@ -195,11 +192,11 @@ void Function::reDrawing(HWND hWnd)
 	{
 		isReplay = false;
 		ResumeThread(threadHandle);
-		stopReplay(WndFunc::drowWnd);
+		stopReplay(WndFunc::canvasWnd);
 	}
 
-	InvalidateRect(hWnd, NULL, TRUE);
-	UpdateWindow(hWnd);
+	InvalidateRect(WndFunc::canvasWnd, NULL, TRUE);
+	UpdateWindow(WndFunc::canvasWnd);
 
 	//MessageBox(hWnd, L"reDrawing", L"dd", MB_OK);
 }
@@ -210,7 +207,7 @@ void Function::clearDrawing(HWND hWnd)
 	{
 		isReplay = false;
 		ResumeThread(threadHandle);
-		stopReplay(WndFunc::drowWnd);
+		stopReplay(WndFunc::canvasWnd);
 	}
 
 	// 기록 삭제
@@ -350,21 +347,16 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 	}
 }
 
-void Function::paint(HWND hWnd, RECT canvasRT)
-{
-	cHdc = BeginPaint(hWnd, &cPS);
 
-	// 메모리 DC 생성 및 호환 비트맵 할당
-	memDC = CreateCompatibleDC(hdc);
-	hBitmap = CreateCompatibleBitmap(hdc, clientRect.right, clientRect.bottom);
-	SelectObject(memDC, hBitmap);
-	// 메모리 DC에서 배경 지우기
-	FillRect(memDC, &clientRect, (HBRUSH)(COLOR_WINDOW + 1));
-
+void Function::paint(HDC hdc, RECT canvasRT, PAINTSTRUCT ps)
+{	
+	cHdc = hdc;
 	CanvasPen = (HPEN)SelectObject(cHdc, CreatePen(PS_SOLID, 1, RGB(234, 234, 234)));
 	Rectangle(cHdc, canvasRT.left, canvasRT.top, canvasRT.right, canvasRT.bottom);
 	SelectObject(cHdc, CanvasPen);
 	DeleteObject(CanvasPen);
+	FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1)); // 배경 색칠
+	
 
 	if (!getIsReplay())
 	{
@@ -385,11 +377,10 @@ void Function::paint(HWND hWnd, RECT canvasRT)
 					mouseUD(record, FALSE);
 					bShape = BRUSH;
 				}
-
 				break;
 
 			case WM_MOUSEMOVE:
-				draw(hWnd, record, FALSE);
+				re_draw(cHdc, record, WndFunc::canvasWnd);
 				break;
 
 
@@ -398,15 +389,9 @@ void Function::paint(HWND hWnd, RECT canvasRT)
 				break;
 			}
 		}
+
+		DeleteObject(nPen);
 	}
-
-	// 메모리 DC의 내용을 실제 화면에 복사
-
-	BitBlt(cHdc, 0, 0, canvasRT.right, canvasRT.bottom, memDC, 0, 0, SRCCOPY);
-	// 메모리 DC와 비트맵 삭제
-	DeleteObject(hBitmap);
-	DeleteDC(memDC);
-	EndPaint(hWnd, &cPS);
 }
 
 

@@ -314,12 +314,13 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
             InvalidateRect(WndFunc::toolWnd, nullptr, true);
 
-            if (!function->getIsReplay()) {
+           if (!function->getIsReplay()) {
                 SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_RESET_BT, 0);
             }
-            else {
+           else
+           {
                 SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_RESET_BT, 0);
-
+                SendMessage(WndFunc::canvasWnd, WM_PAINT, TL_RESET_BT, 0);
                 int midPoint = WndFunc::wndSize.right / 2;   /// 윈도우 중심 좌표 계산
 
                 /// 정지버튼 클릭 즉, 리플레이 중지시 지우개, 저장 버튼 원래 자리로 복귀
@@ -333,6 +334,7 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             }
             replayStay = false;      /// 리플레이 상태 종료
             pCnt = true;
+            function->setisLeftClick(false);
             InvalidateRect(WndFunc::toolWnd, NULL, true);
         }
         ///// 저장 버튼

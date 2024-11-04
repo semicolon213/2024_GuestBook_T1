@@ -76,6 +76,9 @@ public:
 
     PINFO drawPInfo;
 
+    void re_draw();
+    int x, y, px, py;
+
 protected:
     std::unique_ptr<Function> function;
     std::unique_ptr<PenThickness> penThickness;
@@ -93,7 +96,6 @@ private:
     COLORREF bkColor;
     std::unique_ptr<WndFunc> wndFunc;
     bool pCnt = true;
-    bool* tCnt;
 
     bool lCnt = true;
 

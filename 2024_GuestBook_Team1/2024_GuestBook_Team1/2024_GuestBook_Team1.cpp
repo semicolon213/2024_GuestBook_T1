@@ -215,6 +215,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         ShowWindow(WndFunc::sideWnd, SW_HIDE);
         ShowWindow(WndFunc::visitListWnd, SW_HIDE);
         break;
+      
     }
         
 
@@ -428,6 +429,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     
     case WM_DESTROY:
+        SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_RESET_BT, 0);
         PostQuitMessage(0);
         /// function->GDIPlusEnd();
         break;
