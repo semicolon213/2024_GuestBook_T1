@@ -46,6 +46,7 @@ public:
     void createWindowSB(int left, int top, int width, int height, HWND parent);
     void createWindowCP(int left, int top, int width, int height, HWND parent);
     void createWindowVL(int left, int top, int width, int height, HWND parent);
+    void createWindowFM(int left, int top, int right, int bottom, HWND parent);
     
     /**
     * @brief 각 윈도우 생성 후 호출되는 CALLBACK 메서드
@@ -74,6 +75,10 @@ public:
     virtual LRESULT handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); 
 
 
+    static LRESULT CALLBACK WndProcFM(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
+
+    virtual LRESULT handleMessageFM(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
+
     PINFO drawPInfo;
 
     void re_draw();
@@ -88,6 +93,8 @@ protected:
     static LRESULT CALLBACK WndProcVL(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 정적 윈도우 프로시저
     /// 전광판 처리 메서드
     virtual LRESULT handleMessageVL(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // 가상 함수로 메시지 처리
+    
+
 private:
     HWND hwnd;
     HINSTANCE hInst;
@@ -100,5 +107,7 @@ private:
     bool lCnt = true;
 
     WCHAR text[10000];
+
+   
 
 };

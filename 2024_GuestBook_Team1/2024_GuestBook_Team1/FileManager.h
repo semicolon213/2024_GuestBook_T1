@@ -9,9 +9,11 @@
 #include "Struct.h"
 #include "Resource.h"
 #include "Function.h"
+#include "DW_SideMenu.h"
 #include "WndFunc.h"
 #include <unordered_set> //파일리스트 중복 방지 헤더  
 #include <shlobj.h> //세이브파일 절대 경로 확인 
+#include "DW_FileManager.h"
 
 
 class DW_SideMenu;
@@ -37,8 +39,7 @@ private:
     bool isPanelVisible;
 
 public:
-    FileManager();
-    FileManager(HWND hWnd);
+    FileManager() = default;
     ~FileManager() = default;
 
     FileManager(const FileManager&) = delete;
@@ -54,8 +55,6 @@ public:
     HWND hFileListBox;  /// 파일 목록을 표시할 리스트 박스
     HWND hRightPanel;   /// 패널 핸들
     HINSTANCE hInst;    /// 인스턴스 핸들
-
-    void Panels(HWND tWnd);  /// 패널과 UI 초기화
 
     void SaveFileList(); ///파일리스트 저장
     void LoadFileList(); ///파일리스트 불러오기

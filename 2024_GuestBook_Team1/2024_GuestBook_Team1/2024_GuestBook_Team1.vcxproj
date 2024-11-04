@@ -150,6 +150,7 @@
     <ClInclude Include="DrowWindow.h" />
     <ClInclude Include="DW_Canvas.h" />
     <ClInclude Include="DW_ColorBox.h" />
+    <ClInclude Include="DW_FileManager.h" />
     <ClInclude Include="DW_NameBar.h" />
     <ClInclude Include="DW_SideMenu.h" />
     <ClInclude Include="DW_ToolMenu.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="DrowWindow.cpp" />
     <ClCompile Include="DW_Canvas.cpp" />
     <ClCompile Include="DW_ColorBox.cpp" />
+    <ClCompile Include="DW_FileManager.cpp" />
     <ClCompile Include="DW_NameBar.cpp" />
     <ClCompile Include="DW_SideMenu.cpp" />
     <ClCompile Include="DW_ToolMenu.cpp" />
