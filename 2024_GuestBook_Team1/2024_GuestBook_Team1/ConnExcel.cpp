@@ -3,7 +3,6 @@
 #include <sstream>
 #include <vector>
 
-std::unique_ptr<ConnExcel> connExcel = std::make_unique<ConnExcel>();
 
 /// 네임 바 정적 메서드
 LRESULT CALLBACK DrowWindow::WndProcVL(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -23,12 +22,6 @@ LRESULT CALLBACK DrowWindow::WndProcVL(HWND hWnd, UINT message, WPARAM wParam, L
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
-
-
-
-
-
-
 
 /**
 @file ConnExcel.cpp
@@ -142,7 +135,7 @@ wstring ConnExcel::getVisitList()
 
 void ConnExcel::listScroll(HWND hWnd, int clientWidth, RECT mainRT)
 {
-    while (isListRunning)
+    while (isScroll)
     {
         textPosX -= TEXTSPEED;
 
@@ -160,17 +153,16 @@ void ConnExcel::listScroll(HWND hWnd, int clientWidth, RECT mainRT)
 
 void ConnExcel::listScrollThread(HWND hWnd, int clientWidth, RECT mainRT)
 {
-    /*
     if (listScrollThreadHandle.joinable())
         return;
 
     else
         //std::thread를 사용하여 스레드를 시작
+        isScroll = true;
         listScrollThreadHandle = thread(&ConnExcel::listScroll, this, hWnd, clientWidth, mainRT);
-
+        listHandle = listScrollThreadHandle.native_handle();
     //스레드가 종료될 때 자동으로 자원이 반환되도록 함
-    listScrollThreadHandle.detach();
-    */
+    //listScrollThreadHandle.detach();
 }
 
 int ConnExcel::getTextSize(HWND hWnd, wstring list)
@@ -237,50 +229,42 @@ void ConnExcel::setTextPosX(int textPosX)
 }
 
 
-/// 네임 바 메세지 처리 핸들 메서드
-LRESULT DrowWindow::handleMessageVL(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-    switch (message)
-    {
-    case WM_CREATE:
-    {
-        
-        connExcel->listScrollThread(hWnd, WndFunc::wndSize.right, WndFunc::wndSize);
+void ConnExcel::suspendScroll()
+{
+    isScroll = false;
+    SuspendThread(listHandle);
+}
+void ConnExcel::resumeScroll()
+{
+    isScroll = true;
+    ResumeThread(listHandle);
+}
 
-        ConnExcel::list = connExcel->getVisitList().c_str();
+bool ConnExcel::getIsScroll() 
+{
+    return isScroll;
+}
 
-        connExcel->setTextPosX(WndFunc::wndSize.right);
+void ConnExcel::setIsScroll(bool isScroll) 
+{
+    this->isScroll = isScroll;
+}
 
-    	break;
+void ConnExcel::stopThread()
+{
+    /// detach()를 호출하기 전에 joinable() 상태를 확인
+    if (listScrollThreadHandle.joinable()) {
+        listScrollThreadHandle.detach();
     }
-    case WM_PAINT:
-    {
+ 
+}
 
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(WndFunc::visitListWnd, &ps);
+void ConnExcel::setIsStart(bool isStart)
+{
+    this->isStart = isStart;
+}
 
-        SIZE textSize;
-        wsprintf(text, ConnExcel::list.c_str());
-        SetBkColor(hdc, RGB(249, 243, 240));
-
-        HFONT hFont = CreateFont(17, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
-            DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
-            CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY,
-            DEFAULT_PITCH | FF_SWISS, TEXT("나눔고딕"));
-        HFONT holdFont = (HFONT)SelectObject(hdc, hFont);
-        TextOut(hdc, connExcel->getTextPosX(), 5, text, lstrlen(text));
-        SelectObject(hdc, holdFont);
-        DeleteObject(hFont);
-        
-
-        EndPaint(hWnd, &ps);
-
-        EndPaint(WndFunc::visitListWnd, &ps);
-        break;
-    }
-
-
-    default:
-        return DefWindowProc(hWnd, message, wParam, lParam);
-    }
-    return 0;
+bool ConnExcel::getIsStart()
+{
+    return isStart;
 }
