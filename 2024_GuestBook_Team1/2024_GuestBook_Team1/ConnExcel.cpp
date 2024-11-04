@@ -23,12 +23,6 @@ LRESULT CALLBACK DrowWindow::WndProcVL(HWND hWnd, UINT message, WPARAM wParam, L
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-
-
-
-
-
-
 /**
 @file ConnExcel.cpp
 @brief 엑셀관련 클래스 외부 정의 파일
@@ -168,7 +162,7 @@ void ConnExcel::listScrollThread(HWND hWnd, int clientWidth, RECT mainRT)
         listScrollThreadHandle = thread(&ConnExcel::listScroll, this, hWnd, clientWidth, mainRT);
         listHandle = listScrollThreadHandle.native_handle();
     //스레드가 종료될 때 자동으로 자원이 반환되도록 함
-    listScrollThreadHandle.detach();
+    //listScrollThreadHandle.detach();
 }
 
 int ConnExcel::getTextSize(HWND hWnd, wstring list)
@@ -258,7 +252,11 @@ void ConnExcel::setIsScroll(bool isScroll)
 
 void ConnExcel::stopThread()
 {
-    listScrollThreadHandle.detach();
+    /// detach()를 호출하기 전에 joinable() 상태를 확인
+    if (listScrollThreadHandle.joinable()) {
+        listScrollThreadHandle.detach();
+    }
+ 
 }
 
 void ConnExcel::setIsStart(bool isStart)

@@ -340,9 +340,6 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         InvalidateRect(WndFunc::toolWnd, NULL, true); //화면 갱신
         ReleaseDC(hWnd, hdc);
 
-
-
-
         break;
     }
 
@@ -445,6 +442,7 @@ LRESULT DrowWindow::handleMessageVL(HWND hWnd, UINT message, WPARAM wParam, LPAR
     case WM_DESTROY:
     {
         connExcel->stopThread();
+        break;
     }
     case WM_PAINT:
     {
@@ -468,7 +466,7 @@ LRESULT DrowWindow::handleMessageVL(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
         EndPaint(hWnd, &ps);
 
-        EndPaint(WndFunc::visitListWnd, &ps);
+       // EndPaint(WndFunc::visitListWnd, &ps);
         break;
     }
 
