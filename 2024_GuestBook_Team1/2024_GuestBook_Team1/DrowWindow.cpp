@@ -166,15 +166,14 @@ void DrowWindow::createWindowVL(int left, int top, int right, int bottom, HWND p
 
     ShowWindow(WndFunc::visitListWnd, SW_SHOW);
 }
-
-/// 컬러 팔레트 생성 메서드
+    /// 컬러 팔레트 생성 메서드
 void DrowWindow::createWindowCP(int left, int top, int right, int bottom, HWND parent)
 {
     WNDCLASS wc31 = {};
-    wc31.lpfnWndProc = WndProcCP;  // 네임바 메세지 처리하는 정적 메서드
+    wc31.lpfnWndProc = WndProcCP;  
     wc31.lpszClassName = L"Tototo";
     wc31.hInstance = hInst;
-    wc31.hbrBackground = CreateSolidBrush(RGB(0, 0, 0));
+    wc31.hbrBackground = CreateSolidBrush(RGB(224, 232, 234));
 
 
     if (!RegisterClass(&wc31)) {
@@ -197,11 +196,11 @@ void DrowWindow::createWindowCP(int left, int top, int right, int bottom, HWND p
     if (!WndFunc::colorWnd) {
         DWORD error = GetLastError();
         wchar_t buf[256];
-        wsprintf(buf, L"툴바 생성 실패: 오류 코드 %d", error);
+        wsprintf(buf, L"컬러박스 생성 실패: 오류 코드 %d", error);
         MessageBox(NULL, buf, L"Error", MB_OK);
         return;
     }
-    ShowWindow(WndFunc::colorWnd, SW_SHOW);
+    ShowWindow(WndFunc::colorWnd, SW_HIDE);
 }
 
 void DrowWindow::createWindowFM(int left, int top, int right, int bottom, HWND parent)
@@ -278,6 +277,13 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
         /// 전광판 윈도우 생성
         createWindowVL(0, WndFunc::wndSize.bottom - 30, WndFunc::wndSize.right, WndFunc::wndSize.bottom, hWnd);
 
+        createWindowCP(WndFunc::wndSize.top + 450, 100, 450, 600, WndFunc::canvasWnd);
+        break;
+    }
+    /// 캔버스에서 그리기 할때 버그 임시 수정
+    case WM_MOUSEMOVE:
+    {
+        function->setisLeftClick(false);
         break;
     }
     case WM_PAINT:

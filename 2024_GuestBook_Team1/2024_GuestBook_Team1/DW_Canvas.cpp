@@ -34,15 +34,15 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		static HBITMAP hBitmap;
 
 	case WM_CREATE:
-	{	
+	{
 		HDC hdc = GetDC(WndFunc::canvasWnd);
 		memDC = CreateCompatibleDC(hdc);
-		hBitmap = CreateCompatibleBitmap(hdc,WndFunc::wndSize.right, WndFunc::wndSize.bottom);
+		hBitmap = CreateCompatibleBitmap(hdc, WndFunc::wndSize.right, WndFunc::wndSize.bottom);
 		SelectObject(memDC, hBitmap);
 		ReleaseDC(WndFunc::canvasWnd, hdc);
 		function = std::make_unique<Function>();
 		function->GDIPlusStart(); // 붓 gdi 라이브러리 활성화
-		
+
 	}
 	break;
 	case WM_COMMAND:
@@ -86,17 +86,25 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		if (!function->getIsReset()) break;
 		//hdc = GetDC(canWnd);
 
+
+
 		////////////////////////////////////////////////
 
 		drawPInfo.lParam = lParam;
-		drawPInfo.pColor = RGB(0, 0, 0);//ColorPalette::colorArr[Function::penNum];
+		drawPInfo.pColor = DW_ColorBox::getColorNum(DW_ColorBox::colorSelect);//ColorPalette::colorArr[Function::penNum];
 		drawPInfo.pTime = (DWORD)GetTickCount64();
 		drawPInfo.pWidth = penThickness->getPenWidth(); /// 펜 굵기 설정
 		drawPInfo.state = message;
 		function->draw(WndFunc::canvasWnd, drawPInfo, TRUE); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
 	}
-		break;
+	break;
+
 	case WM_LBUTTONDOWN:
+		/// 캔버스에서 그릴 때 색상 창 열려있으면 닫음
+		if (IsWindowVisible(WndFunc::colorWnd))
+		{
+			ShowWindow(WndFunc::colorWnd, SW_HIDE); // 열려 있으면 닫기
+		}
 		{
 	case WM_LBUTTONUP:
 		if (!function->getIsReset())
@@ -104,12 +112,12 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 			break;
 		}
 		drawPInfo.lParam = lParam;
-		drawPInfo.pColor = RGB(0, 0, 0);//ColorPalette::colorArr[Function::penNum];
+		drawPInfo.pColor = DW_ColorBox::getColorNum(DW_ColorBox::colorSelect);//ColorPalette::colorArr[Function::penNum];
 		drawPInfo.pTime = (DWORD)GetTickCount64();
 		drawPInfo.pWidth = penThickness->getPenWidth(); /// 펜 굵기 설정
 		drawPInfo.state = message;
 		function->mouseUD(drawPInfo, TRUE);
-	}
+		}
 		break;
 	case WM_PAINT:
 	{
@@ -136,8 +144,6 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 	{
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
-	
 }
-
 	return 0;
 }

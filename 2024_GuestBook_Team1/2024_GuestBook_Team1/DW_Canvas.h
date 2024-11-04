@@ -3,6 +3,7 @@
 #include "PenThickness.h"
 #include "DrowWindow.h"
 #include "WndFunc.h"
+#include "DW_ColorBox.h"
 
 class DW_Canvas
 {

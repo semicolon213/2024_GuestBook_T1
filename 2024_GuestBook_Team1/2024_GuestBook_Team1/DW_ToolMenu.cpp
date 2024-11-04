@@ -24,6 +24,8 @@ LRESULT CALLBACK DrowWindow::WndProcTB(HWND hWnd, UINT message, WPARAM wParam, L
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
+const int xOffset = 400; // 컬러창 x 좌표
+const int yOffset = 100; // 컬러창 y 좌표
 
 /// 펜 종류 버튼 생성 (창 크기 변경이나 리플레이시에도 위치 변경 없어 생성자로 좌표 초기화)
 MakeButton basicPenButton(10, 10, 40, 40);
@@ -86,6 +88,7 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
             replayStay = true;   /// replay시 true로 설정하여 WM_SIZE 조절을 멈춘다
             playButton.toggleState = !playButton.toggleState;   /// 버튼 누를때마다 이미지 교체 위해 값 반점
+
 
             if (pCnt)
             {
@@ -224,33 +227,99 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             selectedBrushButton = &waterpenButton;
             selectedIcon = IDI_WATERPEN_ICON;
         }
+        // colorButton1에 대한 처리
+        else if (IntersectRect(&a, &mouse, &colorButton1.rectButton))
+        {
+            if (function->getIsReplay()) {
+                // 리플레이 중일 때는 색상 선택 박스를 열지 않음
+                break;
+            }
 
-        /// 색상 버튼 1
-        else if (IntersectRect(&a, &mouse, &colorButton1.rectButton)) {
-            /*
-            if (Function::penNum == 0) { colorPalette->colorSelect(tWnd, 0); }
-            else { Function::penNum = 0; }
-            */
-            createWindowCP(0, 0,100, 100, WndFunc::canvasWnd);
-            selectedColorButton = &colorButton1;   /// 선택한 컬러버튼의 객체 저장
+            // 색상 선택 박스의 고정 위치 설정
+            int fixedX = 320; // 고정 x 좌표
+            int fixedY = 10;  // 고정 y 좌표
+
+            // 색상 선택 박스의 위치를 화면 좌표 기준으로 설정
+            RECT screenRect = colorButton1.rectButton;
+            ClientToScreen(hWnd, reinterpret_cast<POINT*>(&screenRect.left));
+            ClientToScreen(hWnd, reinterpret_cast<POINT*>(&screenRect.right));
+
+            // 이전 버튼의 선택 박스 숨기기
+            if (selectedColorButton != &colorButton1) {
+                ShowWindow(WndFunc::colorWnd, SW_HIDE);
+            }
+
+            // 색상 선택 박스의 위치를 고정된 위치로 설정
+            SetWindowPos(WndFunc::colorWnd, HWND_TOP, fixedX, fixedY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+            InvalidateRect(WndFunc::colorWnd, NULL, TRUE);
+
+            DW_ColorBox::colorSelect = 0;
+            // 색상 선택 박스 표시
+            ShowWindow(WndFunc::colorWnd, SW_SHOW);
+            selectedColorButton = &colorButton1; // 선택한 버튼 저장
         }
-        /// 색상 버튼 2
-        else if (IntersectRect(&a, &mouse, &colorButton2.rectButton)) {
-            /*
-            if (Function::penNum == 1) { colorPalette->colorSelect(tWnd, 1); }
-            else { Function::penNum = 1; }
-            */
-            ShowWindow(WndFunc::colorWnd, SW_HIDE);
-            selectedColorButton = &colorButton2;
+
+        // colorButton2에 대한 처리
+        else if (IntersectRect(&a, &mouse, &colorButton2.rectButton))
+        {
+            if (function->getIsReplay()) {
+                break;
+            }
+
+            // 색상 선택 박스의 고정 위치 설정
+            int fixedX = 370; // 고정 x 좌표
+            int fixedY = 10;  // 고정 y 좌표
+
+            // 색상 선택 박스의 위치를 화면 좌표 기준으로 설정
+            RECT screenRect = colorButton2.rectButton;
+            ClientToScreen(hWnd, reinterpret_cast<POINT*>(&screenRect.left));
+            ClientToScreen(hWnd, reinterpret_cast<POINT*>(&screenRect.right));
+
+            // 이전 버튼의 선택 박스 숨기기
+            if (selectedColorButton != &colorButton2) {
+                ShowWindow(WndFunc::colorWnd, SW_HIDE);
+            }
+
+            // 색상 선택 박스의 위치를 고정된 위치로 설정
+            SetWindowPos(WndFunc::colorWnd, HWND_TOP, fixedX, fixedY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+            InvalidateRect(WndFunc::colorWnd, NULL, TRUE);
+            DW_ColorBox::colorSelect = 1;
+            // 색상 선택 박스 표시
+            ShowWindow(WndFunc::colorWnd, SW_SHOW);
+            selectedColorButton = &colorButton2; // 선택한 버튼 저장
         }
-        /// 색상 버튼 3
-        else if (IntersectRect(&a, &mouse, &colorButton3.rectButton)) {
-            /*
-            if (Function::penNum == 2) { colorPalette->colorSelect(tWnd, 2); }
-            else { Function::penNum = 2; }
-            */
-            selectedColorButton = &colorButton3;
+
+        // colorButton3에 대한 처리
+        else if (IntersectRect(&a, &mouse, &colorButton3.rectButton))
+        {
+            if (function->getIsReplay()) {
+                break;
+            }
+
+            // 색상 선택 박스의 고정 위치 설정
+            int fixedX = 420; // 고정 x 좌표
+            int fixedY = 10;  // 고정 y 좌표
+
+            // 색상 선택 박스의 위치를 화면 좌표 기준으로 설정
+            RECT screenRect = colorButton3.rectButton;
+            ClientToScreen(hWnd, reinterpret_cast<POINT*>(&screenRect.left));
+            ClientToScreen(hWnd, reinterpret_cast<POINT*>(&screenRect.right));
+
+            // 이전 버튼의 선택 박스 숨기기
+            if (selectedColorButton != &colorButton3) {
+                ShowWindow(WndFunc::colorWnd, SW_HIDE);
+            }
+
+            // 색상 선택 박스의 위치를 고정된 위치로 설정
+            SetWindowPos(WndFunc::colorWnd, HWND_TOP, fixedX, fixedY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+            InvalidateRect(WndFunc::colorWnd, NULL, TRUE);
+
+            // 색상 선택 박스 표시
+            DW_ColorBox::colorSelect = 2;
+            ShowWindow(WndFunc::colorWnd, SW_SHOW);
+            selectedColorButton = &colorButton3; // 선택한 버튼 저장
         }
+
 
         /// 지우개 버튼 
         else if (IntersectRect(&a, &mouse, &eraseButton.rectButton)) {
@@ -392,9 +461,9 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 selectedColorButton->clickEffectPen(IDI_COLOREFFECT_ICON, hdc);
             }
 
-            colorButton1.drawEllipseButton(hdc, RGB(0, 0, 0));   /// 색상 버튼 1 미리보기
-            colorButton2.drawEllipseButton(hdc, RGB(0, 0, 0));   /// 색상 버튼 2 미리보기
-            colorButton3.drawEllipseButton(hdc, RGB(0, 0, 0));   /// 색상 버튼 3 미리보기
+            colorButton1.drawEllipseButton(hdc, DW_ColorBox::getColorNum(0));   /// 색상 버튼 1 미리보기
+            colorButton2.drawEllipseButton(hdc, DW_ColorBox::getColorNum(1));   /// 색상 버튼 2 미리보기
+            colorButton3.drawEllipseButton(hdc, DW_ColorBox::getColorNum(2));   /// 색상 버튼 3 미리보기
         }
         EndPaint(hWnd, &ps);
         break;
