@@ -68,7 +68,7 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
     {
     case WM_CREATE:
     {
-        wheelRect = { 100, 50, 300, 250,  };
+        wheelRect = { 100, 50, 300, 250, };
         barRect = { 380, 50, 410, 250 };
         selectedRect = { 50, 280, 310, 330 };
         redSliderRect = { 50, 350, 310, 370 };
@@ -186,7 +186,7 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
         SetCapture(hwnd);
         InvalidateRect(WndFunc::toolWnd, NULL, TRUE);
     case WM_MOUSEMOVE:
-        
+
         if (wParam & MK_LBUTTON)
         {
             int xPos = LOWORD(lParam);
@@ -218,6 +218,14 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
                     red = GetRValue(color);
                     green = GetGValue(color);
                     blue = GetBValue(color);
+                    InvalidateRect(hWnd, NULL, TRUE);
+                }
+                else {
+                    // wheelRect를 벗어난 경우 기본 색상 또는 이전 색상 유지
+                    isMouseInWheel = false;
+                    currentMousePos.x = -1; // 선택 해제 시 표시를 위한 값
+                    currentMousePos.y = -1;
+                    // 미리보기 초기화
                     InvalidateRect(hWnd, NULL, TRUE);
                 }
             }
@@ -257,7 +265,7 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
             DW_ColorBox::colorP[DW_ColorBox::colorSelect] = RGB(red, green, blue);
             break;
         }
-  
+
 
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
@@ -265,26 +273,45 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
     return 0;
 }
 
-
 void DW_ColorBox::DrawColorWheel(HDC hdc, int centerX, int centerY, int radius)
 {
-    for (int y = centerY - radius; y <= centerY + radius; y++)
+    int diameter = radius * 2;
+    std::vector<COLORREF> colorBuffer(diameter * diameter, RGB(234, 232, 224)); // 버퍼 생성
+
+    for (int y = -radius; y < radius; y++)
     {
-        for (int x = centerX - radius; x <= centerX + radius; x++)
+        for (int x = -radius; x < radius; x++)
         {
-            int dx = x - centerX;
-            int dy = y - centerY;
+            int dx = x;
+            int dy = y;
             double distance = sqrt(dx * dx + dy * dy);
 
             if (distance <= radius)
             {
-                double hue = atan2(dy, dx) * 180 / 3.14159265358979323846 + 180;
+                double hue = atan2(dy, dx) * 180 / 3.14159265358979323846 + 60;
                 double saturation = distance / radius;
-                COLORREF color = HSVtoRGB(hue, saturation, value);
-                SetPixel(hdc, x, y, color);
+                COLORREF color = HSVtoRGB(hue, saturation, 1.0); // value 고정 (1.0 예시)
+
+                // 버퍼에 색상 저장
+                int bufX = x + radius;
+                int bufY = diameter - (y + radius) - 1;
+                colorBuffer[bufY * diameter + bufX] = color;
             }
         }
     }
+
+    // 버퍼 내용을 한 번에 출력
+    BITMAPINFO bmi = { 0 };
+    bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bmi.bmiHeader.biWidth = diameter;
+    bmi.bmiHeader.biHeight = -diameter; // 상단부터 그리기 위해 음수 사용
+    bmi.bmiHeader.biPlanes = 1;
+    bmi.bmiHeader.biBitCount = 32;
+    bmi.bmiHeader.biCompression = BI_RGB;
+
+    SetDIBitsToDevice(hdc, centerX - radius, centerY - radius, diameter, diameter, 0, 0,
+        0, diameter, colorBuffer.data(), &bmi, DIB_RGB_COLORS);
+
     if (isMouseInWheel && currentMousePos.x != -1 && currentMousePos.y != -1)
     {
         HPEN whitePen = CreatePen(PS_SOLID, 2, RGB(255, 255, 255));
@@ -387,7 +414,7 @@ void DW_ColorBox::DrawSlider(HDC hdc, RECT rect, int value, int max)
             SetPixel(hdc, x, y, color); // 슬라이더 색상 채우기
         }
     }
-    // 원형 윤곽선과 내부 색 채우기
+    //원형 윤곽선과 내부 색 채우기
     int outlinePosition = rect.left + barWidth;
     HBRUSH fillBrush = CreateSolidBrush(RGB(255, 255, 255));  // 원 내부 색상 지정 (예: 빨간색)
     HPEN outlinePen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0)); // 윤곽선 색상 및 두께
@@ -426,7 +453,7 @@ void DW_ColorBox::DrawThicknessSlider(HDC hdc, RECT rect, RoundRECT roundrect, i
     int outlinePosition = rect.left + barWidth;
     HPEN outlinePen = CreatePen(PS_SOLID, 2, RGB(0, 0, 0)); // 윤곽선 색상 및 두께
     SelectObject(hdc, outlinePen);
-    Ellipse(hdc, outlinePosition - 10, rect.top , outlinePosition + 10, rect.bottom ); // 원의 크기 조절
+    Ellipse(hdc, outlinePosition - 10, rect.top, outlinePosition + 10, rect.bottom); // 원의 크기 조절
     DeleteObject(outlinePen);
 
 }

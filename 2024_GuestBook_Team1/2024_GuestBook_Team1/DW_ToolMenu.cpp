@@ -87,6 +87,7 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             replayStay = true;   /// replay시 true로 설정하여 WM_SIZE 조절을 멈춘다
             playButton.toggleState = !playButton.toggleState;   /// 버튼 누를때마다 이미지 교체 위해 값 반점
 
+
             if (pCnt)
             {
                 if (!function->getIsReplay())
@@ -199,9 +200,19 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
         }
         /// 물펜
+        else if (IntersectRect(&a, &mouse, &waterpenButton.rectButton)) {
+            function->setBShape(WATERCOLOR);
 
+            selectedBrushButton = &waterpenButton;
+            selectedIcon = IDI_WATERPEN_ICON;
+        }
+        // colorButton1에 대한 처리
         else if (IntersectRect(&a, &mouse, &colorButton1.rectButton))
         {
+            if (function->getIsReplay()) {
+                // 리플레이 중일 때는 색상 선택 박스를 열지 않음
+                break;
+            }
 
             // 색상 선택 박스의 고정 위치 설정
             int fixedX = 320; // 고정 x 좌표
@@ -211,7 +222,6 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             RECT screenRect = colorButton1.rectButton;
             ClientToScreen(hWnd, reinterpret_cast<POINT*>(&screenRect.left));
             ClientToScreen(hWnd, reinterpret_cast<POINT*>(&screenRect.right));
-
 
             // 이전 버튼의 선택 박스 숨기기
             if (selectedColorButton != &colorButton1) {
@@ -228,8 +238,12 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             selectedColorButton = &colorButton1; // 선택한 버튼 저장
         }
 
+        // colorButton2에 대한 처리
         else if (IntersectRect(&a, &mouse, &colorButton2.rectButton))
         {
+            if (function->getIsReplay()) {
+                break;
+            }
 
             // 색상 선택 박스의 고정 위치 설정
             int fixedX = 370; // 고정 x 좌표
@@ -254,8 +268,12 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             selectedColorButton = &colorButton2; // 선택한 버튼 저장
         }
 
+        // colorButton3에 대한 처리
         else if (IntersectRect(&a, &mouse, &colorButton3.rectButton))
         {
+            if (function->getIsReplay()) {
+                break;
+            }
 
             // 색상 선택 박스의 고정 위치 설정
             int fixedX = 420; // 고정 x 좌표
