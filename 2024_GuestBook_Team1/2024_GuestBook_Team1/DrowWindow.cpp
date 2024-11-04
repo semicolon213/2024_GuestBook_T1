@@ -252,9 +252,9 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
         {
             // 텍스트를 출력할 위치(x, y 좌표)
             int x = WndFunc::wndSize.right / 2 - 175;
-            int y = 270;
+            int y = 270 + 25;
 
-            Rectangle(hdc, x - 50, 100, x + 420, 750);
+            Rectangle(hdc, x - 50, 125, x + 420, 775);
 
             // 큰 텍스트를 위한 폰트 생성
             HFONT hFontLarge = CreateFont(

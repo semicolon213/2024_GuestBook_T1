@@ -1,5 +1,63 @@
 #include "MakeButton.h"
 
+void MakeButton::makeMenuButton(int x, int y, int width, int height, int func, LPCWSTR text)
+{
+    this->x = x;
+    this->y = y;
+    this->width = width;
+    this->height = height;
+    this->func = func;
+    this->text = text;
+    this->hButton = nullptr;
+}
+
+void MakeButton::showMenuButton(HWND g_Hwnd, int path, HWND& get_hWnd)
+{
+    this->hButton = g_Hwnd;
+
+    get_hWnd = CreateWindowW(
+        L"BUTTON",                                                          // 버튼 클래스 이름
+        text,                                                               // 버튼 텍스트
+        WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_ICON | BS_FLAT,             // 버튼 스타일
+        x,                                                                  // 버튼의 x 위치
+        y,                                                                  // 버튼의 y 위치
+        width,                                                              // 버튼의 폭
+        height,                                                             // 버튼의 높이
+        this->hButton,                                                             // 부모 윈도우 핸들
+        (HMENU)func,                                                        // 버튼의 ID
+        (HINSTANCE)GetWindowLongPtr(this->hButton, GWLP_HINSTANCE),                // 인스턴스 핸들
+        NULL                                                                // 추가 매개변수
+    );
+    insertIconImg(text, path, (HINSTANCE)GetWindowLongPtr(this->hButton, GWLP_HINSTANCE));
+
+    /// 점선 테두리 삭제 메세지 전송
+    SendMessage(g_Hwnd, WM_UPDATEUISTATE, MAKELONG(UIS_SET, UISF_HIDEFOCUS), 0);
+
+}
+
+void MakeButton::insertIconImg(LPCWSTR text, int path, HINSTANCE hInst)
+{
+    /// 버튼의 크기에 맞는 아이콘을 불러오기 위해 LoadImage를 사용.
+    HICON hIcon = (HICON)LoadImage(
+        hInst,                        /// 인스턴스 핸들
+        MAKEINTRESOURCE(path),        /// 리소스 경로
+        IMAGE_ICON,                   /// 아이콘 유형
+        width,                        /// 아이콘의 가로 크기
+        height,                       /// 아이콘의 세로 크기
+        LR_DEFAULTCOLOR               /// 기본 색상 로드 플래그
+    );
+
+    /// 버튼에 아이콘 설정 함수
+    SendMessageW(
+        FindWindowExW(this->hButton, NULL, L"BUTTON", text),   /// 버튼의 핸들을 찾습니다.
+        BM_SETIMAGE,                                    /// 버튼에 이미지를 설정하는 메시지
+        IMAGE_ICON,                                     /// 이미지 유형이 아이콘임을 지정
+        (LPARAM)hIcon                                   /// 설정할 아이콘
+    );
+
+}
+
+
 MakeButton::MakeButton()
 {
     /// 생성자 초기화

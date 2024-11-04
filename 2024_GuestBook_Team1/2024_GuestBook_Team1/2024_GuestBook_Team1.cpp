@@ -1,7 +1,7 @@
 ﻿#include "2024_GuestBook_Team1.h"
 #include <commctrl.h>
 #include "WndFunc.h"
-
+#include "MakeButton.h"
 
 #define MAX_LOADSTRING 100
 
@@ -74,10 +74,10 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.lpfnWndProc = WndProc;
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
-    wcex.hInstance = hInstance;
+    wcex.hInstance = hInstance; 
     wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_YUHAN256));
     wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-    wcex.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(243, 243, 243));
+    wcex.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(255,255,255));
     wcex.lpszMenuName = NULL;
     wcex.lpszClassName = szWindowClass;
     wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_YUHAN));
@@ -141,6 +141,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 //
 
+MakeButton bt_Replay;
+MakeButton bt_Load;
+MakeButton bt_Credit;
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -149,22 +153,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         /// 최상위 윈도우 핸들 생성이 윈도우 사이즈 초기화
         GetClientRect(hWnd, &WndFunc::wndSize);
-
-        drowWnd = std::make_unique<DrowWindow>(1, hInst);
-
-        // 버튼 스타일
-        DWORD buttonStyle = WS_CHILD | WS_VISIBLE | BS_CENTER | BS_VCENTER | BS_PUSHBUTTON;
-
-        WndFunc::DrowBT = CreateWindowW(L"BUTTON", L"서명하기", buttonStyle,
-            (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 170 + 100, 240, 100, hWnd, (HMENU)DEF_DROW_BT, hInst, nullptr);
-
-        WndFunc::LoadBT = CreateWindowW(L"BUTTON", L"불러오기", buttonStyle,
-            (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 50 + 100, 240, 100, hWnd, (HMENU)DEF_LOAD_BT, hInst, nullptr);
-
-        WndFunc::CreditBT = CreateWindowW(L"BUTTON", L"CREDIT", buttonStyle,
-            (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) + 70 + 100, 240, 100, hWnd, (HMENU)DEF_CREDIT_BT, hInst, nullptr);
-
-
+      
         // DrowWindow 인스턴스 생성
         drowWnd = std::make_unique<DrowWindow>(1, hInst);
 
@@ -197,6 +186,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             MessageBox(NULL, L"창 생성 실패", L"에러", MB_OK);
         }
 
+
+        bt_Replay.makeMenuButton((WndFunc::wndSize.right / 2) - 450, (WndFunc::wndSize.bottom / 2) - 50 + 100, 250, 250, DEF_DROW_BT, L"REPLAY");
+        bt_Replay.showMenuButton(hWnd, IDI_MAIN_SIGN_ICON, WndFunc::DrowBT);
+        
+        bt_Load.makeMenuButton((WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 50 + 100, 250, 250, DEF_LOAD_BT, L"불러오기");
+        bt_Load.showMenuButton(hWnd, IDI_MAIN_LOAD_ICON, WndFunc::LoadBT);
+
+        bt_Credit.makeMenuButton((WndFunc::wndSize.right / 2) + 210, (WndFunc::wndSize.bottom / 2) - 50 + 100, 250, 250, DEF_CREDIT_BT, L"CREDIT");
+        bt_Credit.showMenuButton(hWnd, IDI_MAIN_CREDIT_ICON, WndFunc::CreditBT);
+        // 버튼 스타일
+        DWORD buttonStyle = WS_CHILD | WS_VISIBLE | BS_CENTER | BS_VCENTER | BS_PUSHBUTTON;
+
+        /*
+        //WndFunc::DrowBT = CreateWindowW(L"BUTTON", L"서명하기", buttonStyle,
+         //   (WndFunc::wndSize.right / 2) - 450, (WndFunc::wndSize.bottom / 2) - 50 + 100, 250, 250, hWnd, (HMENU)DEF_DROW_BT, hInst, nullptr);
+
+        //WndFunc::LoadBT = CreateWindowW(L"BUTTON", L"불러오기", buttonStyle,
+          //  (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 50 + 100, 250, 250, hWnd, (HMENU)DEF_LOAD_BT, hInst, nullptr);
+
+        //WndFunc::CreditBT = CreateWindowW(L"BUTTON", L"CREDIT", buttonStyle,
+          //  (WndFunc::wndSize.right / 2) + 210, (WndFunc::wndSize.bottom / 2) - 50 + 100, 250, 250, hWnd, (HMENU)DEF_CREDIT_BT, hInst, nullptr);
+          */
         ShowWindow(WndFunc::drowWnd, SW_HIDE);
         ShowWindow(WndFunc::nameWnd, SW_HIDE);
         ShowWindow(WndFunc::toolWnd, SW_HIDE);
@@ -230,7 +241,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             ShowWindow(WndFunc::CreditBT, SW_HIDE);
             break;
         }
-
         case DEF_LOAD_BT:   // 불러오기
         {
          
@@ -257,9 +267,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             ShowWindow(WndFunc::drowWnd, SW_SHOW);
             ShowWindow(WndFunc::nameWnd, SW_SHOW);
 
+            ShowWindow(WndFunc::fileNameW, SW_HIDE);
             ShowWindow(WndFunc::DrowBT, SW_HIDE);
             ShowWindow(WndFunc::LoadBT, SW_HIDE);
             ShowWindow(WndFunc::CreditBT, SW_HIDE);
+
             break;
         }
         default:
@@ -279,9 +291,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         MoveWindow(WndFunc::canvasWnd, (WndFunc::wndSize.right - 1300) / 2,(WndFunc::wndSize.bottom - 600) / 2, 1300, 700, true);
         MoveWindow(WndFunc::visitListWnd, 0, WndFunc::wndSize.bottom - 30, WndFunc::wndSize.right, WndFunc::wndSize.bottom, true);
 
-        MoveWindow(WndFunc::DrowBT, (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 170 + 100, 240, 100, true);
-        MoveWindow(WndFunc::LoadBT, (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 50 + 100, 240, 100, true);
-        MoveWindow(WndFunc::CreditBT, (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) + 70 + 100, 240, 100, true);
+        MoveWindow(WndFunc::DrowBT, (WndFunc::wndSize.right / 2) - 450, (WndFunc::wndSize.bottom / 2) - 50 + 100, 250, 250, true);
+        MoveWindow(WndFunc::LoadBT, (WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 50 + 100, 250, 250, true);
+        MoveWindow(WndFunc::CreditBT, (WndFunc::wndSize.right / 2) + 210, (WndFunc::wndSize.bottom / 2) - 50 + 100, 250, 250, true);
         break;
     }
     case WM_GETMINMAXINFO:
@@ -351,12 +363,68 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         SelectObject(hdc, hOldFont);
         DeleteObject(hFontVersion);
 
-        
+        // 기존 펜을 백업하기 위해 선언
+        HPEN oldPen;
+        // 굵기 3의 펜 생성
+        HPEN thickPen = CreatePen(PS_SOLID, 3, RGB(0, 0, 0));
+
+        // HDC에 굵기 3 펜을 선택
+        oldPen = (HPEN)SelectObject(hdc, thickPen);
 
 
+        HFONT hFontText = CreateFont(
+            40,                 // "서명하기" 텍스트의 크기
+            0, 0, 0,           // 너비와 각도 (0은 자동 설정)
+            FW_BOLD,           // 굵게 설정
+            FALSE, FALSE, FALSE, // 기울임, 밑줄, 취소선 여부
+            DEFAULT_CHARSET,   // 문자 집합
+            OUT_DEFAULT_PRECIS,
+            CLIP_DEFAULT_PRECIS,
+            DEFAULT_QUALITY,
+            DEFAULT_PITCH | FF_SWISS,
+            L"Malgun Gothic");         // 글꼴 이름
+        HFONT hOldFontText = (HFONT)SelectObject(hdc, hFontText);
+
+
+        // 첫 번째 직사각형 그리기
+        Rectangle(hdc, (WndFunc::wndSize.right / 2) - 480, (WndFunc::wndSize.bottom / 2) + 20 , (WndFunc::wndSize.right / 2) - 170, (WndFunc::wndSize.bottom / 2) + 330);
+
+
+        // "서명하기" 텍스트를 큰 글씨로 출력
+        LPCWSTR text = L"서명하기";
+        TextOut(hdc, (WndFunc::wndSize.right / 2) - 380, (WndFunc::wndSize.bottom / 2) - 40, text, wcslen(text));
+
+
+        // 두 번째 직사각형 그리기
+        Rectangle(hdc, (WndFunc::wndSize.right / 2) - 145, (WndFunc::wndSize.bottom / 2) + 20, (WndFunc::wndSize.right / 2) + 160, (WndFunc::wndSize.bottom / 2) + 330);
+
+        // "서명하기" 텍스트를 큰 글씨로 출력
+        text = L"불러오기";
+        TextOut(hdc, (WndFunc::wndSize.right / 2) - 50, (WndFunc::wndSize.bottom / 2) - 40, text, wcslen(text));
+
+
+
+        // 세 번째 직사각형 그리기
+        Rectangle(hdc, (WndFunc::wndSize.right / 2) + 180, (WndFunc::wndSize.bottom / 2) + 20, (WndFunc::wndSize.right / 2) + 490, (WndFunc::wndSize.bottom / 2) + 330);
+
+        // "서명하기" 텍스트를 큰 글씨로 출력
+        text = L"CREDIT";
+        TextOut(hdc, (WndFunc::wndSize.right / 2) + 285, (WndFunc::wndSize.bottom / 2) - 40, text, wcslen(text));
+
+
+        // 원래 펜으로 되돌림
+        SelectObject(hdc, oldPen);
+
+        // "서명하기" 텍스트의 글꼴 자원 해제
+        SelectObject(hdc, hOldFontText);
+        DeleteObject(hFontText);
+
+        // 사용한 펜 삭제
+        DeleteObject(thickPen);
         EndPaint(hWnd, &ps);
         break;
     }
+
 
     
     case WM_DESTROY:

@@ -65,7 +65,6 @@ LRESULT CALLBACK DrowWindow::WndProcNB(HWND hWnd, UINT message, WPARAM wParam, L
 }
 
 HWND backB = nullptr;
-HWND fileNameW = nullptr;
 HWND sideB = nullptr;
 
 MakeButton sideMenu;
@@ -81,16 +80,17 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
     case WM_SETTEXT:
         /// WM_SETTEXT 메시지 처리
         /// save나 로드시 namebar 텍스트 변경
-        SetWindowText(fileNameW, reinterpret_cast<LPCWSTR>(lParam));
+        /// 
+        
+        if (!WndFunc::creditOn) {
+            SetWindowText(WndFunc::fileNameW, reinterpret_cast<LPCWSTR>(lParam));
+        }
         break;
     case WM_CREATE:
     {
-        /*
-        backB = CreateWindow(L"BUTTON", L"<", WS_CHILD | WS_VISIBLE,
-            10, 12, 30, 30, hWnd, (HMENU)NB_BACK_BT, nullptr, NULL);
-*/
-        fileNameW = CreateWindow(L"STATIC", L"이름 없음", WS_CHILD | WS_VISIBLE,
+        WndFunc::fileNameW = CreateWindow(L"STATIC", L"이름 없음", WS_CHILD | WS_VISIBLE,
             50, 12, 300, 30, hWnd, (HMENU)NB_FILE_NAME, nullptr, NULL);
+        
 
         sideMenu.setCoordinate(WndFunc::wndSize.right - 40, 10, WndFunc::wndSize.right - 10, 40);
 
@@ -99,14 +99,16 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY,
             DEFAULT_PITCH | FF_SWISS, TEXT("나눔고딕"));
 
-        // STATIC 컨트롤에 폰트 설정
-        SendMessage(fileNameW, WM_SETFONT, (WPARAM)hFont, TRUE);
+            // STATIC 컨트롤에 폰트 설정
+            SendMessage(WndFunc::fileNameW, WM_SETFONT, (WPARAM)hFont, TRUE);
+            
         break;
     }
     case WM_SIZE:
     {
         /// 창 크기 변화시 사이드 메뉴 버튼 이동
         sideMenu.setCoordinate(WndFunc::wndSize.right - 40, 10, WndFunc::wndSize.right - 10, 40);
+        
         break;
     }
     case WM_LBUTTONDOWN:
@@ -139,6 +141,8 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             WndFunc::buttonOn = true;
             WndFunc::creditOn = false;
 
+            ShowWindow(WndFunc::fileNameW, SW_SHOW);
+
             ShowWindow(WndFunc::drowWnd, SW_HIDE);
             ShowWindow(WndFunc::nameWnd, SW_HIDE);
             ShowWindow(WndFunc::toolWnd, SW_HIDE);
@@ -169,7 +173,10 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         HDC hdc = BeginPaint(hWnd, &ps);
 
         /// 사이드 버튼의 이미지 버튼 두개 
-        sideMenu.doubleImgButton(hdc, IDI_CLOSE_MENU_ICON, IDI_MENU_ICON);
+        if (!WndFunc::creditOn) {
+            sideMenu.doubleImgButton(hdc, IDI_CLOSE_MENU_ICON, IDI_MENU_ICON);
+
+        }
         exitButton.drawRectButton(hdc, IDI_EXIT_ICON);
         EndPaint(hWnd, &ps);
         break;

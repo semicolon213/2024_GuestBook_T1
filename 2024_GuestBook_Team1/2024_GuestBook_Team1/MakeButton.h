@@ -9,9 +9,24 @@ class MakeButton
 private:
     int icon;      /// 아이콘 지정 멤버 변수
 
+    int x;                /// 버튼의 x 위치
+    int y;                /// 버튼의 y 위치
+    int width;            /// 버튼의 폭
+    int height;           /// 버튼의 높이
+    int func;             /// 버튼의 ID
+    LPCWSTR text;         /// 버튼 텍스트
+    COLORREF buttonColor; /// 버튼 색지정
+    HWND hButton;
+
+
 public:
     RECT rectButton;
     bool toggleState;   /// doubleImgButton 전환 멤버 변수
+
+    void insertIconImg(LPCWSTR text, int path, HINSTANCE hInst);
+
+    void makeMenuButton(int x, int y, int width, int height, int func, LPCWSTR text);
+    void showMenuButton(HWND g_Hwnd, int path, HWND& get_hWnd);
 
     /**
     * @brief MakeButton 클래스의 생성자 위치 좌표를 나중에 지정할 때 사용
