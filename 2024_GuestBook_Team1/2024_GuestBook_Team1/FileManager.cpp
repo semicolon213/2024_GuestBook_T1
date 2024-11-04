@@ -38,7 +38,7 @@ void FileManager::SaveFileList()
     }
 
     // 바탕화면 경로에 저장할 파일 경로를 추가
-    std::wstring filePath = std::wstring(desktopPath) + L"\\file\\FileList.txt";
+    std::wstring filePath = L"..\\file\\FileList.txt";
 
     // 파일 열기 (경로에 파일이 없으면 새로 생성됨)
     std::wofstream ofs(filePath, std::ios::out | std::ios::trunc);
@@ -68,7 +68,7 @@ void FileManager::LoadFileList()
     }
 
     // 바탕화면 경로에 파일 경로를 추가
-    std::wstring filePath = std::wstring(desktopPath) + L"\\file\\FileList.txt";
+    std::wstring filePath = L"..\\file\\FileList.txt";
 
     // 파일 열기
     std::wifstream ifs(filePath);
@@ -230,7 +230,7 @@ bool FileManager::ConfigureDialog(HWND hWnd, DWORD flags, WCHAR* fileBuffer, DWO
     }
 
     // "file" 폴더 경로 생성
-    std::wstring initialDir = std::wstring(desktopPath) + L"\\file\\";
+    std::wstring initialDir = L"..\\file\\";
 
     OFN.lStructSize = sizeof(OPENFILENAME);
     OFN.hwndOwner = hWnd;
@@ -243,10 +243,10 @@ bool FileManager::ConfigureDialog(HWND hWnd, DWORD flags, WCHAR* fileBuffer, DWO
     return (flags & OFN_OVERWRITEPROMPT) ? GetSaveFileName(&OFN) : GetOpenFileName(&OFN);
 }
 
-// 파일을 열거나 저장하는 작업을 하는 창을 뜨게 함 (EX: 다른 이름으로 저장) 
-// OFN_PATHMUSTEXIST: 경로가 유효해야 함.
-// OFN_OVERWRITEPROMPT: 같은 파일명이 존재할 경우 덮어쓰기를 확인.
-// OFN_FILEMUSTEXIST : 파일이 실제로 존재해야 함(파일 열기 시 사용).
+/// 파일을 열거나 저장하는 작업을 하는 창을 뜨게 함 (EX: 다른 이름으로 저장) 
+/// OFN_PATHMUSTEXIST: 경로가 유효해야 함.
+/// OFN_OVERWRITEPROMPT: 같은 파일명이 존재할 경우 덮어쓰기를 확인.
+/// OFN_FILEMUSTEXIST : 파일이 실제로 존재해야 함(파일 열기 시 사용).
 bool FileManager::HandleFileOperation(HWND hWnd, std::vector<PINFO>* penMemory, bool isSave) {
 
 
@@ -284,7 +284,7 @@ void FileManager::selectFileMode(int wmId, HWND s_hWnd, std::vector<PINFO>* penM
         HandleFileOperation(s_hWnd, penMemory, false);
         Function::drawLInfo.pInfo = *penMemory;
 
-        // 화면 갱신
+        /// 화면 갱신
         InvalidateRect(s_hWnd, NULL, TRUE);
         UpdateWindow(s_hWnd);
     }
@@ -292,9 +292,9 @@ void FileManager::selectFileMode(int wmId, HWND s_hWnd, std::vector<PINFO>* penM
 
     case SD_FILEMANAGER_BT:
     {
-        MessageBox(nullptr, DW_FileManager::filePath.c_str(), L"파일 경로", MB_OK); // 경로 출력
+        /// MessageBox(nullptr, DW_FileManager::filePath.c_str(), L"파일 경로", MB_OK); // 경로 출력
 
-        // filePath에 저장된 파일을 즉시 로드
+        /// filePath에 저장된 파일을 즉시 로드
         if (load(DW_FileManager::filePath.c_str(), penMemory, s_hWnd)) {
             Function::drawLInfo.pInfo = *penMemory;
 
@@ -309,7 +309,7 @@ void FileManager::selectFileMode(int wmId, HWND s_hWnd, std::vector<PINFO>* penM
             SendMessage(WndFunc::nameWnd, WM_SETTEXT, 0, (LPARAM)baseName.c_str()); /// 2024_GuestBook_Team1로 메시지 전달
             SendMessage(WndFunc::toolWnd, WM_COMMAND, TL_PLAY_BT, 0); /// 추가
 
-            // 화면 갱신
+            /// 화면 갱신
             InvalidateRect(s_hWnd, NULL, TRUE);
             UpdateWindow(s_hWnd);
         }
