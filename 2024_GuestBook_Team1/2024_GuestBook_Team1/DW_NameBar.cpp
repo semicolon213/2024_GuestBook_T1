@@ -177,7 +177,7 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         /// 사이드 버튼의 이미지 버튼 두개 
         if (!WndFunc::creditOn) {
             sideMenu.doubleImgButton(hdc, IDI_CLOSE_MENU_ICON, IDI_MENU_ICON);
-
+            function->clearDrawing(WndFunc::canvasWnd);
         }
         exitButton.drawRectButton(hdc, IDI_EXIT_ICON);
         EndPaint(hWnd, &ps);
