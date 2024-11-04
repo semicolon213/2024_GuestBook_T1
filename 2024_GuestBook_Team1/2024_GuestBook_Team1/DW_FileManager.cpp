@@ -8,7 +8,7 @@ std::vector<std::wstring> fileList; // 파일 목록 벡터
 std::wstring filePath;
 std::wstring DW_FileManager::filePath; // 정의
 
-std::wstring getFilePath() {
+std::wstring DW_FileManager::getFilePath() {
     PWSTR desktopPath = NULL;
     HRESULT result = SHGetKnownFolderPath(FOLDERID_Desktop, 0, NULL, &desktopPath);
 
@@ -57,7 +57,7 @@ void populateFileList(HWND hListBox) {
     }
 
     // 새로운 파일을 검색 및 추가
-    std::wstring filePath = getFilePath();
+    std::wstring filePath = DW_FileManager::getFilePath();
     WIN32_FIND_DATAW findFileData;
     HANDLE hFind = FindFirstFileW((filePath + L"*.txt").c_str(), &findFileData); // .txt 파일만 찾기
 
@@ -101,20 +101,6 @@ LRESULT CALLBACK DrowWindow::WndProcFM(HWND hWnd, UINT message, WPARAM wParam, L
 LRESULT DrowWindow::handleMessageFM(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
     case WM_CREATE: {
-        // 바탕화면의 "file" 폴더 경로 가져오기
-        std::wstring fileFolderPath = getFilePath();
-
-        // "file" 폴더 존재 여부 확인 및 생성
-        DWORD ftyp = GetFileAttributesW(fileFolderPath.c_str());
-        if (ftyp == INVALID_FILE_ATTRIBUTES) {
-            // 폴더가 존재하지 않는 경우, 생성
-            if (!CreateDirectoryW(fileFolderPath.c_str(), NULL) && GetLastError() != ERROR_ALREADY_EXISTS) {
-                // 폴더 생성 실패 처리
-                MessageBox(hWnd, L"파일 폴더를 생성할 수 없습니다.", L"오류", MB_OK);
-                return -1; // 생성 실패 시 윈도우 생성 중단
-            }
-        }
-
         // 리스트 박스 생성
         RECT rect;
         GetClientRect(WndFunc::drowWnd, &rect);
@@ -141,7 +127,7 @@ LRESULT DrowWindow::handleMessageFM(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
                 std::wstring selectedFile(selectedFileName);
 
-                std::wstring desktopPath = getFilePath();
+                std::wstring desktopPath = DW_FileManager::getFilePath();
 
                 DW_FileManager::filePath = desktopPath + selectedFile;
 

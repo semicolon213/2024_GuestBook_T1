@@ -16,7 +16,7 @@ public:
     static void saveFileList(const std::vector<std::wstring>& fileList);
     static std::vector<std::wstring> loadFileList();
     static std::wstring filePath;
-
+    static std::wstring getFilePath();
 
 protected:
 

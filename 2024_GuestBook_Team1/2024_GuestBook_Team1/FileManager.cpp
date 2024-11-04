@@ -2,64 +2,8 @@
 
 FileManager FileManager::fileManager; //인스턴스 
 
-FileManager::FileManager() : hRightPanel(nullptr), hFileListBox(nullptr), hInst(nullptr), m_hWnd(nullptr), isPanelVisible(false)
-{} //초기화를 위한 생성자 
-
-FileManager::FileManager(HWND hWnd) : hRightPanel(nullptr), hFileListBox(nullptr), hInst(nullptr), m_hWnd(hWnd) {}
-// 초기화를 위한 생성자
-
 std::wstring FileManager::baseName = L"";
 // 파일 이름을 담아요 
-
-void FileManager::Panels(HWND hWnd) //파일리스트 
-{
-    hWnd = WndFunc::canvasWnd; // (임시)사용하려는 윈도우 핸들은 캔버스윈도우의 핸들임 
-    hInst = (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE); // 부모의 인스턴스를 가져옴 
-
-    RECT rect; //구조체 선언 
-    GetClientRect(WndFunc::canvasWnd, &rect); //캔버스윈도우의 구조체 영역을 가져옴 
-
-
-    /// 사이드 메뉴 위치 및 크기 설정
-    int top = 110;
-    top += rect.top;
-    int panelWidth = 300;
-    int panelX = rect.right - panelWidth;
-    int panelY = 400;
-
-    /// 리스트 박스의 위치와 크기 설정
-    int listBoxX = 10;
-    int listBoxY = 40;
-    int listBoxWidth = rect.right - 20;
-    int listBoxHeight = rect.bottom - listBoxY - 10;
-
-    //파일리스트 패널 
-    hRightPanel = CreateWindowW(
-        L"STATIC", nullptr, WS_CHILD | WS_VISIBLE | WS_BORDER,
-        rect.left, rect.top, rect.right, rect.bottom,
-        hWnd, nullptr, hInst, nullptr);
-
-
-    /// 파일 매니저 패널 안에 있는 글씨 라벨("File Manager") 
-    HWND hLabel = CreateWindowW(
-        L"STATIC", L"File Manager", WS_CHILD | WS_VISIBLE,
-        10, 10, rect.right - 20, 20,
-        hRightPanel, nullptr, hInst, nullptr);
-
-    // 파일 매니저 리스트 박스 (하얀 창)
-    hFileListBox = CreateWindowW(
-        L"LISTBOX", nullptr, WS_CHILD | WS_VSCROLL | LBS_NOTIFY | WS_VISIBLE,
-        listBoxX, listBoxY, listBoxWidth, listBoxHeight,
-        hRightPanel, nullptr, hInst, nullptr);
-
-    // 파일 매니저 위치 조절 
-    MoveWindow(hRightPanel, panelX, top, rect.right, rect.bottom, TRUE);
-
-    // 파일 매니저를 맨 위로 가져옴 (임시방편)
-   /* SetWindowPos(hRightPanel, HWND_TOP, 0, 0, 0, 0,
-        SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);*/
-
-}
 
 //파일리스트에 파일을 추가하는 함수 
 void FileManager::AddFileToList(const std::wstring& fileName)
