@@ -270,11 +270,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             ShowWindow(WndFunc::drowWnd, SW_SHOW);
             ShowWindow(WndFunc::nameWnd, SW_SHOW);
 
+            ShowWindow(WndFunc::canvasWnd, SW_HIDE);
+            ShowWindow(WndFunc::toolWnd, SW_HIDE);
             ShowWindow(WndFunc::fileNameW, SW_HIDE);
             ShowWindow(WndFunc::DrowBT, SW_HIDE);
             ShowWindow(WndFunc::LoadBT, SW_HIDE);
             ShowWindow(WndFunc::CreditBT, SW_HIDE);
+            ShowWindow(WndFunc::sideWnd, SW_HIDE);
 
+            SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_CLEAR_BT, 0);
+
+            InvalidateRect(WndFunc::drowWnd, NULL, TRUE);
             break;
         }
         default:

@@ -132,8 +132,7 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
         /// 크레딧
         else if (IntersectRect(&aSide, &mouseSide, &sideCredit.rectButton)) {
-            /// 메세지 박스 없애고 if문(InTerSect)내부에 실행 코드 추가
-            MessageBox(hWnd, L"Credit", L"Credit", MB_OK);
+            SendMessage(GetParent(WndFunc::drowWnd), WM_COMMAND, DEF_CREDIT_BT, 0);
         }
         break;
     }
