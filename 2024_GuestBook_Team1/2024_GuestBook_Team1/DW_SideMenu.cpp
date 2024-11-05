@@ -124,8 +124,6 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
             createWindowFM(Fm_x, Fm_y, x_2, y_2, WndFunc::drowWnd); //파일매니저 윈도우 생성 
 
-
-
             isListBoxVisible = !isListBoxVisible; // 현재 상태 반전
 
             ShowWindow(DW_FileManager::hListBox, isListBoxVisible ? SW_HIDE : SW_SHOW); // 리스트박스 보이기/숨기기
