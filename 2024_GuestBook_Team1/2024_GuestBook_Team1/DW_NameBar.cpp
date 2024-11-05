@@ -144,6 +144,8 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             WndFunc::buttonOn = true;
             WndFunc::creditOn = false;
 
+            SendMessage(WndFunc::nameWnd, WM_SETTEXT, 0, (LPARAM)L"이름 없음");
+
             ShowWindow(WndFunc::fileNameW, SW_SHOW);
 
             ShowWindow(WndFunc::drowWnd, SW_HIDE);
