@@ -144,6 +144,6 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 	{
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
-}
+	}
 	return 0;
 }

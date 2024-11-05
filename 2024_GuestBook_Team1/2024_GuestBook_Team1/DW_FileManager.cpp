@@ -9,11 +9,11 @@ std::wstring filePath;
 std::wstring DW_FileManager::filePath; // 정의
 
 std::wstring DW_FileManager::getFilePath() {
-        return  L"..\\file\\";
+    return  L"..\\file\\";
 }
 
 void DW_FileManager::saveFileList(const std::vector<std::wstring>& fileList) {
-    std::wstring filePath = L"..\\file\\FileList.txt"; 
+    std::wstring filePath = L"..\\file\\";
     std::wofstream outFile(filePath);
     if (outFile.is_open()) {
         for (const auto& fileName : fileList) {
@@ -25,7 +25,7 @@ void DW_FileManager::saveFileList(const std::vector<std::wstring>& fileList) {
 
 std::vector<std::wstring> DW_FileManager::loadFileList() {
     std::vector<std::wstring> fileList;
-    std::wstring filePath = L"..\\file\\FileList.txt";  
+    std::wstring filePath = L"..\\file\\";
     std::wifstream inFile(filePath);
     std::wstring line;
 
@@ -49,17 +49,22 @@ void populateFileList(HWND hListBox) {
     // 새로운 파일을 검색 및 추가
     std::wstring filePath = DW_FileManager::getFilePath();
     WIN32_FIND_DATAW findFileData;
-    HANDLE hFind = FindFirstFileW((filePath + L"*.txt").c_str(), &findFileData); // .txt 파일만 찾기
+    HANDLE hFind = FindFirstFileW((filePath + L"*").c_str(), &findFileData);
 
     if (hFind != INVALID_HANDLE_VALUE) {
         do {
             if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-                // 파일이 목록에 이미 있는지 확인
-                auto it = std::find(savedFileList.begin(), savedFileList.end(), findFileData.cFileName);
-                if (it == savedFileList.end()) {
-                    // 중복이 아닌 경우에만 추가
-                    SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)findFileData.cFileName);
-                    savedFileList.push_back(findFileData.cFileName);
+                std::wstring fileName = findFileData.cFileName;
+
+                // 파일 이름에 '.'이 포함되어 있지 않은 경우 확장자가 없는 파일로 간주
+                if (fileName.find(L'.') == std::wstring::npos) {
+                    // 파일이 목록에 이미 있는지 확인
+                    auto it = std::find(savedFileList.begin(), savedFileList.end(), fileName);
+                    if (it == savedFileList.end()) {
+                        // 중복이 아닌 경우에만 추가
+                        SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)fileName.c_str());
+                        savedFileList.push_back(fileName);
+                    }
                 }
             }
         } while (FindNextFileW(hFind, &findFileData) != 0);
@@ -109,6 +114,7 @@ LRESULT DrowWindow::handleMessageFM(HWND hWnd, UINT message, WPARAM wParam, LPAR
         break;
     }
     case WM_COMMAND: {
+        function->setisLeftClick(false);
         if (LOWORD(wParam) == 101 && HIWORD(wParam) == LBN_DBLCLK) {
             int selectedIndex = SendMessage(DW_FileManager::hListBox, LB_GETCURSEL, 0, 0);
             if (selectedIndex != LB_ERR) {

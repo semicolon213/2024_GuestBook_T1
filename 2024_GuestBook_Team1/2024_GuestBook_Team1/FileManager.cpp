@@ -38,7 +38,7 @@ void FileManager::SaveFileList()
     }
 
     // 바탕화면 경로에 저장할 파일 경로를 추가
-    std::wstring filePath = L"..\\file\\FileList.txt";
+    std::wstring filePath = L"..\\file\\";
 
     // 파일 열기 (경로에 파일이 없으면 새로 생성됨)
     std::wofstream ofs(filePath, std::ios::out | std::ios::trunc);
@@ -68,7 +68,7 @@ void FileManager::LoadFileList()
     }
 
     // 바탕화면 경로에 파일 경로를 추가
-    std::wstring filePath = L"..\\file\\FileList.txt";
+    std::wstring filePath = L"..\\file\\";
 
     // 파일 열기
     std::wifstream ifs(filePath);
@@ -234,7 +234,6 @@ bool FileManager::ConfigureDialog(HWND hWnd, DWORD flags, WCHAR* fileBuffer, DWO
 
     OFN.lStructSize = sizeof(OPENFILENAME);
     OFN.hwndOwner = hWnd;
-    OFN.lpstrFilter = L"txt 파일(*.txt)\0*.txt\0모든 파일(*.*)\0*.*\0"; // txt로 확장자 설정 (임시)
     OFN.lpstrFile = fileBuffer;
     OFN.nMaxFile = bufferSize;
     OFN.lpstrInitialDir = initialDir.c_str(); // 초기 디렉토리 설정
@@ -255,13 +254,7 @@ bool FileManager::HandleFileOperation(HWND hWnd, std::vector<PINFO>* penMemory, 
 
     if (ConfigureDialog(hWnd, flags, filePath, sizeof(fileName))) {
         if (isSave) {
-            /// 파일 확장자가 .txt가 없으면 추가
-            std::wstring path(filePath);
-            if (path.find(L".txt") == std::wstring::npos) {
-                path += L".txt";  /// .txt 확장자 추가
-                wcscpy_s(filePath, sizeof(fileName) / sizeof(WCHAR), path.c_str());
 
-            }
         }
         return isSave ? save(filePath, penMemory, hWnd) : load(filePath, penMemory, hWnd);
     }
@@ -283,6 +276,8 @@ void FileManager::selectFileMode(int wmId, HWND s_hWnd, std::vector<PINFO>* penM
     {
         HandleFileOperation(s_hWnd, penMemory, false);
         Function::drawLInfo.pInfo = *penMemory;
+
+        SendMessage(WndFunc::toolWnd, WM_COMMAND, TL_PLAY_BT, 0); /// 추가
 
         /// 화면 갱신
         InvalidateRect(s_hWnd, NULL, TRUE);

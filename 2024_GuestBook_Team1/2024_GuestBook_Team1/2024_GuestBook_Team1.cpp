@@ -20,9 +20,9 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
-                     _In_opt_ HINSTANCE hPrevInstance,
-                     _In_ LPWSTR    lpCmdLine,
-                     _In_ int       nCmdShow)
+    _In_opt_ HINSTANCE hPrevInstance,
+    _In_ LPWSTR    lpCmdLine,
+    _In_ int       nCmdShow)
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
@@ -36,7 +36,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     MyRegisterClass(hInstance);
 
     // 애플리케이션 초기화를 수행합니다:
-    if (!InitInstance (hInstance, nCmdShow))
+    if (!InitInstance(hInstance, nCmdShow))
     {
         return FALSE;
     }
@@ -57,7 +57,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
     }
 
-    return (int) msg.wParam;
+    return (int)msg.wParam;
 }
 
 //  함수: MyRegisterClass()
@@ -74,10 +74,10 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.lpfnWndProc = WndProc;
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
-    wcex.hInstance = hInstance; 
+    wcex.hInstance = hInstance;
     wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_YUHAN256));
     wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-    wcex.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(255,255,255));
+    wcex.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(255, 255, 255));
     wcex.lpszMenuName = NULL;
     wcex.lpszClassName = szWindowClass;
     wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_YUHAN));
@@ -153,7 +153,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         /// 최상위 윈도우 핸들 생성이 윈도우 사이즈 초기화
         GetClientRect(hWnd, &WndFunc::wndSize);
-      
+
         // DrowWindow 인스턴스 생성
         drowWnd = std::make_unique<DrowWindow>(1, hInst);
 
@@ -189,7 +189,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         bt_Replay.makeMenuButton((WndFunc::wndSize.right / 2) - 450, (WndFunc::wndSize.bottom / 2) - 50 + 100, 250, 250, DEF_DROW_BT, L"REPLAY");
         bt_Replay.showMenuButton(hWnd, IDI_MAIN_SIGN_ICON, WndFunc::DrowBT);
-        
+
         bt_Load.makeMenuButton((WndFunc::wndSize.right / 2) - 120, (WndFunc::wndSize.bottom / 2) - 50 + 100, 250, 250, DEF_LOAD_BT, L"불러오기");
         bt_Load.showMenuButton(hWnd, IDI_MAIN_LOAD_ICON, WndFunc::LoadBT);
 
@@ -215,9 +215,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         ShowWindow(WndFunc::sideWnd, SW_HIDE);
         ShowWindow(WndFunc::visitListWnd, SW_HIDE);
         break;
-      
+
     }
-        
+
 
     case WM_COMMAND:
     {
@@ -244,9 +244,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         case DEF_LOAD_BT:   // 불러오기
         {
-         
+
             /// 현재 버튼을 숨김
             WndFunc::buttonOn = false;
+
+            FileManager::fileManager.selectFileMode(LOAD, hWnd, DW_SideMenu::penMemory); /// 추가
 
             ShowWindow(WndFunc::drowWnd, SW_SHOW);
             ShowWindow(WndFunc::nameWnd, SW_SHOW);
@@ -289,7 +291,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         MoveWindow(WndFunc::drowWnd, 0, 0, WndFunc::wndSize.right, WndFunc::wndSize.bottom, true);
         MoveWindow(WndFunc::nameWnd, 0, 0, WndFunc::wndSize.right, 57, true);
         MoveWindow(WndFunc::toolWnd, -1, 57, WndFunc::wndSize.right, 51, true);
-        MoveWindow(WndFunc::canvasWnd, (WndFunc::wndSize.right - 1300) / 2,(WndFunc::wndSize.bottom - 600) / 2, 1300, 700, true);
+        MoveWindow(WndFunc::canvasWnd, (WndFunc::wndSize.right - 1300) / 2, (WndFunc::wndSize.bottom - 600) / 2, 1300, 700, true);
         MoveWindow(WndFunc::visitListWnd, 0, WndFunc::wndSize.bottom - 30, WndFunc::wndSize.right, WndFunc::wndSize.bottom, true);
 
         MoveWindow(WndFunc::DrowBT, (WndFunc::wndSize.right / 2) - 450, (WndFunc::wndSize.bottom / 2) - 50 + 100, 250, 250, true);
@@ -388,7 +390,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
         // 첫 번째 직사각형 그리기
-        Rectangle(hdc, (WndFunc::wndSize.right / 2) - 480, (WndFunc::wndSize.bottom / 2) + 20 , (WndFunc::wndSize.right / 2) - 170, (WndFunc::wndSize.bottom / 2) + 330);
+        Rectangle(hdc, (WndFunc::wndSize.right / 2) - 480, (WndFunc::wndSize.bottom / 2) + 20, (WndFunc::wndSize.right / 2) - 170, (WndFunc::wndSize.bottom / 2) + 330);
 
 
         // "서명하기" 텍스트를 큰 글씨로 출력
@@ -427,7 +429,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
 
 
-    
+
     case WM_DESTROY:
         SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_RESET_BT, 0);
         PostQuitMessage(0);
