@@ -104,6 +104,8 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		{
 			ShowWindow(WndFunc::fileManager, SW_HIDE); // 열려 있으면 닫기
 			ShowWindow(WndFunc::sideWnd, SW_HIDE); // 열려 있으면 닫기
+			DW_NameBar::sideMenu.toggleState = false;
+			InvalidateRect(WndFunc::nameWnd, NULL, TRUE);
 		}
 
 		/// 캔버스에서 그릴 때 색상 창 열려있으면 닫음

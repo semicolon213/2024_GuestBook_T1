@@ -67,7 +67,7 @@ LRESULT CALLBACK DrowWindow::WndProcNB(HWND hWnd, UINT message, WPARAM wParam, L
 HWND backB = nullptr;
 HWND sideB = nullptr;
 
-MakeButton sideMenu;
+MakeButton DW_NameBar::sideMenu;
 MakeButton exitButton(10, 10, 40, 40);
 RECT mousePoint;
 RECT a1;
@@ -91,7 +91,7 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             50, 12, 300, 30, hWnd, (HMENU)NB_FILE_NAME, nullptr, NULL);
         
 
-        sideMenu.setCoordinate(WndFunc::wndSize.right - 40, 10, WndFunc::wndSize.right - 10, 40);
+        DW_NameBar::sideMenu.setCoordinate(WndFunc::wndSize.right - 40, 10, WndFunc::wndSize.right - 10, 40);
 
         HFONT hFont = CreateFont(24, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
             DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
@@ -106,12 +106,16 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
     case WM_SIZE:
     {
         /// 창 크기 변화시 사이드 메뉴 버튼 이동
-        sideMenu.setCoordinate(WndFunc::wndSize.right - 40, 10, WndFunc::wndSize.right - 10, 40);
+        DW_NameBar::sideMenu.setCoordinate(WndFunc::wndSize.right - 40, 10, WndFunc::wndSize.right - 10, 40);
         
         break;
     }
     case WM_LBUTTONDOWN:
     {
+        if (function->getIsReplay()) {
+            break;
+        }
+
         /// 버튼 클릭 확인용 마우스 좌표 기준 RECT 생성
         mousePoint.left = LOWORD(lParam);
         mousePoint.top = HIWORD(lParam);
@@ -119,22 +123,19 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         mousePoint.bottom = mousePoint.top + 1;
 
         /// 사이드 윈도우 존재 시 창 삭제
-        if (IntersectRect(&a1, &mousePoint, &sideMenu.rectButton)) {
-
-            /// 토글 상태 반전(버튼 이미지 변경)
-            sideMenu.toggleState = !sideMenu.toggleState;
-
-            /// 현재 사이드바가 열려있지 않을때 실행
-            if (WndFunc::sideWnd == nullptr) {
+         /// 사이드 메뉴 버튼을 클릭했는지 확인
+        if (IntersectRect(&a1, &mousePoint, &DW_NameBar::sideMenu.rectButton)) {
+            if (!DW_NameBar::sideMenu.toggleState) {
+                // 사이드 메뉴가 닫혀 있으면 열기
+                DW_NameBar::sideMenu.toggleState = true;
                 createWindowSB(WndFunc::wndSize.right - 60, 110, 60, 300, WndFunc::drowWnd);
             }
             else {
-                /// 파일매니저와 리스트 박스 끄기
-                ShowWindow(DW_FileManager::hListBox, SW_HIDE); 
+                // 사이드 메뉴가 열려 있으면 닫기
+                DW_NameBar::sideMenu.toggleState = false;
+                ShowWindow(DW_FileManager::hListBox, SW_HIDE);
                 ShowWindow(WndFunc::fileManager, SW_HIDE);
-                /// 사이드 윈도우 DestroyWindow
                 DestroyWindow(WndFunc::sideWnd);
-                /// 사이드 윈도우 핸들값 초기화
                 WndFunc::sideWnd = nullptr;
             }
         }
@@ -176,7 +177,7 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
         /// 사이드 버튼의 이미지 버튼 두개 
         if (!WndFunc::creditOn) {
-            sideMenu.doubleImgButton(hdc, IDI_CLOSE_MENU_ICON, IDI_MENU_ICON);
+            DW_NameBar::sideMenu.doubleImgButton(hdc, IDI_CLOSE_MENU_ICON, IDI_MENU_ICON);
 
         }
         exitButton.drawRectButton(hdc, IDI_EXIT_ICON);

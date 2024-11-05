@@ -277,15 +277,18 @@ void FileManager::selectFileMode(int wmId, HWND s_hWnd, std::vector<PINFO>* penM
         HandleFileOperation(s_hWnd, penMemory, false);
         Function::drawLInfo.pInfo = *penMemory;
 
-        SendMessage(WndFunc::toolWnd, WM_COMMAND, TL_PLAY_BT, 0); /// 추가
+        // penMemory가 비어있지 않을 경우에만 메시지 전송
+        if (!penMemory->empty())
+        {
+            SendMessage(WndFunc::toolWnd, WM_COMMAND, TL_PLAY_BT, 0); // 추가
+        }
 
         if (IsWindowVisible(WndFunc::fileManager) || IsWindowVisible(WndFunc::sideWnd))
         {
             ShowWindow(WndFunc::fileManager, SW_HIDE); // 열려 있으면 닫기
             ShowWindow(WndFunc::sideWnd, SW_HIDE); // 열려 있으면 닫기
-
-            SendMessage(WndFunc::nameWnd, WM_COMMAND, SIDEMENU_TOGGLE, 0); /// 추가
-
+            DW_NameBar::sideMenu.toggleState = false;
+            InvalidateRect(WndFunc::nameWnd, NULL, TRUE);
         }
 
         /// 화면 갱신
@@ -298,6 +301,14 @@ void FileManager::selectFileMode(int wmId, HWND s_hWnd, std::vector<PINFO>* penM
     {
         /// MessageBox(nullptr, DW_FileManager::filePath.c_str(), L"파일 경로", MB_OK); // 경로 출력
 
+        if (IsWindowVisible(WndFunc::fileManager) || IsWindowVisible(WndFunc::sideWnd))
+        {
+            ShowWindow(WndFunc::fileManager, SW_HIDE); // 열려 있으면 닫기
+            ShowWindow(WndFunc::sideWnd, SW_HIDE); // 열려 있으면 닫기
+            DW_NameBar::sideMenu.toggleState = false;
+            InvalidateRect(WndFunc::nameWnd, NULL, TRUE);
+
+        }
         /// filePath에 저장된 파일을 즉시 로드
         if (load(DW_FileManager::filePath.c_str(), penMemory, s_hWnd)) {
             Function::drawLInfo.pInfo = *penMemory;

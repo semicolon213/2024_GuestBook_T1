@@ -131,6 +131,12 @@ LRESULT DrowWindow::handleMessageFM(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 DWORD fileAttr = GetFileAttributesW(DW_FileManager::filePath.c_str());
                 if (fileAttr != INVALID_FILE_ATTRIBUTES && !(fileAttr & FILE_ATTRIBUTE_DIRECTORY)) {
                     FileManager::fileManager.selectFileMode(SD_FILEMANAGER_BT, hWnd, DW_SideMenu::penMemory);
+
+                    if (IsWindowVisible(WndFunc::fileManager) || IsWindowVisible(WndFunc::sideWnd))
+                    {
+                        ShowWindow(WndFunc::fileManager, SW_HIDE); // 열려 있으면 닫기
+                        ShowWindow(WndFunc::sideWnd, SW_HIDE); // 열려 있으면 닫기
+                    }
                 }
                 else {
                     MessageBox(hWnd, L"파일이 존재하지 않습니다.", L"알림", MB_OK);

@@ -98,6 +98,9 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         else if (IntersectRect(&aSide, &mouseSide, &sideLoad.rectButton)) {
             function->setisLeftClick(false);
 
+
+            DW_SideMenu::penMemory->clear();
+
             /// 메세지 박스 없애고 if문(InTerSect)내부에 실행 코드 추가
             FileManager::fileManager.selectFileMode(LOAD, hWnd, DW_SideMenu::penMemory); /// 추가
         }
