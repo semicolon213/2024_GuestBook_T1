@@ -96,6 +96,7 @@ LRESULT CALLBACK DrowWindow::WndProcFM(HWND hWnd, UINT message, WPARAM wParam, L
 LRESULT DrowWindow::handleMessageFM(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
     case WM_CREATE: {
+        function->setisLeftClick(false);
         // 리스트 박스 생성
         RECT rect;
         GetClientRect(WndFunc::drowWnd, &rect);

@@ -104,6 +104,8 @@
 #define FILE_MANAGER 1009
 #define CREDIT 1010
 
+// 사이드 메뉴 이미지 바꾸기
+#define SIDEMENU_TOGGLE 1200
 
 #define EXCEL "..\\VisitList.csv"
 

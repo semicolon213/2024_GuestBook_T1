@@ -80,7 +80,6 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
     case WM_SETTEXT:
         /// WM_SETTEXT 메시지 처리
         /// save나 로드시 namebar 텍스트 변경
-        /// 
         
         if (!WndFunc::creditOn) {
             SetWindowText(WndFunc::fileNameW, reinterpret_cast<LPCWSTR>(lParam));
@@ -121,6 +120,7 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
         /// 사이드 윈도우 존재 시 창 삭제
         if (IntersectRect(&a1, &mousePoint, &sideMenu.rectButton)) {
+
             /// 토글 상태 반전(버튼 이미지 변경)
             sideMenu.toggleState = !sideMenu.toggleState;
 

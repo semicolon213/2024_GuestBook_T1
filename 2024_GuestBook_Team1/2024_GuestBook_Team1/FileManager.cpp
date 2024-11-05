@@ -279,6 +279,15 @@ void FileManager::selectFileMode(int wmId, HWND s_hWnd, std::vector<PINFO>* penM
 
         SendMessage(WndFunc::toolWnd, WM_COMMAND, TL_PLAY_BT, 0); /// 추가
 
+        if (IsWindowVisible(WndFunc::fileManager) || IsWindowVisible(WndFunc::sideWnd))
+        {
+            ShowWindow(WndFunc::fileManager, SW_HIDE); // 열려 있으면 닫기
+            ShowWindow(WndFunc::sideWnd, SW_HIDE); // 열려 있으면 닫기
+
+            SendMessage(WndFunc::nameWnd, WM_COMMAND, SIDEMENU_TOGGLE, 0); /// 추가
+
+        }
+
         /// 화면 갱신
         InvalidateRect(s_hWnd, NULL, TRUE);
         UpdateWindow(s_hWnd);
