@@ -247,6 +247,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             /// 현재 버튼을 숨김
             WndFunc::buttonOn = false;
 
+            DW_SideMenu::penMemory->clear();
+
             FileManager::fileManager.selectFileMode(LOAD, hWnd, DW_SideMenu::penMemory); /// 추가
 
             ShowWindow(WndFunc::drowWnd, SW_SHOW);
