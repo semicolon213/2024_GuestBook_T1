@@ -64,6 +64,9 @@ LRESULT DrowWindow::handleMessageSB(HWND hWnd, UINT message, WPARAM wParam, LPAR
     }
     case WM_LBUTTONDOWN:
     {
+        if (function->getIsReplay()) {
+            break;
+        }
         /// 좌클릭시 현재 마우스 좌표(lParam)을 받아 마우스 RECT 생성
         int x = LOWORD(lParam);
         int y = HIWORD(lParam);

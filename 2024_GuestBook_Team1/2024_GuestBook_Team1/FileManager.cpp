@@ -144,9 +144,6 @@ bool FileManager::save(const wchar_t* path, std::vector<PINFO>* penMemory, HWND 
         baseName = baseName.substr(pos + 1);
     }
 
-    /// FileNameW에 파일 이름 표시
-    SendMessage(WndFunc::nameWnd, WM_SETTEXT, 0, (LPARAM)baseName.c_str()); /// 2024_GuestBook_Team1로 메시지 전달
-
     this->fs.close();
     AddFileToList(path);
 
@@ -271,7 +268,10 @@ void FileManager::selectFileMode(int wmId, HWND s_hWnd, std::vector<PINFO>* penM
     case SAVE:
     {
         *penMemory = Function::drawLInfo.pInfo;
+        // penMemory가 비어있지 않을 경우에만 메시지 전송
         HandleFileOperation(s_hWnd, penMemory, true);
+        SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_CLEAR_BT, 0);
+        SendMessage(WndFunc::nameWnd, WM_SETTEXT, 0, (LPARAM)L"이름 없음");
     }
     break;
 

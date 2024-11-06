@@ -85,9 +85,6 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		GetWindowText(WndFunc::fileNameW, buffer, sizeof(buffer) / sizeof(wchar_t));
 		if (wcscmp(buffer, L"이름 없음") != 0)
 		{
-			function->setisLeftClick(false);
-			function->mouseUD(drawPInfo, FALSE);
-			function->draw(WndFunc::canvasWnd, drawPInfo, FALSE);
 			break;
 		}
 

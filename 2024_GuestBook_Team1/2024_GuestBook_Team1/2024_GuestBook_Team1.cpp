@@ -233,7 +233,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             ShowWindow(WndFunc::nameWnd, SW_SHOW);
             ShowWindow(WndFunc::toolWnd, SW_SHOW);
             ShowWindow(WndFunc::canvasWnd, SW_SHOW);
-            ShowWindow(WndFunc::sideWnd, SW_SHOW);
             ShowWindow(WndFunc::visitListWnd, SW_SHOW);
 
             // 기존 버튼 숨김
@@ -254,7 +253,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             ShowWindow(WndFunc::nameWnd, SW_SHOW);
             ShowWindow(WndFunc::toolWnd, SW_SHOW);
             ShowWindow(WndFunc::canvasWnd, SW_SHOW);
-            ShowWindow(WndFunc::sideWnd, SW_SHOW);
             ShowWindow(WndFunc::visitListWnd, SW_SHOW);
 
             ShowWindow(WndFunc::DrowBT, SW_HIDE);

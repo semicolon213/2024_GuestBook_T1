@@ -61,4 +61,6 @@ public:
     void LoadFileList(); ///파일리스트 불러오기
 
     static std::wstring baseName; // 정적 변수 선언
+
+    std::unique_ptr<Function> function;
 };

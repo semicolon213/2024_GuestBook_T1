@@ -1,49 +1,5 @@
 #include "DW_NameBar.h"
 
-/// 사이드바 생성 메서드
-void DrowWindow::createWindowSB(int left, int top, int right, int bottom, HWND parent)
-{
-    /// 윈도우 등록은 한번만 해야하기 때문에 윈도우 등록 코드는 한번만 실행
-
-    static bool isClassRegistered = false;  /// 클래스가 이미 등록되었는지 확인
-
-    if (!isClassRegistered) {
-        WNDCLASS wc5 = {};
-        wc5.lpfnWndProc = WndProcSB;  /// 네임바 메세지 처리하는 정적 메서드
-        wc5.lpszClassName = L"CustomNameWindowClass2";
-        wc5.hInstance = hInst;
-        wc5.hbrBackground = CreateSolidBrush(RGB(230, 230, 230));
-
-        if (!RegisterClass(&wc5)) {
-            MessageBox(NULL, L"side 바 등록 실패", L"Error", MB_OK);
-            return;
-        }
-
-        isClassRegistered = true;  // 클래스가 등록됨을 표시
-    }
-
-    WndFunc::sideWnd = CreateWindow(
-        L"CustomNameWindowClass2",
-        L"Name Window",
-        WS_CHILD | WS_VISIBLE,
-        left, top,
-        right,
-        bottom,
-        parent,
-        nullptr,
-        hInst,
-        reinterpret_cast<LPVOID>(this)  // this 포인터 전달
-    );
-    if (!WndFunc::sideWnd) {
-        DWORD error = GetLastError();
-        wchar_t buf[256];
-        wsprintf(buf, L"사이드 바 생성 실패: 오류 코드 %d", error);
-        MessageBox(NULL, buf, L"Error", MB_OK);
-        return;
-    }
-    ShowWindow(WndFunc::sideWnd, SW_SHOW);
-}
-
 /// 네임 바 정적 메서드
 LRESULT CALLBACK DrowWindow::WndProcNB(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 
@@ -80,7 +36,7 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
     case WM_SETTEXT:
         /// WM_SETTEXT 메시지 처리
         /// save나 로드시 namebar 텍스트 변경
-        
+
         if (!WndFunc::creditOn) {
             SetWindowText(WndFunc::fileNameW, reinterpret_cast<LPCWSTR>(lParam));
         }
@@ -89,7 +45,7 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
     {
         WndFunc::fileNameW = CreateWindow(L"STATIC", L"이름 없음", WS_CHILD | WS_VISIBLE,
             50, 12, 300, 30, hWnd, (HMENU)NB_FILE_NAME, nullptr, NULL);
-        
+
 
         DW_NameBar::sideMenu.setCoordinate(WndFunc::wndSize.right - 40, 10, WndFunc::wndSize.right - 10, 40);
 
@@ -98,16 +54,16 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY,
             DEFAULT_PITCH | FF_SWISS, TEXT("나눔고딕"));
 
-            // STATIC 컨트롤에 폰트 설정
-            SendMessage(WndFunc::fileNameW, WM_SETFONT, (WPARAM)hFont, TRUE);
-            
+        // STATIC 컨트롤에 폰트 설정
+        SendMessage(WndFunc::fileNameW, WM_SETFONT, (WPARAM)hFont, TRUE);
+
         break;
     }
     case WM_SIZE:
     {
         /// 창 크기 변화시 사이드 메뉴 버튼 이동
         DW_NameBar::sideMenu.setCoordinate(WndFunc::wndSize.right - 40, 10, WndFunc::wndSize.right - 10, 40);
-        
+
         break;
     }
     case WM_LBUTTONDOWN:
@@ -124,19 +80,18 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
         /// 사이드 윈도우 존재 시 창 삭제
          /// 사이드 메뉴 버튼을 클릭했는지 확인
-        if (IntersectRect(&a1, &mousePoint, &DW_NameBar::sideMenu.rectButton)) {
-            if (!DW_NameBar::sideMenu.toggleState) {
-                // 사이드 메뉴가 닫혀 있으면 열기
+        if (IntersectRect(&a1, &mousePoint, &DW_NameBar::sideMenu.rectButton))
+        {
+
+            if (!IsWindowVisible(WndFunc::sideWnd))
+            {
                 DW_NameBar::sideMenu.toggleState = true;
-                createWindowSB(WndFunc::wndSize.right - 60, 110, 60, 300, WndFunc::drowWnd);
+                ShowWindow(WndFunc::sideWnd, SW_SHOW);
             }
-            else {
-                // 사이드 메뉴가 열려 있으면 닫기
+            else
+            {
                 DW_NameBar::sideMenu.toggleState = false;
-                ShowWindow(DW_FileManager::hListBox, SW_HIDE);
-                ShowWindow(WndFunc::fileManager, SW_HIDE);
-                DestroyWindow(WndFunc::sideWnd);
-                WndFunc::sideWnd = nullptr;
+                ShowWindow(WndFunc::sideWnd, SW_HIDE);
             }
         }
 
@@ -144,6 +99,7 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             WndFunc::buttonOn = true;
             WndFunc::creditOn = false;
 
+            DW_NameBar::sideMenu.toggleState = false;
             SendMessage(WndFunc::nameWnd, WM_SETTEXT, 0, (LPARAM)L"이름 없음");
 
             ShowWindow(WndFunc::fileNameW, SW_SHOW);
@@ -154,7 +110,7 @@ LRESULT DrowWindow::handleMessageNB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             ShowWindow(WndFunc::canvasWnd, SW_HIDE);
             ShowWindow(WndFunc::sideWnd, SW_HIDE);
             ShowWindow(WndFunc::visitListWnd, SW_HIDE);
-            
+
             ShowWindow(WndFunc::DrowBT, SW_SHOW);
             ShowWindow(WndFunc::LoadBT, SW_SHOW);
             ShowWindow(WndFunc::CreditBT, SW_SHOW);
