@@ -272,8 +272,8 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
         createWindowTB(-1, 57, WndFunc::wndSize.right, 51, hWnd);
 
         /// 캔버스 윈도우 생성
-        createWindowCV((WndFunc::wndSize.right - 1300) / 2, (WndFunc::wndSize.bottom - 600) / 2, 1300, 700, hWnd);
-
+        createWindowCV((WndFunc::wndSize.right - 1300) / 2 - 100, (WndFunc::wndSize.bottom - 600) / 2 - 40, 1500, 800, hWnd);
+        
         /// 전광판 윈도우 생성
         createWindowVL(0, WndFunc::wndSize.bottom - 30, WndFunc::wndSize.right, WndFunc::wndSize.bottom, hWnd);
 

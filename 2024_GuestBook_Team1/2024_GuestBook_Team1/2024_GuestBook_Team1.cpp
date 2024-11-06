@@ -289,7 +289,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         MoveWindow(WndFunc::drowWnd, 0, 0, WndFunc::wndSize.right, WndFunc::wndSize.bottom, true);
         MoveWindow(WndFunc::nameWnd, 0, 0, WndFunc::wndSize.right, 57, true);
         MoveWindow(WndFunc::toolWnd, -1, 57, WndFunc::wndSize.right, 51, true);
-        MoveWindow(WndFunc::canvasWnd, (WndFunc::wndSize.right - 1300) / 2,(WndFunc::wndSize.bottom - 600) / 2, 1300, 700, true);
+        MoveWindow(WndFunc::canvasWnd, (WndFunc::wndSize.right - 1300) / 2 - 100, (WndFunc::wndSize.bottom - 600) / 2 - 40, 1500, 800, true);
         MoveWindow(WndFunc::visitListWnd, 0, WndFunc::wndSize.bottom - 30, WndFunc::wndSize.right, WndFunc::wndSize.bottom, true);
 
         MoveWindow(WndFunc::DrowBT, (WndFunc::wndSize.right / 2) - 450, (WndFunc::wndSize.bottom / 2) - 50 + 100, 250, 250, true);
@@ -303,7 +303,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         MINMAXINFO* mmi = reinterpret_cast<MINMAXINFO*>(lParam);
 
         mmi->ptMinTrackSize.x = 1350;  // 최소 너비 1350px
-        mmi->ptMinTrackSize.y = 900;  // 최소 높이 900px
+        mmi->ptMinTrackSize.y = 950;  // 최소 높이 900px
 
         break;
     }
