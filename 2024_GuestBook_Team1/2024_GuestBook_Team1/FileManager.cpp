@@ -252,13 +252,16 @@ bool FileManager::HandleFileOperation(HWND hWnd, std::vector<PINFO>* penMemory, 
     DWORD flags = isSave ? (OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT) : (OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST);
     WCHAR* filePath = isSave ? fileName : fileOpenName;
 
-    if (ConfigureDialog(hWnd, flags, filePath, sizeof(fileName))) {
-        if (isSave) {
-
-        }
-        return isSave ? save(filePath, penMemory, hWnd) : load(filePath, penMemory, hWnd);
+    /// 대화상자가 취소되면 false를 반환하도록 수정
+    if (!ConfigureDialog(hWnd, flags, filePath, sizeof(fileName))) {
+        //DW_SideMenu::penMemory->clear();
+        SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_CLEAR_BT, 0);
+        SendMessage(WndFunc::nameWnd, WM_SETTEXT, 0, (LPARAM)L"이름 없음");
+        return false;  // 대화상자가 취소되면 바로 종료
     }
-    return false;
+
+    // ConfigureDialog가 성공적으로 완료된 경우에만 저장 또는 로드 실행
+    return isSave ? save(filePath, penMemory, hWnd) : load(filePath, penMemory, hWnd);
 }
 
 
