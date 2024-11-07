@@ -15,7 +15,7 @@ RECT redSliderRect, greenSliderRect, blueSliderRect;
 RECT thicknessSliderRect = { 100, 50, 300, 80 }; // 슬라이더 위치를 원하는 좌표로 설정합니다.
 RoundRECT thicknessSliderRoundRect = { 100, 50, 300, 80, 10, 10 }; // 둥근 직사각형 영역
 
-COLORREF DW_ColorBox::colorP[3] = { RGB(0,0,0),RGB(0,0,0),RGB(0,0,0) };
+COLORREF DW_ColorBox::colorP[3] = { RGB(0,0,0),RGB(255,0,0),RGB(0,255,0) };
 int DW_ColorBox::thicknessP[3] = { 10, 10, 10 }; // 각 버튼의 초기 굵기를 3으로 설정
 
 COLORREF DW_ColorBox::getColorNum(int colorSelect) {

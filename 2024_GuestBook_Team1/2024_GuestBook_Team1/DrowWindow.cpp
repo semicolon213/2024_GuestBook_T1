@@ -204,6 +204,41 @@ void DrowWindow::createWindowCP(int left, int top, int right, int bottom, HWND p
     ShowWindow(WndFunc::colorWnd, SW_HIDE);
 }
 
+/// 사이드바 생성 메서드
+void DrowWindow::createWindowSB(int left, int top, int right, int bottom, HWND parent)
+{
+    /// 윈도우 등록은 한번만 해야하기 때문에 윈도우 등록 코드는 한번만 실행
+    WNDCLASS wc5 = {};
+    wc5.lpfnWndProc = WndProcSB;  /// 네임바 메세지 처리하는 정적 메서드
+    wc5.lpszClassName = L"CustomNameWindowClass2";
+    wc5.hInstance = hInst;
+    wc5.hbrBackground = CreateSolidBrush(RGB(230, 230, 230));
+    if (!RegisterClass(&wc5)) {
+        MessageBox(NULL, L"side 바 등록 실패", L"Error", MB_OK);
+        return;
+    }
+    WndFunc::sideWnd = CreateWindow(
+        L"CustomNameWindowClass2",
+        L"Name Window",
+        WS_CHILD | WS_VISIBLE,
+        left, top,
+        right,
+        bottom,
+        parent,
+        nullptr,
+        hInst,
+        reinterpret_cast<LPVOID>(this)  // this 포인터 전달
+    );
+    if (!WndFunc::sideWnd) {
+        DWORD error = GetLastError();
+        wchar_t buf[256];
+        wsprintf(buf, L"사이드 바 생성 실패: 오류 코드 %d", error);
+        MessageBox(NULL, buf, L"Error", MB_OK);
+        return;
+    }
+    ShowWindow(WndFunc::sideWnd, SW_HIDE);
+}
+/// 파일 매니저 생성 메서드
 void DrowWindow::createWindowFM(int left, int top, int right, int bottom, HWND parent)
 {
     WNDCLASS wc111 = {};
@@ -277,6 +312,9 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 
         /// 전광판 윈도우 생성
         createWindowVL(0, WndFunc::wndSize.bottom - 30, WndFunc::wndSize.right, WndFunc::wndSize.bottom, hWnd);
+
+        /// 사이드바 윈도우 생성
+        createWindowSB(WndFunc::wndSize.right - 60, 110, 60, 300, hWnd);
 
         createWindowCP(WndFunc::wndSize.top + 450, 100, 380, 570, WndFunc::canvasWnd);
         break;
