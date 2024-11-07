@@ -297,7 +297,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         MoveWindow(WndFunc::drowWnd, 0, 0, WndFunc::wndSize.right, WndFunc::wndSize.bottom, true);
         MoveWindow(WndFunc::nameWnd, 0, 0, WndFunc::wndSize.right, 57, true);
         MoveWindow(WndFunc::toolWnd, -1, 57, WndFunc::wndSize.right, 51, true);
-        MoveWindow(WndFunc::canvasWnd, (WndFunc::wndSize.right - 1300) / 2 - 100, (WndFunc::wndSize.bottom - 600) / 2 - 40, 1500, 800, true);
+        MoveWindow(WndFunc::canvasWnd, (WndFunc::wndSize.right - 1300) / 2 - 100, (WndFunc::wndSize.bottom - 600) / 2 - 40, 1500, 780, true);
         MoveWindow(WndFunc::visitListWnd, 0, WndFunc::wndSize.bottom - 30, WndFunc::wndSize.right, WndFunc::wndSize.bottom, true);
         MoveWindow(WndFunc::sideWnd, WndFunc::wndSize.right - 50, WndFunc::wndSize.top + 107, WndFunc::wndSize.right, 300, true);
 

@@ -32,8 +32,8 @@ MakeButton basicPenButton(10, 10, 40, 40);
 MakeButton pencilButton(50, 10, 80, 40);
 MakeButton brushButton(90, 10, 120, 40);
 MakeButton sprayButton(130, 10, 160, 40);
-MakeButton rectpenButton(170, 10, 200, 40);
-MakeButton waterpenButton(210, 10, 240, 40);
+//MakeButton rectpenButton(170, 10, 200, 40);
+MakeButton waterpenButton(170, 10, 200, 40);
 MakeButton visitListButton(1200, 10, 1230, 40);
 
 /// 스탬프 종류 버튼 생성
@@ -235,14 +235,6 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             selectedIcon = IDI_SPRAY_ICON;
             // 캔버스에 현재 선택된 펜 모양 반영
             SendMessage(WndFunc::canvasWnd, WM_LBUTTONUP, 0, MAKELPARAM(0, 0));
-        }
-        /// 네모펜
-        else if (IntersectRect(&a, &mouse, &rectpenButton.rectButton)) {
-            function->setBShape(MARKER);
-
-            selectedBrushButton = &rectpenButton;
-            selectedIcon = IDI_RECTPEN_ICON;
-
         }
         /// 물펜
         else if (IntersectRect(&a, &mouse, &waterpenButton.rectButton)) {
@@ -503,6 +495,9 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         HDC hdc = BeginPaint(hWnd, &ps);
         int midPoint = WndFunc::wndSize.right / 2;
 
+        MoveToEx(hdc, 225, 10, NULL);
+        LineTo(hdc, 225, 40);
+
         playButton.setCoordinate(midPoint + 115, 10, midPoint + 145, 40);
         stopButton.setCoordinate(midPoint + 160, 10, midPoint + 190, 40);
 
@@ -519,7 +514,7 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             pencilButton.drawRectButton(hdc, IDI_PENCIL_ICON);
             brushButton.drawRectButton(hdc, IDI_BRUSH_ICON);
             sprayButton.drawRectButton(hdc, IDI_SPRAY_ICON);
-            rectpenButton.drawRectButton(hdc, IDI_RECTPEN_ICON);
+            //rectpenButton.drawRectButton(hdc, IDI_RECTPEN_ICON);
             waterpenButton.drawRectButton(hdc, IDI_WATERPEN_ICON);
             eraseButton.drawRectButton(hdc, IDI_ERASE_ICON);
 

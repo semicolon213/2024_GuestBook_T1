@@ -77,7 +77,7 @@
 
 #define EXCEL "..\\VisitList.csv"
 
-#define TEXTSPEED 1
+#define TEXTSPEED 20
 
 #ifndef IDC_STATIC
 #define IDC_STATIC				-1

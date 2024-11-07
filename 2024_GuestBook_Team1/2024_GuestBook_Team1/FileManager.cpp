@@ -5,6 +5,10 @@ FileManager FileManager::fileManager; //인스턴스
 std::wstring FileManager::baseName = L"";
 // 파일 이름을 담아요 
 
+// 스마트 포인터로 ConnExcel 객체 선언
+std::unique_ptr<ConnExcel> connExcelFM = std::make_unique<ConnExcel>();
+
+
 //파일리스트에 파일을 추가하는 함수 
 void FileManager::AddFileToList(const std::wstring& fileName)
 {
@@ -143,6 +147,9 @@ bool FileManager::save(const wchar_t* path, std::vector<PINFO>* penMemory, HWND 
     size_t pos = baseName.find_last_of(L"\\/");
     if (pos != std::wstring::npos) {
         baseName = baseName.substr(pos + 1);
+
+        std::wstring visitorName = baseName; // 방문자 이름을 wstring 형식으로 저장
+        connExcelFM->insertExcel(visitorName);
     }
 
     this->fs.close();
