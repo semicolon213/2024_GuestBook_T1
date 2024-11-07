@@ -36,6 +36,13 @@ MakeButton rectpenButton(170, 10, 200, 40);
 MakeButton waterpenButton(210, 10, 240, 40);
 MakeButton visitListButton(1200, 10, 1230, 40);
 
+/// 스탬프 종류 버튼 생성
+MakeButton heartButton(250, 10, 280, 40);
+MakeButton uhButton(290, 10, 320, 40);
+MakeButton yuhanButton(330, 10, 360, 40);
+MakeButton pfButton(370, 10, 400, 40);
+MakeButton guButton(410, 10, 440, 40);
+
 /// 색상 종류 버튼 생성 (그리기는 WM_PAINT로 처리)
 MakeButton colorButton1;
 MakeButton colorButton2;
@@ -246,6 +253,48 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             // 캔버스에 현재 선택된 펜 모양 반영
             SendMessage(WndFunc::canvasWnd, WM_LBUTTONUP, 0, MAKELPARAM(0, 0));
         }
+
+        /// 하트 스탬프
+        else if (IntersectRect(&a, &mouse, &heartButton.rectButton)) {
+            function->setBShape(STAMP);
+            function->stampIcon(IDI_HEART_ICON);
+
+            selectedBrushButton = &heartButton;
+            selectedIcon = IDI_HEART_ICON;
+        }
+        /// 어? 스탬프
+        else if (IntersectRect(&a, &mouse, &uhButton.rectButton)) {
+            function->setBShape(STAMP);
+            function->stampIcon(IDI_UH_ICON);
+
+            selectedBrushButton = &uhButton;
+            selectedIcon = IDI_UH_ICON;
+        }
+        /// 유한대 마크 스탬프
+        else if (IntersectRect(&a, &mouse, &yuhanButton.rectButton)) {
+            function->setBShape(STAMP);
+            function->stampIcon(IDI_YUHAN_ICON);
+
+            selectedBrushButton = &yuhanButton;
+            selectedIcon = IDI_YUHAN_ICON;
+        }
+        /// 교수절교 스탬프
+        else if (IntersectRect(&a, &mouse, &pfButton.rectButton)) {
+            function->setBShape(STAMP);
+            function->stampIcon(IDI_PF_ICON);
+
+            selectedBrushButton = &pfButton;
+            selectedIcon = IDI_PF_ICON;
+        }
+        /// 비둘기 스탬프
+        else if (IntersectRect(&a, &mouse, &guButton.rectButton)) {
+            function->setBShape(STAMP);
+            function->stampIcon(IDI_GU_ICON);
+
+            selectedBrushButton = &guButton;
+            selectedIcon = IDI_GU_ICON;
+        }
+
         // colorButton1에 대한 처리
         else if (IntersectRect(&a, &mouse, &colorButton1.rectButton))
         {
@@ -474,7 +523,12 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             waterpenButton.drawRectButton(hdc, IDI_WATERPEN_ICON);
             eraseButton.drawRectButton(hdc, IDI_ERASE_ICON);
 
-
+            // 스탬프 버튼 추가
+            heartButton.drawRectButton(hdc, IDI_HEART_ICON);
+            uhButton.drawRectButton(hdc, IDI_UH_ICON);
+            yuhanButton.drawRectButton(hdc, IDI_YUHAN_ICON);
+            pfButton.drawRectButton(hdc, IDI_PF_ICON);
+            guButton.drawRectButton(hdc, IDI_GU_ICON);
 
             //saveButton.drawRectButton(memDC, IDI_SAVE_ICON);
 

@@ -1,10 +1,10 @@
 #include "DW_Canvas.h"
 
-// ¸â¹ö º¯¼ö Ãß°¡
-bool isDrawing = false;    // µå·ÎÀ× »óÅÂ ÇÃ·¡±×
-POINT lastPoint;           // ÀÌÀü Á¡ÀÇ ÁÂÇ¥
+// ë©¤ë²„ ë³€ìˆ˜ ì¶”ê°€
+bool isDrawing = false;    // ë“œë¡œì‰ ìƒíƒœ í”Œë˜ê·¸
+POINT lastPoint;           // ì´ì „ ì ì˜ ì¢Œí‘œ
 
-/// ³×ÀÓ ¹Ù Á¤Àû ¸Ş¼­µå
+/// ë„¤ì„ ë°” ì •ì  ë©”ì„œë“œ
 LRESULT CALLBACK DrowWindow::WndProcCV(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 
     DrowWindow* pThis = nullptr;
@@ -19,14 +19,14 @@ LRESULT CALLBACK DrowWindow::WndProcCV(HWND hWnd, UINT message, WPARAM wParam, L
     }
 
     if (pThis) {
-        return pThis->handleMessageCV(hWnd, message, wParam, lParam); // ÀÎ½ºÅÏ½ºÀÇ °¡»ó ÇÔ¼ö È£Ãâ
+        return pThis->handleMessageCV(hWnd, message, wParam, lParam); // ì¸ìŠ¤í„´ìŠ¤ì˜ ê°€ìƒ í•¨ìˆ˜ í˜¸ì¶œ
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 
 
-/// ³×ÀÓ ¹Ù ¸Ş¼¼Áö Ã³¸® ÇÚµé ¸Ş¼­µå
+/// ë„¤ì„ ë°” ë©”ì„¸ì§€ ì²˜ë¦¬ í•¸ë“¤ ë©”ì„œë“œ
 LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message)
     {
@@ -41,7 +41,7 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
         SelectObject(memDC, hBitmap);
         ReleaseDC(WndFunc::canvasWnd, hdc);
         function = std::make_unique<Function>();
-        function->GDIPlusStart(); // º× gdi ¶óÀÌºê·¯¸® È°¼ºÈ­
+        function->GDIPlusStart(); // ë¶“ gdi ë¼ì´ë¸ŒëŸ¬ë¦¬ í™œì„±í™”
 
     }
     break;
@@ -90,7 +90,7 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
         if (IsWindowVisible(WndFunc::colorWnd))
         {
             function->setisLeftClick(false);
-            //ShowWindow(WndFunc::colorWnd, SW_HIDE); // ¿­·Á ÀÖÀ¸¸é ´İ±â
+            //ShowWindow(WndFunc::colorWnd, SW_HIDE); // ì—´ë ¤ ìˆìœ¼ë©´ ë‹«ê¸°
             break;
         }
 
@@ -101,50 +101,48 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
         drawPInfo.lParam = lParam;
         drawPInfo.pColor = DW_ColorBox::getColorNum(DW_ColorBox::colorSelect);//ColorPalette::colorArr[Function::penNum];
         drawPInfo.pTime = (DWORD)GetTickCount64();
-        drawPInfo.pWidth = penThickness->getPenWidth(); /// Ææ ±½±â ¼³Á¤
+        drawPInfo.pWidth = penThickness->getPenWidth(); /// íœ êµµê¸° ì„¤ì •
         drawPInfo.state = message;
-        function->draw(WndFunc::canvasWnd, drawPInfo, TRUE); // ºê·¯½¬ ±â´É Ãß°¡ÇÏ·Á¸é ÇØ´ç RECTANGLE ¿¡ ¾Ë¸Â´Â º¯¼ö¸¦ ³ÖÀ¸¸é µÊ.
+        function->draw(WndFunc::canvasWnd, drawPInfo, TRUE); // ë¸ŒëŸ¬ì‰¬ ê¸°ëŠ¥ ì¶”ê°€í•˜ë ¤ë©´ í•´ë‹¹ RECTANGLE ì— ì•Œë§ëŠ” ë³€ìˆ˜ë¥¼ ë„£ìœ¼ë©´ ë¨.
     }
     break;
 
-    case WM_LBUTTONDOWN:
+	case WM_LBUTTONDOWN:
+		/// ìº”ë²„ìŠ¤ì—ì„œ ê·¸ë¦´ ë•Œ ìƒ‰ìƒ ì°½ ì—´ë ¤ìˆìœ¼ë©´ ë‹«ìŒ
+		if (IsWindowVisible(WndFunc::colorWnd))
+		{
+			ShowWindow(WndFunc::colorWnd, SW_HIDE); // ì—´ë ¤ ìˆìœ¼ë©´ ë‹«ê¸°
+		}
+		drawPInfo.lParam = lParam;
+		drawPInfo.pColor = DW_ColorBox::getColorNum(DW_ColorBox::colorSelect);//ColorPalette::colorArr[Function::penNum];
+		drawPInfo.pTime = (DWORD)GetTickCount64();
+		drawPInfo.pWidth = penThickness->getPenWidth(); /// íœ êµµê¸° ì„¤ì •
+		drawPInfo.state = message;
+		function->mouseUD(drawPInfo, TRUE);
+		function->draw(WndFunc::canvasWnd, drawPInfo, TRUE); // ë¸ŒëŸ¬ì‰¬ ê¸°ëŠ¥ ì¶”ê°€í•˜ë ¤ë©´ í•´ë‹¹ RECTANGLE ì— ì•Œë§ëŠ” ë³€ìˆ˜ë¥¼ ë„£ìœ¼ë©´ ë¨.
+		break;
 
-        /// Äµ¹ö½º¿¡¼­ ±×¸± ¶§ »ö»ó Ã¢ ¿­·ÁÀÖÀ¸¸é ´İÀ½
-        if (IsWindowVisible(WndFunc::colorWnd)) 
-        {
-            function->setisLeftClick(false);
-            ShowWindow(WndFunc::colorWnd, SW_HIDE);
-            break;
-        }
-       
+	case WM_LBUTTONUP:
+		if (!function->getIsReset())
+		{
+			break;
+		}
+		drawPInfo.lParam = lParam;
+		drawPInfo.pColor = DW_ColorBox::getColorNum(DW_ColorBox::colorSelect);//ColorPalette::colorArr[Function::penNum];
+		drawPInfo.pTime = (DWORD)GetTickCount64();
+		drawPInfo.pWidth = penThickness->getPenWidth(); /// íœ êµµê¸° ì„¤ì •
+		drawPInfo.state = message;
+		function->mouseUD(drawPInfo, TRUE);
+		break;
 
-    case WM_LBUTTONUP:
-    {
-        // colorWnd°¡ ¿­·Á ÀÖÀ¸¸é WM_LBUTTONUPÀÇ Ã³¸®¸¦ °Ç³Ê¶Ü
-        if (IsWindowVisible(WndFunc::colorWnd))
-        {
-            break;
-        }
-        if (!function->getIsReset())
-        {
-            break;
-        }
-        drawPInfo.lParam = lParam;
-        drawPInfo.pColor = DW_ColorBox::getColorNum(DW_ColorBox::colorSelect);//ColorPalette::colorArr[Function::penNum];
-        drawPInfo.pTime = (DWORD)GetTickCount64();
-        drawPInfo.pWidth = penThickness->getPenWidth(); /// Ææ ±½±â ¼³Á¤
-        drawPInfo.state = message;
-        function->mouseUD(drawPInfo, TRUE);
-    }
-    break;
-    case WM_PAINT:
-    {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(WndFunc::canvasWnd, &ps);
+	case WM_PAINT:
+	{
+		PAINTSTRUCT ps;
+		HDC hdc = BeginPaint(WndFunc::canvasWnd, &ps);
 
         function->paint(memDC, WndFunc::wndSize, ps);
 
-        //memDC ¸¦ hdc·Î °í¼Ó º¹»ç
+        //memDC ë¥¼ hdcë¡œ ê³ ì† ë³µì‚¬
         BitBlt(hdc, 0, 0, WndFunc::wndSize.right, WndFunc::wndSize.bottom, memDC, 0, 0, SRCCOPY);
 
         ReleaseDC(hWnd, hdc);

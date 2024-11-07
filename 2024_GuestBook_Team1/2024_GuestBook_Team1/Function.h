@@ -25,6 +25,9 @@ private:
 	int x, y, x2, y2;
 	int px3, py3;
 
+	bool stampOn = false;	// 스탬프 모드 활성화 여부
+	static int stampID;
+
 	// 붓 브러쉬 변수 
 	std::chrono::steady_clock::time_point DrawTime; // 좌클릭 한 시간
 	std::chrono::steady_clock::time_point currentTime; // 그리기 시작한 시간
@@ -86,6 +89,8 @@ public:
 	void GDIPlusEnd(); // gdi+ 종료 함수
 
 	void paint(HDC, RECT, PAINTSTRUCT);
+
+	void stampIcon(int);
 
 	void re_draw(HDC phdc, PINFO pino, HWND hd);
 

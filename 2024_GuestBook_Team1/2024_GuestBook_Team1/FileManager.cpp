@@ -129,6 +129,7 @@ bool FileManager::save(const wchar_t* path, std::vector<PINFO>* penMemory, HWND 
             << i.pColor << ' '
             << i.pTime << ' '
             << i.state << ' '
+            << i.stampValue << ' '
             << i.bShape << std::endl;
 
         if (this->fs.fail()) {
@@ -173,6 +174,7 @@ bool FileManager::load(const wchar_t* path, std::vector<PINFO>* penMemory, HWND 
         >> pen_info.pColor
         >> pen_info.pTime
         >> pen_info.state
+        >> pen_info.stampValue
         >> pen_info.bShape) {
         penMemory->push_back(pen_info);
     }

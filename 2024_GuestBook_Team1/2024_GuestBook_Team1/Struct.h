@@ -14,6 +14,7 @@ typedef struct pointInfo
     UINT state;         ///마우스 상태
     int bShape;      ///브러쉬 모양
 
+    int stampValue;
 }PINFO;
 
 
