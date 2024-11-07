@@ -45,6 +45,7 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
     }
     break;
+    
     case WM_COMMAND:
     {
         if (wParam == TL_CLEAR_BT)

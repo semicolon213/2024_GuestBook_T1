@@ -193,34 +193,41 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         }
 
 
-        /// 기본 펜
+        // 예: 기본 펜 선택 코드 수정
         if (IntersectRect(&a, &mouse, &basicPenButton.rectButton)) {
             function->setBShape(BASIC);
-            
+            selectedBrushButton = &basicPenButton;
+            selectedIcon = IDI_PEN_ICON;
 
-            selectedBrushButton = &basicPenButton;   /// 선택된 버튼 기록용 변수에 현재 객체 저장
-            selectedIcon = IDI_PEN_ICON;         /// 선택된 아이콘 값 저장
+            // 캔버스에 현재 선택된 펜 모양 반영
+            SendMessage(WndFunc::canvasWnd, WM_LBUTTONUP, 0, MAKELPARAM(0, 0));
         }
-        /// 펜슬
         else if (IntersectRect(&a, &mouse, &pencilButton.rectButton)) {
             function->setBShape(PENCIL);
-
             selectedBrushButton = &pencilButton;
             selectedIcon = IDI_PENCIL_ICON;
+
+            // 캔버스에 현재 선택된 펜 모양 반영
+            SendMessage(WndFunc::canvasWnd, WM_LBUTTONUP, 0, MAKELPARAM(0, 0));
         }
         /// 브러시
         else if (IntersectRect(&a, &mouse, &brushButton.rectButton)) {
             function->setBShape(BRUSH);
-            printf("%d", Function::bShape);
+
             selectedBrushButton = &brushButton;
             selectedIcon = IDI_BRUSH_ICON;
+            // 캔버스에 현재 선택된 펜 모양 반영
+            SendMessage(WndFunc::canvasWnd, WM_LBUTTONUP, 0, MAKELPARAM(0, 0));
         }
         /// 스프레이
         else if (IntersectRect(&a, &mouse, &sprayButton.rectButton)) {
             function->setBShape(SPRAY);
 
+
             selectedBrushButton = &sprayButton;
             selectedIcon = IDI_SPRAY_ICON;
+            // 캔버스에 현재 선택된 펜 모양 반영
+            SendMessage(WndFunc::canvasWnd, WM_LBUTTONUP, 0, MAKELPARAM(0, 0));
         }
         /// 네모펜
         else if (IntersectRect(&a, &mouse, &rectpenButton.rectButton)) {
@@ -236,6 +243,8 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
             selectedBrushButton = &waterpenButton;
             selectedIcon = IDI_WATERPEN_ICON;
+            // 캔버스에 현재 선택된 펜 모양 반영
+            SendMessage(WndFunc::canvasWnd, WM_LBUTTONUP, 0, MAKELPARAM(0, 0));
         }
         // colorButton1에 대한 처리
         else if (IntersectRect(&a, &mouse, &colorButton1.rectButton))
