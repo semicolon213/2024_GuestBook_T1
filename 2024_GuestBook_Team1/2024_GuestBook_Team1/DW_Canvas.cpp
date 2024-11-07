@@ -88,12 +88,12 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 			break;
 		}
 
+		if (IsWindowVisible(WndFunc::fileManager)) {
+			break;
+		}
+
 		if (!function->getIsReset()) break;
 		//hdc = GetDC(canWnd);
-
-
-
-		////////////////////////////////////////////////
 
 		drawPInfo.lParam = lParam;
 		drawPInfo.pColor = DW_ColorBox::getColorNum(DW_ColorBox::colorSelect);//ColorPalette::colorArr[Function::penNum];
