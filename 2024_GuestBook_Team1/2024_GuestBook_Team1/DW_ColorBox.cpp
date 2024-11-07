@@ -16,7 +16,7 @@ RECT thicknessSliderRect = { 100, 50, 300, 80 }; // 슬라이더 위치를 원하는 좌표�
 RoundRECT thicknessSliderRoundRect = { 100, 50, 300, 80, 10, 10 }; // 둥근 직사각형 영역
 
 COLORREF DW_ColorBox::colorP[3] = { RGB(0,0,0),RGB(0,0,0),RGB(0,0,0) };
-int DW_ColorBox::thicknessP[3] = { 3, 3, 3 }; // 각 버튼의 초기 굵기를 3으로 설정
+int DW_ColorBox::thicknessP[3] = { 10, 10, 10 }; // 각 버튼의 초기 굵기를 3으로 설정
 
 COLORREF DW_ColorBox::getColorNum(int colorSelect) {
     return DW_ColorBox::colorP[colorSelect];
@@ -68,8 +68,8 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
     {
     case WM_CREATE:
     {
-        wheelRect = { 100, 50, 300, 250, };
-        barRect = { 380, 50, 410, 250 };
+        wheelRect = { 50, 50, 250, 250, };
+        barRect = { 290, 50, 320, 250 };
         selectedRect = { 50, 280, 310, 330 };
         redSliderRect = { 50, 350, 310, 370 };
         greenSliderRect = { 50, 400, 310, 420 };
@@ -152,11 +152,11 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
         // 펜 굵기 텍스트와 값 표시
         int thicknessValue = DW_ColorBox::getThicknessNum(DW_ColorBox::colorSelect);
-        colorbox->DrawThicknessSlider(memDC, thicknessSliderRect, thicknessSliderRoundRect, thicknessValue, 20);
+        colorbox->DrawThicknessSlider(memDC, thicknessSliderRect, thicknessSliderRoundRect, thicknessValue, 30);
 
         const char* thicknessText = "Thickness";
         textX = thicknessSliderRect.left;
-        textY = thicknessSliderRect.top - 20;
+        textY = thicknessSliderRect.top - 30;
         TextOutA(memDC, textX, textY, thicknessText, strlen(thicknessText));
 
         // Thickness 값 표시
@@ -230,7 +230,7 @@ LRESULT DrowWindow::handleMessageCP(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 }
             }
             if (PtInRect(&thicknessSliderRect, { xPos, yPos })) {
-                int newThickness = max(1, min(20, (xPos - thicknessSliderRect.left) * 20 / (thicknessSliderRect.right - thicknessSliderRect.left)));
+                int newThickness = max(1, min(30, (xPos - thicknessSliderRect.left) * 30 / (thicknessSliderRect.right - thicknessSliderRect.left)));
                 DW_ColorBox::setThicknessNum(DW_ColorBox::colorSelect, newThickness);
                 PenThickness::setPenWidth(newThickness);
                 InvalidateRect(hWnd, NULL, TRUE);

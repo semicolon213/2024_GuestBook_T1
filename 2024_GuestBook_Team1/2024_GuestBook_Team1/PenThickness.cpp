@@ -2,7 +2,7 @@
 #include "resource.h"
 #include <CommCtrl.h>  
 
-int PenThickness::penWidth = 3;
+int PenThickness::penWidth = 10;
 
 PenThickness::PenThickness() {}
 
