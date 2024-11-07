@@ -492,29 +492,32 @@ void Function::GDIPlusEnd() { //gdi 종료
 //마우스로 할때 L버튼 누른채 캔버스 윈도우 외부로 나가서 떼면 계속 그려지지만 터치로 할 시 정상작동
 void Function::setisCanvas(bool cnt, LPARAM lParam)
 {
-    if (cnt)
     {
+        if (!isReplay)
+            if (cnt)
+            {
 
-        if (!isCanvas)
-        {
-            SendMessage(WndFunc::canvasWnd, WM_LBUTTONDOWN, NULL, lParam);
-        }
+                if (!isCanvas)
+                {
+                    SendMessage(WndFunc::canvasWnd, WM_LBUTTONDOWN, NULL, lParam);
+                }
 
-        isCanvas = cnt;
-    }
-    else
-    {
-        if (isCanvas)
-        {
-            SendMessage(WndFunc::canvasWnd, WM_LBUTTONUP, NULL, lParam);
-        }
+                isCanvas = cnt;
+            }
+            else
+            {
+                if (isCanvas)
+                {
+                    SendMessage(WndFunc::canvasWnd, WM_LBUTTONUP, NULL, lParam);
+                }
 
-        POINT pt = { LOWORD(lParam), HIWORD(lParam) };
-        MapWindowPoints(WndFunc::drowWnd, WndFunc::canvasWnd, &pt, 1);
+                POINT pt = { LOWORD(lParam), HIWORD(lParam) };
+                MapWindowPoints(WndFunc::drowWnd, WndFunc::canvasWnd, &pt, 1);
 
-        x = pt.x;
-        y = pt.y;
+                x = pt.x;
+                y = pt.y;
 
-        isCanvas = cnt;
+                isCanvas = cnt;
+            }
     }
 }
