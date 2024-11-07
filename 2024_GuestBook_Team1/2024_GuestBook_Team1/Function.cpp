@@ -86,27 +86,25 @@ void Function::re_draw(HDC phdc, PINFO dInfo,HWND hd) // 뒤에 브러쉬 추가
 
 		setPenStyle(dInfo, dInfo.pColor);
 
-		if (isReplay) {
-			if (dInfo.bShape != STAMP)
-			{
-				MoveToEx(hdc, x, y, NULL);
-				LineTo(hdc, px, py);
-				DeleteObject(nPen);
-			}
-			else if (dInfo.bShape == STAMP && dInfo.state == WM_LBUTTONDOWN) {
-				replayhIcon = (HICON)LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(dInfo.stampValue), IMAGE_ICON, 124, 124, 0); // 스탬프 아이콘 설정
-				DrawIconEx(hdc, x - 60, y - 60, replayhIcon, 120, 120, 0, NULL, DI_NORMAL);
-				DestroyIcon(replayhIcon);
-			}
-		}
-		else if (stampOn && dInfo.state == WM_LBUTTONDOWN) {
-			DrawIconEx(hdc, x - 60, y - 60, hIcon, 120, 120, 0, NULL, DI_NORMAL);
+		if (dInfo.bShape == STAMP && dInfo.state == WM_LBUTTONDOWN) {
+			replayhIcon = (HICON)LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(dInfo.stampValue), IMAGE_ICON, 124, 124, 0); // 스탬프 아이콘 설정
+			DrawIconEx(hdc, x - 60, y - 60, replayhIcon, 120, 120, 0, NULL, DI_NORMAL);
+			DestroyIcon(replayhIcon);
 			DestroyIcon(hIcon);
-			DeleteObject(nPen);
 		}
 		else if (stampOn == false && dInfo.state == WM_MOUSEMOVE) {
-			MoveToEx(hdc, x, y, NULL);
-			LineTo(hdc, px, py);
+			if (dInfo.bShape == SPRAY || dInfo.bShape == WATERCOLOR || dInfo.bShape == PENCIL)
+			{
+				//SetPixel(hdc, px, py, RGB(255, 255, 255));
+			}
+			else
+			{
+				MoveToEx(hdc, x, y, NULL);
+				if (dInfo.bShape == BASIC || dInfo.bShape == BRUSH) {
+					LineTo(hdc, px, py);
+				}
+				DeleteObject(nPen);
+			}
 		}
 
 		x = px;
