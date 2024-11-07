@@ -41,6 +41,7 @@ private:
 	bool isLeftClick = false;
 	bool isReplay = false;
 	bool isReset = true;
+	bool isCanvas = true;
 
 	ULONG_PTR gdiplusToken;
 
@@ -56,6 +57,8 @@ private:
 public:
 	void setisLeftClick(bool);
 	bool getisLeftClick();
+
+	void setisCanvas(bool, LPARAM);
 
 	void draw(HWND, PINFO, bool);		//뒤에 브러쉬 추가
 	void mouseUD(PINFO, bool);

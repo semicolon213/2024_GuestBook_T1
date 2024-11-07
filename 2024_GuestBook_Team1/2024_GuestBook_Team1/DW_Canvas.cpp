@@ -93,6 +93,7 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
             break;
         }
 
+        function->setisCanvas(true, lParam);
 
         ////////////////////////////////////////////////
 

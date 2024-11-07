@@ -40,7 +40,7 @@
 #define IDD_PEN_THICKNESS       504
 #define IDC_THICKNESS_SLIDER    503  // 슬라이더의 ID
 #define IDC_THICKNESS_EDIT      502  // 에디트 박스의 ID
-#define IDD_PEN_THICKNESS		501
+//#define IDD_PEN_THICKNESS		501
 
 
 /// 그리기 영역
