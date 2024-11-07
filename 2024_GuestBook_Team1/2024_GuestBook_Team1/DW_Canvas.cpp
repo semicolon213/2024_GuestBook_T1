@@ -105,7 +105,15 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		{
 			ShowWindow(WndFunc::colorWnd, SW_HIDE); // 열려 있으면 닫기
 		}
-		{
+		drawPInfo.lParam = lParam;
+		drawPInfo.pColor = DW_ColorBox::getColorNum(DW_ColorBox::colorSelect);//ColorPalette::colorArr[Function::penNum];
+		drawPInfo.pTime = (DWORD)GetTickCount64();
+		drawPInfo.pWidth = penThickness->getPenWidth(); /// 펜 굵기 설정
+		drawPInfo.state = message;
+		function->mouseUD(drawPInfo, TRUE);
+		function->draw(WndFunc::canvasWnd, drawPInfo, TRUE); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
+		break;
+
 	case WM_LBUTTONUP:
 		if (!function->getIsReset())
 		{
@@ -117,8 +125,9 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		drawPInfo.pWidth = penThickness->getPenWidth(); /// 펜 굵기 설정
 		drawPInfo.state = message;
 		function->mouseUD(drawPInfo, TRUE);
-		}
+		function->draw(WndFunc::canvasWnd, drawPInfo, TRUE); // 브러쉬 기능 추가하려면 해당 RECTANGLE 에 알맞는 변수를 넣으면 됨.
 		break;
+
 	case WM_PAINT:
 	{
 		PAINTSTRUCT ps;

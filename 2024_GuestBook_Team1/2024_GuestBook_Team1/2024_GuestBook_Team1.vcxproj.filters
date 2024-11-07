@@ -75,9 +75,6 @@
     <ClInclude Include="MakeButton.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Stamp.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="WndFunc.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -132,9 +129,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MakeButton.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Stamp.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="WndFunc.cpp">

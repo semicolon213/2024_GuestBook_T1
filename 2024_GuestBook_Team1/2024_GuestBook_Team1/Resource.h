@@ -34,6 +34,7 @@
 #define SPRAY 303
 #define MARKER 304
 #define WATERCOLOR 305
+#define STAMP 306
 
 // 펜 굵기 
 #define IDC_CLOSE_BUTTON		505
@@ -59,38 +60,8 @@
 #define IDI_HEART_ICON						140
 #define IDI_UH_ICON							141
 #define IDI_YUHAN_ICON						142
-#define IDI_YONGBIN_ICON					143
-#define IDI_WHY_ICON						144
 #define IDI_GU_ICON							145
-#define IDI_WHAT_ICON						146
 #define IDI_PF_ICON							147
-#define IDI_F_ICON							148
-#define IDI_HATE_ICON						149
-
-#define IDI_BT_HEART_ICON					150
-#define IDI_BT_UH_ICON						151
-#define IDI_BT_YUHAN_ICON					152
-#define IDI_BT_YONGBIN_ICON					153
-#define IDI_BT_WHY_ICON						154
-#define IDI_BT_GU_ICON						155
-#define IDI_BT_WHAT_ICON					156
-#define IDI_BT_PF_ICON						157
-#define IDI_BT_F_ICON						158
-#define IDI_BT_HATE_ICON					159
-
-/// 스탬프 func (700번대)
-#define CHANGE_PEN			700
-#define HEART_STAMP			701
-#define UH_STAMP			702
-#define YUHAN_STAMP			703
-#define YONGBIN_STAMP		704
-#define WHY_STAMP			705
-#define GU_STAMP			706
-#define WHAT_STAMP			707
-#define PF_STAMP			708
-#define F_STAMP				709
-#define HATE_STAMP			710
-#define PREVIEW				711
 
 // 버튼 호출 상수
 #define COLOR1 1001

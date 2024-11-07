@@ -161,7 +161,6 @@
     <ClInclude Include="PenThickness.h" />
     <ClInclude Include="PenView.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="Stamp.h" />
     <ClInclude Include="Struct.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WndFunc.h" />
@@ -184,7 +183,6 @@
     <ClCompile Include="MakeButton.cpp" />
     <ClCompile Include="PenThickness.cpp" />
     <ClCompile Include="PenView.cpp" />
-    <ClCompile Include="Stamp.cpp" />
     <ClCompile Include="WndFunc.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,9 @@ int Function::penNum = 0;
 LINFO Function::drawLInfo = { };
 HWND Function::hWnd = nullptr;
 int Function::bShape = BASIC;
-
+int Function::stampID = BASIC;
+HICON hIcon;
+HICON replayhIcon;
 
 void Function::record(PINFO inputPI)
 {
@@ -12,6 +14,8 @@ void Function::record(PINFO inputPI)
 
 	inputPI.bShape = bShape;
 	inputPI.pWidth = currentThickness;
+	inputPI.stampValue = stampID;
+
 	drawLInfo.pInfo.push_back(inputPI);
 
 	/*std::wstring message = L"record() 호출됨, drawLInfo.pInfo 크기: " + std::to_wstring(drawLInfo.pInfo.size()) +
@@ -34,10 +38,29 @@ void Function::draw(HWND hWnd, PINFO dInfo, bool isRecord) // 뒤에 브러쉬 추가
 		currentTime = std::chrono::steady_clock::now(); // 그리기 시간 저장
 
 		setPenStyle(dInfo, dInfo.pColor);
-		MoveToEx(hdc, x, y, NULL);
-		LineTo(hdc, px, py);
 
-		DeleteObject(nPen);
+		if (isReplay) {
+			if (dInfo.bShape != STAMP)
+			{
+				MoveToEx(hdc, x, y, NULL);
+				LineTo(hdc, px, py);
+				DeleteObject(nPen);
+			}
+			else if (dInfo.bShape == STAMP && dInfo.state == WM_LBUTTONDOWN) {
+				replayhIcon = (HICON)LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(dInfo.stampValue), IMAGE_ICON, 124, 124, 0); // 스탬프 아이콘 설정
+				DrawIconEx(hdc, x - 60, y - 60, replayhIcon, 120, 120, 0, NULL, DI_NORMAL);
+				DestroyIcon(replayhIcon);
+			}
+		}
+		else if (stampOn && dInfo.state == WM_LBUTTONDOWN) {
+			DrawIconEx(hdc, x - 60, y - 60, hIcon, 120, 120, 0, NULL, DI_NORMAL);
+			DestroyIcon(hIcon);
+			DeleteObject(nPen);
+		}
+		else if (stampOn == false && dInfo.state == WM_MOUSEMOVE) {
+			MoveToEx(hdc, x, y, NULL);
+			LineTo(hdc, px, py);
+		}
 
 		x = px;
 		y = py;
@@ -63,17 +86,28 @@ void Function::re_draw(HDC phdc, PINFO dInfo,HWND hd) // 뒤에 브러쉬 추가
 
 		setPenStyle(dInfo, dInfo.pColor);
 
-		if (dInfo.bShape == SPRAY || dInfo.bShape == WATERCOLOR || dInfo.bShape == PENCIL)
-		{
-			//SetPixel(hdc, px, py, RGB(255, 255, 255));
+		if (isReplay) {
+			if (dInfo.bShape != STAMP)
+			{
+				MoveToEx(hdc, x, y, NULL);
+				LineTo(hdc, px, py);
+				DeleteObject(nPen);
+			}
+			else if (dInfo.bShape == STAMP && dInfo.state == WM_LBUTTONDOWN) {
+				replayhIcon = (HICON)LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(dInfo.stampValue), IMAGE_ICON, 124, 124, 0); // 스탬프 아이콘 설정
+				DrawIconEx(hdc, x - 60, y - 60, replayhIcon, 120, 120, 0, NULL, DI_NORMAL);
+				DestroyIcon(replayhIcon);
+			}
 		}
-		else
-		{
+		else if (stampOn && dInfo.state == WM_LBUTTONDOWN) {
+			DrawIconEx(hdc, x - 60, y - 60, hIcon, 120, 120, 0, NULL, DI_NORMAL);
+			DestroyIcon(hIcon);
+			DeleteObject(nPen);
+		}
+		else if (stampOn == false && dInfo.state == WM_MOUSEMOVE) {
 			MoveToEx(hdc, x, y, NULL);
 			LineTo(hdc, px, py);
 		}
-
-		DeleteObject(nPen);
 
 		x = px;
 		y = py;
@@ -155,6 +189,9 @@ void Function::replay(HWND hWnd)
 			{
 			case WM_LBUTTONDOWN:
 				mouseUD(replayInfo, false);
+				if (replayInfo.bShape == STAMP) {
+					draw(hWnd, replayInfo, false);
+				}
 				break;
 
 			case WM_MOUSEMOVE:
@@ -226,6 +263,7 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 	case BASIC: // 기본 그리기
 		nPen = CreatePen(PS_SOLID, dinfo.pWidth, col);
 		oPen = (HPEN)SelectObject(hdc, nPen);
+		stampOn = false; // 스탬프 모드 비활성화
 		break;
 
 	case BRUSH: // 붓 브러쉬
@@ -273,6 +311,7 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 			nPen = CreatePen(PS_SOLID, dinfo.pWidth, col);  // 그릴 때 저장된 두께 사용
 		}
 		oPen = (HPEN)SelectObject(hdc, nPen);
+		stampOn = false; // 스탬프 모드 비활성화
 		break;
 	}
 
@@ -289,6 +328,7 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 		Gdiplus::SolidBrush brush(Gdiplus::Color(alpha, GetRValue(col), GetGValue(col), GetBValue(col)));	// 색상 설정
 		graphics.FillPolygon(&brush, points, 60); // 정형화 되지 않는 도형 그리기	
 		ReleaseDC(hWnd, hdc);
+		stampOn = false; // 스탬프 모드 비활성화
 		break;
 	}
 
@@ -299,6 +339,7 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 		else if (dinfo.pWidth >= 7 && dinfo.pWidth <= 10) { spray_pixel = 290; }
 		else if (dinfo.pWidth >= 11 && dinfo.pWidth <= 14) { spray_pixel = 400; }
 		else if (dinfo.pWidth >= 15 && dinfo.pWidth <= 20) { spray_pixel = 510; }
+		else if (dinfo.pWidth >= 21 && dinfo.pWidth <= 25) { spray_pixel = 620; }
 		for (int i = 0; i < spray_pixel; ++i)
 		{
 			int offsetX = (rand() % (dinfo.pWidth * 8)) - (dinfo.pWidth * 4);
@@ -309,6 +350,7 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 			}
 		}
 		ReleaseDC(hWnd, hdc);
+		stampOn = false; // 스탬프 모드 비활성화
 		break;
 
 	case MARKER: //삭제 
@@ -317,6 +359,7 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 		Gdiplus::SolidBrush marker(Gdiplus::Color(40, GetRValue(col), GetGValue(col), GetBValue(col)));
 		graphics.FillRectangle(&marker, x - dinfo.pWidth, y - dinfo.pWidth, dinfo.pWidth * 2, dinfo.pWidth * 2);
 		ReleaseDC(hWnd, hdc);
+		stampOn = false; // 스탬프 모드 비활성화
 		break;
 	}
 
@@ -339,9 +382,15 @@ void Function::setPenStyle(PINFO dinfo, COLORREF col)
 		graphics.FillPolygon(&brush, points, numPoints); // 비정형 도형 그리기
 
 		ReleaseDC(hWnd, hdc);
+		stampOn = false; // 스탬프 모드 비활성화
 		break;
 	}
-
+	case STAMP:
+	{
+		hIcon = (HICON)LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(stampID), IMAGE_ICON, 124, 124, 0); // 스탬프 아이콘 설정
+		stampOn = true; // 스탬프 모드 활성화
+		break;
+	}
 	default:
 		break;
 	}
@@ -370,8 +419,12 @@ void Function::paint(HDC hdc, RECT canvasRT, PAINTSTRUCT ps)
 			switch (record.state)
 			{
 			case WM_LBUTTONDOWN:
-				mouseUD(record, FALSE);
+				mouseUD(record, false);
+				if (record.bShape == STAMP) {
+					re_draw(cHdc, record, WndFunc::canvasWnd);
+				}
 				break;
+
 			case WM_LBUTTONUP:
 				if (record.bShape == BRUSH) {
 					mouseUD(record, FALSE);
@@ -394,8 +447,10 @@ void Function::paint(HDC hdc, RECT canvasRT, PAINTSTRUCT ps)
 	}
 }
 
-
-
+void Function::stampIcon(int stampID)
+{
+	this->stampID = stampID;
+}
 
 void Function::setBShape(int bShape)
 {
