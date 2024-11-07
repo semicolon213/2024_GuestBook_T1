@@ -22,7 +22,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{bf0598ad-a6ca-4c60-bc41-04873aa68eff}</ProjectGuid>
-    <RootNamespace>My2024GuestBookTeam1</RootNamespace>
+    <RootNamespace>0</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

@@ -4,6 +4,8 @@
 #include "DrowWindow.h"
 #include "WndFunc.h"
 #include "DW_ColorBox.h"
+#include "DW_NameBar.h"
+#include "Function.h"
 
 class DW_Canvas
 {

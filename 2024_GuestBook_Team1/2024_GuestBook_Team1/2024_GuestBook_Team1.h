@@ -11,7 +11,7 @@
 #include "BlueWindow.h"
 #include "framework.h"
 #include "Resource.h"
-
+#include "FileManager.h"
 #include "WndFunc.h"
 
 #include "DrowWindow.h"

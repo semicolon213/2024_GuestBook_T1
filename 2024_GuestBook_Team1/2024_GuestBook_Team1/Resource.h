@@ -104,7 +104,6 @@
 #define FILE_MANAGER 1009
 #define CREDIT 1010
 
-
 #define EXCEL "..\\VisitList.csv"
 
 #define TEXTSPEED 1

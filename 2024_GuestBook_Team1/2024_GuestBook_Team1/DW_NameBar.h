@@ -9,6 +9,6 @@
 class DW_NameBar
 {
 public:
-    
+    static MakeButton sideMenu;
 };
 

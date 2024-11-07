@@ -24,7 +24,7 @@ LRESULT CALLBACK DrowWindow::WndProcCV(HWND hWnd, UINT message, WPARAM wParam, L
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-
+wchar_t buffer[256];
 
 /// 네임 바 메세지 처리 핸들 메서드
 LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -82,13 +82,18 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 	break;
 	case WM_MOUSEMOVE:
 	{
+		GetWindowText(WndFunc::fileNameW, buffer, sizeof(buffer) / sizeof(wchar_t));
+		if (wcscmp(buffer, L"이름 없음") != 0)
+		{
+			break;
+		}
+
+		if (IsWindowVisible(WndFunc::fileManager) || IsWindowVisible(WndFunc::sideWnd)) {
+			break;
+		}
 
 		if (!function->getIsReset()) break;
 		//hdc = GetDC(canWnd);
-
-
-
-		////////////////////////////////////////////////
 
 		drawPInfo.lParam = lParam;
 		drawPInfo.pColor = DW_ColorBox::getColorNum(DW_ColorBox::colorSelect);//ColorPalette::colorArr[Function::penNum];
@@ -100,6 +105,26 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 	break;
 
 	case WM_LBUTTONDOWN:
+
+		GetWindowText(WndFunc::fileNameW, buffer, sizeof(buffer) / sizeof(wchar_t));
+		if (wcscmp(buffer, L"이름 없음") != 0)
+		{
+			function->setisLeftClick(false);
+			function->mouseUD(drawPInfo, FALSE);
+			function->draw(WndFunc::canvasWnd, drawPInfo, FALSE);
+			break;
+		}
+
+		if (IsWindowVisible(WndFunc::fileManager) || IsWindowVisible(WndFunc::sideWnd))
+		{
+			function->setisLeftClick(false);
+			ShowWindow(WndFunc::fileManager, SW_HIDE); // 열려 있으면 닫기
+			ShowWindow(WndFunc::sideWnd, SW_HIDE); // 열려 있으면 닫기
+			DW_NameBar::sideMenu.toggleState = false;
+			InvalidateRect(WndFunc::nameWnd, NULL, TRUE);
+			break;
+		}
+
 		/// 캔버스에서 그릴 때 색상 창 열려있으면 닫음
 		if (IsWindowVisible(WndFunc::colorWnd))
 		{
@@ -144,6 +169,6 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
 	{
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
-}
+	}
 	return 0;
 }
