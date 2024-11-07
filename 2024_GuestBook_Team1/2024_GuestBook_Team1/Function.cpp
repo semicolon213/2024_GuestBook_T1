@@ -223,7 +223,7 @@ void Function::clearDrawing(HWND hWnd)
 void Function::setPenStyle(PINFO dinfo, COLORREF col)
 {
     // 브러쉬 선택하면 거기에 맞는 펜 제공
-    switch (bShape)
+    switch (Function::bShape)
     {
     case BASIC: // 기본 그리기
         nPen = CreatePen(PS_SOLID, dinfo.pWidth, col);

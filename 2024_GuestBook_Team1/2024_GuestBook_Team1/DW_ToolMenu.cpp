@@ -151,6 +151,13 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
     }
     case WM_LBUTTONDOWN:
     {
+        /// 캔버스에서 그릴 때 색상 창 열려있으면 닫음
+        if (IsWindowVisible(WndFunc::colorWnd))
+        {
+            //function->setisLeftClick(false);
+            ShowWindow(WndFunc::colorWnd, SW_HIDE);
+            break;
+        }
         HDC hdc = GetDC(hWnd);
 
         /// 현재 마우스 좌표로 사각형 생성
@@ -160,7 +167,8 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         mouse.bottom = mouse.top + 1;
 
         /// 방문자 스레드 on/off
-        if (IntersectRect(&a, &mouse, &visitListButton.rectButton)) {
+        if (IntersectRect(&a, &mouse, &visitListButton.rectButton)) 
+        {
             visitListButton.toggleState = !visitListButton.toggleState;   /// 버튼 누를때마다 이미지 교체 위해 값 반전
 
             if (lCnt)
@@ -185,19 +193,22 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         }
 
 
-        /// 기본 펜
+        // 예: 기본 펜 선택 코드 수정
         if (IntersectRect(&a, &mouse, &basicPenButton.rectButton)) {
             function->setBShape(BASIC);
+            selectedBrushButton = &basicPenButton;
+            selectedIcon = IDI_PEN_ICON;
 
-            selectedBrushButton = &basicPenButton;   /// 선택된 버튼 기록용 변수에 현재 객체 저장
-            selectedIcon = IDI_PEN_ICON;         /// 선택된 아이콘 값 저장
+            // 캔버스에 현재 선택된 펜 모양 반영
+            SendMessage(WndFunc::canvasWnd, WM_LBUTTONUP, 0, MAKELPARAM(0, 0));
         }
-        /// 펜슬
         else if (IntersectRect(&a, &mouse, &pencilButton.rectButton)) {
             function->setBShape(PENCIL);
-
             selectedBrushButton = &pencilButton;
             selectedIcon = IDI_PENCIL_ICON;
+
+            // 캔버스에 현재 선택된 펜 모양 반영
+            SendMessage(WndFunc::canvasWnd, WM_LBUTTONUP, 0, MAKELPARAM(0, 0));
         }
         /// 브러시
         else if (IntersectRect(&a, &mouse, &brushButton.rectButton)) {
@@ -205,13 +216,18 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
             selectedBrushButton = &brushButton;
             selectedIcon = IDI_BRUSH_ICON;
+            // 캔버스에 현재 선택된 펜 모양 반영
+            SendMessage(WndFunc::canvasWnd, WM_LBUTTONUP, 0, MAKELPARAM(0, 0));
         }
         /// 스프레이
         else if (IntersectRect(&a, &mouse, &sprayButton.rectButton)) {
             function->setBShape(SPRAY);
 
+
             selectedBrushButton = &sprayButton;
             selectedIcon = IDI_SPRAY_ICON;
+            // 캔버스에 현재 선택된 펜 모양 반영
+            SendMessage(WndFunc::canvasWnd, WM_LBUTTONUP, 0, MAKELPARAM(0, 0));
         }
         /// 네모펜
         else if (IntersectRect(&a, &mouse, &rectpenButton.rectButton)) {
@@ -227,6 +243,8 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
             selectedBrushButton = &waterpenButton;
             selectedIcon = IDI_WATERPEN_ICON;
+            // 캔버스에 현재 선택된 펜 모양 반영
+            SendMessage(WndFunc::canvasWnd, WM_LBUTTONUP, 0, MAKELPARAM(0, 0));
         }
         // colorButton1에 대한 처리
         else if (IntersectRect(&a, &mouse, &colorButton1.rectButton))
@@ -331,6 +349,8 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
             }
             selectedColorButton = &colorButton3; // 선택한 버튼 저장
         }
+        
+       
 
 
         /// 지우개 버튼 
@@ -385,6 +405,7 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 SendMessage(WndFunc::canvasWnd, WM_COMMAND, TL_PLAY_BT, 1);
                 pCnt = true;
             }
+            
 
             InvalidateRect(WndFunc::toolWnd, NULL, true);
             UpdateWindow(WndFunc::toolWnd);
