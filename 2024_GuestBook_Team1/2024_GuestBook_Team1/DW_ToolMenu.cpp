@@ -489,68 +489,149 @@ LRESULT DrowWindow::handleMessageTB(HWND hWnd, UINT message, WPARAM wParam, LPAR
         break;
     }
 
+    /// 문제 생기면 이 WM_PAINT 쓰셈
+/*
+ case WM_PAINT:
+ {
+     PAINTSTRUCT ps;
+     HDC hdc = BeginPaint(hWnd, &ps);
+     int midPoint = WndFunc::wndSize.right / 2;
+
+     playButton.setCoordinate(midPoint + 115, 10, midPoint + 145, 40);
+     stopButton.setCoordinate(midPoint + 160, 10, midPoint + 190, 40);
+
+     playButton.doubleImgButton(hdc, IDI_PAUSE_ICON, IDI_PLAY_ICON);
+     stopButton.drawRectButton(hdc, IDI_STOP_ICON);
+     visitListButton.doubleImgButton(hdc, IDI_PAUSE_ICON, IDI_PLAY_ICON);
+
+     if (WndFunc::buttonOn)
+     {
+
+         eraseButton.setCoordinate(midPoint + 50, 10, midPoint + 80, 40);
+         /// 버튼과 이미지 그리기
+         basicPenButton.drawRectButton(hdc, IDI_PEN_ICON);
+         pencilButton.drawRectButton(hdc, IDI_PENCIL_ICON);
+         brushButton.drawRectButton(hdc, IDI_BRUSH_ICON);
+         sprayButton.drawRectButton(hdc, IDI_SPRAY_ICON);
+         rectpenButton.drawRectButton(hdc, IDI_RECTPEN_ICON);
+         waterpenButton.drawRectButton(hdc, IDI_WATERPEN_ICON);
+         eraseButton.drawRectButton(hdc, IDI_ERASE_ICON);
+
+
+
+         //saveButton.drawRectButton(memDC, IDI_SAVE_ICON);
+
+         /// 선택된 브러시 버튼에 이펙트 적용
+         if (selectedBrushButton != nullptr) {
+             selectedBrushButton->clickEffectPen(IDI_PENEFFECT_ICON, selectedIcon, hdc);
+         }
+
+         /// 컬러 버튼 그리기 (Ellipse로 색상과 구현 위해 WM_PAINT에서 그리기 + 좌표처리)
+         colorButton1.setCoordinate(midPoint - 140, 10, midPoint - 110, 40);
+         colorButton2.setCoordinate(midPoint - 90, 10, midPoint - 60, 40);
+         colorButton3.setCoordinate(midPoint - 40, 10, midPoint - 10, 40);
+
+         /// 선택된 컬러 버튼에 이펙트 적용
+         /// 이펙트 먼저 그린 후 색상 버튼을 그림(drawEllipseButton)
+         if (selectedColorButton != nullptr) {
+             selectedColorButton->clickEffectPen(IDI_COLOREFFECT_ICON, hdc);
+         }
+
+         colorButton1.drawEllipseButton(hdc, DW_ColorBox::getColorNum(0));   /// 색상 버튼 1 미리보기
+         colorButton2.drawEllipseButton(hdc, DW_ColorBox::getColorNum(1));   /// 색상 버튼 2 미리보기
+         colorButton3.drawEllipseButton(hdc, DW_ColorBox::getColorNum(2));   /// 색상 버튼 3 미리보기
+     }
+     EndPaint(hWnd, &ps);
+     break;
+ }
+ */
     case WM_PAINT:
     {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
+
+        // 더블 버퍼링을 위한 메모리 DC 생성
+        HDC memDC = CreateCompatibleDC(hdc);
+        HBITMAP hBitmap = CreateCompatibleBitmap(hdc, WndFunc::wndSize.right, WndFunc::wndSize.bottom);
+        HBITMAP oldBitmap = (HBITMAP)SelectObject(memDC, hBitmap);
+
+        // 배경을 흰색으로 채우기
+        HBRUSH hWhiteBrush = (HBRUSH)GetStockObject(WHITE_BRUSH);
+        RECT rect;
+        GetClientRect(hWnd, &rect);
+        FillRect(memDC, &rect, hWhiteBrush);
+
         int midPoint = WndFunc::wndSize.right / 2;
 
-        MoveToEx(hdc, 225, 10, NULL);
-        LineTo(hdc, 225, 40);
+        
 
         playButton.setCoordinate(midPoint + 115, 10, midPoint + 145, 40);
         stopButton.setCoordinate(midPoint + 160, 10, midPoint + 190, 40);
 
-        playButton.doubleImgButton(hdc, IDI_PAUSE_ICON, IDI_PLAY_ICON);
-        stopButton.drawRectButton(hdc, IDI_STOP_ICON);
-        visitListButton.doubleImgButton(hdc, IDI_PAUSE_ICON, IDI_PLAY_ICON);
+        // 메모리 DC에 버튼을 그리기
+        playButton.doubleImgButton(memDC, IDI_PAUSE_ICON, IDI_PLAY_ICON);
+        stopButton.drawRectButton(memDC, IDI_STOP_ICON);
+        visitListButton.doubleImgButton(memDC, IDI_PAUSE_ICON, IDI_PLAY_ICON);
 
         if (WndFunc::buttonOn)
         {
+            MoveToEx(memDC, 225, 10, NULL);
+            LineTo(memDC, 225, 40);
 
             eraseButton.setCoordinate(midPoint + 50, 10, midPoint + 80, 40);
-            /// 버튼과 이미지 그리기
-            basicPenButton.drawRectButton(hdc, IDI_PEN_ICON);
-            pencilButton.drawRectButton(hdc, IDI_PENCIL_ICON);
-            brushButton.drawRectButton(hdc, IDI_BRUSH_ICON);
-            sprayButton.drawRectButton(hdc, IDI_SPRAY_ICON);
-            //rectpenButton.drawRectButton(hdc, IDI_RECTPEN_ICON);
-            waterpenButton.drawRectButton(hdc, IDI_WATERPEN_ICON);
-            eraseButton.drawRectButton(hdc, IDI_ERASE_ICON);
+
+            // 버튼과 이미지 그리기
+            basicPenButton.drawRectButton(memDC, IDI_PEN_ICON);
+            pencilButton.drawRectButton(memDC, IDI_PENCIL_ICON);
+            brushButton.drawRectButton(memDC, IDI_BRUSH_ICON);
+            sprayButton.drawRectButton(memDC, IDI_SPRAY_ICON);
+            //rectpenButton.drawRectButton(memDC, IDI_RECTPEN_ICON);
+            waterpenButton.drawRectButton(memDC, IDI_WATERPEN_ICON);
+            eraseButton.drawRectButton(memDC, IDI_ERASE_ICON);
 
             // 스탬프 버튼 추가
-            heartButton.drawRectButton(hdc, IDI_HEART_ICON);
-            uhButton.drawRectButton(hdc, IDI_UH_ICON);
-            yuhanButton.drawRectButton(hdc, IDI_YUHAN_ICON);
-            pfButton.drawRectButton(hdc, IDI_PF_ICON);
-            guButton.drawRectButton(hdc, IDI_GU_ICON);
+            heartButton.drawRectButton(memDC, IDI_HEART_ICON);
+            uhButton.drawRectButton(memDC, IDI_UH_ICON);
+            yuhanButton.drawRectButton(memDC, IDI_YUHAN_ICON);
+            pfButton.drawRectButton(memDC, IDI_PF_ICON);
+            guButton.drawRectButton(memDC, IDI_GU_ICON);
 
-            //saveButton.drawRectButton(memDC, IDI_SAVE_ICON);
 
-            /// 선택된 브러시 버튼에 이펙트 적용
+            // 선택된 브러시 버튼에 이펙트 적용
             if (selectedBrushButton != nullptr) {
-                selectedBrushButton->clickEffectPen(IDI_PENEFFECT_ICON, selectedIcon, hdc);
+                selectedBrushButton->clickEffectPen(IDI_PENEFFECT_ICON, selectedIcon, memDC);
             }
 
-            /// 컬러 버튼 그리기 (Ellipse로 색상과 구현 위해 WM_PAINT에서 그리기 + 좌표처리)
+            // 컬러 버튼 좌표 설정 및 이펙트 적용
             colorButton1.setCoordinate(midPoint - 140, 10, midPoint - 110, 40);
             colorButton2.setCoordinate(midPoint - 90, 10, midPoint - 60, 40);
             colorButton3.setCoordinate(midPoint - 40, 10, midPoint - 10, 40);
 
-            /// 선택된 컬러 버튼에 이펙트 적용
-            /// 이펙트 먼저 그린 후 색상 버튼을 그림(drawEllipseButton)
             if (selectedColorButton != nullptr) {
-                selectedColorButton->clickEffectPen(IDI_COLOREFFECT_ICON, hdc);
+                selectedColorButton->clickEffectPen(IDI_COLOREFFECT_ICON, memDC);
             }
 
-            colorButton1.drawEllipseButton(hdc, DW_ColorBox::getColorNum(0));   /// 색상 버튼 1 미리보기
-            colorButton2.drawEllipseButton(hdc, DW_ColorBox::getColorNum(1));   /// 색상 버튼 2 미리보기
-            colorButton3.drawEllipseButton(hdc, DW_ColorBox::getColorNum(2));   /// 색상 버튼 3 미리보기
+            // 색상 버튼 그리기
+            colorButton1.drawEllipseButton(memDC, DW_ColorBox::getColorNum(0));
+            colorButton2.drawEllipseButton(memDC, DW_ColorBox::getColorNum(1));
+            colorButton3.drawEllipseButton(memDC, DW_ColorBox::getColorNum(2));
         }
+
+        // 메모리 DC의 내용을 화면 DC로 복사하여 출력
+        BitBlt(hdc, 0, 0, WndFunc::wndSize.right, WndFunc::wndSize.bottom, memDC, 0, 0, SRCCOPY);
+
+        // 리소스 정리
+        SelectObject(memDC, oldBitmap);
+        DeleteObject(hBitmap);
+        DeleteDC(memDC);
+
         EndPaint(hWnd, &ps);
         break;
     }
-    default:
+
+    case WM_ERASEBKGND:
+    return 1; // 기본 배경 지우기 방지
+     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;

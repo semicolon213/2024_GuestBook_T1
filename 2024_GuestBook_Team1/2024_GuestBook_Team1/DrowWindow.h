@@ -81,7 +81,6 @@ public:
 
     PINFO drawPInfo;
 
-    void re_draw();
     int x, y, px, py;
 
 protected:

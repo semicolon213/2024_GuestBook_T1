@@ -108,11 +108,13 @@ LRESULT DrowWindow::handleMessageCV(HWND hWnd, UINT message, WPARAM wParam, LPAR
     break;
 
 	case WM_LBUTTONDOWN:
-		/// 캔버스에서 그릴 때 색상 창 열려있으면 닫음
-		if (IsWindowVisible(WndFunc::colorWnd))
-		{
-			ShowWindow(WndFunc::colorWnd, SW_HIDE); // 열려 있으면 닫기
-		}
+        /// 캔버스에서 그릴 때 색상 창 열려있으면 닫음
+        if (IsWindowVisible(WndFunc::colorWnd))
+        {
+            //function->setisLeftClick(false);
+            ShowWindow(WndFunc::colorWnd, SW_HIDE);
+            break;
+        }
 		drawPInfo.lParam = lParam;
 		drawPInfo.pColor = DW_ColorBox::getColorNum(DW_ColorBox::colorSelect);//ColorPalette::colorArr[Function::penNum];
 		drawPInfo.pTime = (DWORD)GetTickCount64();

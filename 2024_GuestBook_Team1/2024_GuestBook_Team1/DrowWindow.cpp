@@ -319,13 +319,19 @@ LRESULT DrowWindow::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM
         createWindowCP(WndFunc::wndSize.top + 450, 100, 380, 570, WndFunc::canvasWnd);
         break;
     }
-
+    /*
     case WM_MOUSEMOVE:
     {
         if (function->getisLeftClick()) function->setisCanvas(false, lParam);
         break;
     }
-
+    */
+    /// 캔버스에서 그리기 할때 버그 임시 수정
+    case WM_MOUSEMOVE:
+    {
+        function->setisLeftClick(false);
+        break;
+    }
     case WM_LBUTTONUP:
         function->setisLeftClick(false);
         break;
